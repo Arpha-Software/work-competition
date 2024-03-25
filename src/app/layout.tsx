@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import "./globals.css";
+import { Nunito_Sans } from "next/font/google";
 
-const inter = Inter({ subsets: ["latin"] });
+import "@/styles/globals.css";
+
+const nunitoSans = Nunito_Sans({ subsets: ["latin-ext"] });
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -16,7 +17,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={nunitoSans.className}>{children}</body>
     </html>
   );
 }
