@@ -4,7 +4,7 @@ import { LinkProps } from "next/link";
 import { cva } from "class-variance-authority";
 import cn from "@/tools/cn";
 
-import ArrowIcon from "/public/arrow.svg";
+import ArrowIcon from "/public/icons/arrow.svg";
 
 type ArrowLinkProps = LinkProps & AnchorHTMLAttributes<HTMLAnchorElement> & {
   variant?: "primary" | "disabled";

@@ -6,7 +6,7 @@ export default function Home() {
     <main>
       Home page
       <ArrowLink variant="disabled" href='#'>Подивитись докладніше</ArrowLink>
-      <Button variant="secondary">Дізнатись більше</Button>
+      <Button variant="secondary">Зареєструвати роботу</Button>
     </main>
   );
 }
