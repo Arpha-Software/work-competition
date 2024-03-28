@@ -7,7 +7,7 @@ export const categories = [
       description: "Тут розміщуються новаторські технології та цифрові рішення, спрямовані на підвищення рівня безпеки на робочому місці, реалізовані найбільш прогресивними суб’єктами господарювання. Хочете отримати найкращий досвід – заходьте!",
     },
     image: {
-      src: images.categories.image1,
+      src: images.categories.category1,
       alt: "image1",
     },
     linkHref: "/category1",
@@ -18,7 +18,7 @@ export const categories = [
       description: "Тут кожен спеціаліст з охорони праці може заявити просебе як про найкращого фахівця, що має максимальну ефективність   та є суперпрофесіоналом. Хочете потішити себе та свого роботодавця – вам сюди!",
     },
     image: {
-      src: images.categories.image2,
+      src: images.categories.category2,
       alt: "image2",
     },
     linkHref: "/category2",
@@ -29,7 +29,7 @@ export const categories = [
       description: "Це про роботодавців, які розуміють, що таке успішний бізнес знайпродуктивнішою командою професіоналіві однодумців. Якщо ви знаєте, якзробити команду такою, і ви вже це зробили чи намагаєтеся це зробити –  цей розділ для вас.",
     },
     image: {
-      src: images.categories.image3,
+      src: images.categories.category3,
       alt: "image3",
     },
     linkHref: "/category3",
@@ -40,7 +40,7 @@ export const categories = [
       description: "Цей розділ для творців, які вміють викласти свої почуття напапері. Знаєте як виглядає безпечна праця? Вам сюди! Немає значення, скільки вам років, вмієте ви малювати чи користуєтеся відповідним програмним забезпеченням. Фантазія і почуття – ось що робить ескіз, постер, малюноквитвором мистецтва.",
     },
     image: {
-      src: images.categories.image4,
+      src: images.categories.category4,
       alt: "image4",
     },
     linkHref: "/category4",
