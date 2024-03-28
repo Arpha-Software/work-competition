@@ -1,7 +1,9 @@
 const images = {
-  icons: {
-    arrowWhite: "https://res.cloudinary.com/dykizktlm/image/upload/v1711402455/work%20competition/arrow-white_xfbznc.svg",
-    arrowBlue: "https://res.cloudinary.com/dykizktlm/image/upload/v1711402455/work%20competition/arrow-blue_zgodwv.svg",
+  categories: {
+    category1: "/images/cat1.png",
+    category2: "/images/cat2.png",
+    category3: "/images/cat3.png",
+    category4: "/images/cat4.png",
   }
 }
 

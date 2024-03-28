@@ -17,7 +17,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={nunitoSans.className}>{children}</body>
+      <body className={nunitoSans.className}>
+        <header>Header</header>
+
+        { children }
+
+        <footer>Footer</footer>
+      </body>
     </html>
   );
 }
