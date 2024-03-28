@@ -1,16 +1,9 @@
 import Image from "next/image";
 import cn from "@/tools/cn";
+
 import { ArrowLink } from "../ArrowLink";
 
-type ImageT = {
-  src: string,
-  alt: string,
-}
-
-type ContentT = {
-  title: string,
-  description: string,
-}
+import type { ContentT, ImageT } from "@/utils/types";
 
 type CategoryCardProps = {
   className?: string,
