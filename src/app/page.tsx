@@ -1,15 +1,11 @@
-import { Header } from '@/sections/Header';
-import { Footer } from '@/sections/Footer';
 import { Categories } from '@/sections/Home/Categories';
 
 export default async function Home() {
   return (
     <main>
-      <Header />
+      <h1 className='sr-only'>Categories</h1>
 
       <Categories />
-
-      <Footer />
     </main>
   );
 }
