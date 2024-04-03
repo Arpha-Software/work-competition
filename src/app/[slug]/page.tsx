@@ -6,14 +6,15 @@ import { content } from './content';
 import styles from './InnerPage.module.scss';
 import { Input } from '@/components/Input';
 import { Form } from '@/components/Form';
+import { Pages } from '@/utils/enums';
 
 type PageParams = {
   params: {
     slug:
-      | 'inovative-solutions'
-      | 'best-specialist'
-      | 'effective-support'
-      | 'art';
+        Pages.inovativeSolutions
+      | Pages.bestSpecialist
+      | Pages.effectiveSupport
+      | Pages.art
   };
 };
 
@@ -40,13 +41,13 @@ export default async function Page({ params: { slug } }: PageParams) {
             {subtitle}
           </p>
 
-          <Modal className='w-[620px] h-[550px] top-4 overflow-auto'>
+          <Modal className='w-full max-w-[620px] h-[550px] top-4 overflow-auto'>
             <div className='space-y-4'>
               <h2 className='text-3xl text-center uppercase'>Реєстрація</h2>
-              <p className='text-sm text-center uppercase w-96 mx-auto'>Категорія: Інноваційні та цифрові рішення для забезпечення безпеки на роботі</p>
+              <p className='text-sm text-center uppercase w-96 mx-auto'>Категорія: {title}</p>
             </div>
 
-            <Form />
+            <Form page={slug} />
           </Modal>
         </div>
       </Container>

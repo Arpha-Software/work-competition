@@ -4,11 +4,13 @@ import { InputHTMLAttributes } from "react"
 type InputProps = InputHTMLAttributes<HTMLInputElement> & {
   className?: string,
   label?: string,
+  error?: string,
 }
 
 export const Input = ({
   className,
   label,
+  error,
   ...props
 }: InputProps) => {
   return (
@@ -25,6 +27,10 @@ export const Input = ({
           )}
           {...props}
         />
+
+        {error ? (
+          <span className="text-red-500 text-xs">{ error }</span>
+        ): null}
       </label>
     </div>
   )
