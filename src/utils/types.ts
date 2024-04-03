@@ -8,4 +8,4 @@ export type ContentT = {
   description: string,
 }
 
-export type FormData = Record<string, string | number | boolean>;
+export type FormData = Record<string, string | number | boolean | File | null>;

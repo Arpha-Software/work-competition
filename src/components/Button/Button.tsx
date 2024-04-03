@@ -1,24 +1,37 @@
-import { ButtonHTMLAttributes } from "react";
+import { ButtonHTMLAttributes, ReactNode } from "react";
 import { cva } from "class-variance-authority";
 import cn from "@/tools/cn";
 
-type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
+type ButtonProps = {
   variant?: "primary" | "secondary" | "disabled";
+  tag?: "button" | "div" | "a";
+  className?: string;
+  type?: "button" | "submit" | "reset";
+  onClick?: () => void;
+  children: ReactNode;
 }
 
 export const Button = ({
   className,
   variant,
+  tag: Tag = "button",
+  children,
+  type = "button",
+  onClick,
   ...props
 }: ButtonProps) => {
   return (
-    <button
+    <Tag
+      {...props}
       className={cn(
         buttonVariants({ variant }),
         className
       )}
-      {...props}
-    />
+      type={type}
+      onClick={onClick}
+    >
+      { children }
+    </Tag>
   )
 }
 

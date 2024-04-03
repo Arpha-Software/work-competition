@@ -19,6 +19,8 @@ import {
 
 import { validateFormData } from "./form-types";
 import { cutFileName } from "@/tools/helpers";
+import { submitForm } from "@/api/form";
+import { content } from "@/app/[slug]/content";
 
 type FormProps = {
   page: Pages;
@@ -57,10 +59,13 @@ export const Form = ({ page }: FormProps) => {
     }
   };
 
+  console.log('category:', content[page].title);
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    const allFields = { ...formData, file };
 
-    const validation = validateFormData(formData, page);
+    const validation = validateFormData(allFields, page);
 
     if (!validation.success) {
       const errors = validation.errors!.reduce((acc, curr) => {
@@ -69,13 +74,26 @@ export const Form = ({ page }: FormProps) => {
       }, {} as Record<string, string>);
 
       dispatch({ type: FormActionTypes.SET_VALIDATION_ERRORS, validationErrors: errors });
-      console.error("Form data is invalid, validation errors:", errors);
+
       return;
     }
 
     dispatch({ type: FormActionTypes.SET_VALIDATION_ERRORS, validationErrors: {} });
 
-    console.log("Form data is valid, proceed with submission:", validation.data);
+    const formFormData = new FormData();
+
+    formFormData.append('data', new Blob([JSON.stringify({...formData, category: content[page].title})], { type: 'application/json' }));
+    if (file) {
+      formFormData.append('file', file as Blob, file.name);
+    }
+
+    submitForm(formFormData).then(response => {
+      if (response.success) {
+        console.log("Form submitted successfully");
+      } else {
+        console.error("Form submission failed");
+      }
+    });
   };
 
   useEffect(() => {
@@ -83,7 +101,7 @@ export const Form = ({ page }: FormProps) => {
   }, [page]);
 
   return (
-    <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
+    <form className="mt-8 space-y-6 last:space-y-8" onSubmit={handleSubmit}>
       {pages[page].mainInputs.map(({ label, placeholder, name, type, className }, index) => (
         <Input
           key={`${label}-${index}`}
@@ -114,8 +132,8 @@ export const Form = ({ page }: FormProps) => {
         />
       ))}
 
-      <div className="flex items-center">
-        <Button className="w-36 h-14 p-0" type="button" variant="secondary">
+      <div className="flex items-center relative">
+        <Button className="w-36 h-14 p-0" tag="div" variant="secondary">
           <label htmlFor="file" className="flex items-center w-full h-full px-3 justify-between cursor-pointer">
             <FileIcon />
             <span>Ваша робота</span>
@@ -131,6 +149,12 @@ export const Form = ({ page }: FormProps) => {
           />
         </Button>
 
+        {validationErrors.file ? (
+          <span className="absolute top-full text-xs text-red-500">
+            {validationErrors.file}
+          </span>
+        ) : null}
+
         {file && (
           <div className="text-sm">
             <span className="block ml-3">Обраний файл: {cutFileName(file.name)}</span>
@@ -139,7 +163,7 @@ export const Form = ({ page }: FormProps) => {
         )}
       </div>
 
-      <label htmlFor="agreement" className={`flex items-center select-none ${validationErrors.agreement ? 'text-red-500' : ''}`}>
+      <label htmlFor="agreement" className='flex items-center select-none relative'>
         <input
           type="checkbox"
           id="agreement"
@@ -150,9 +174,10 @@ export const Form = ({ page }: FormProps) => {
         />
 
         <span className="text-sm">Надаю згоду на обробку персональних даних</span>
+        {validationErrors.agreement ? <span className="absolute top-full text-xs text-red-500">{validationErrors.agreement}</span> : null}
       </label>
 
-      <Button className="w-full" type="submit">Відправити</Button>
+      <Button className="w-full mt-8" type="submit">Відправити</Button>
     </form>
   )
 }

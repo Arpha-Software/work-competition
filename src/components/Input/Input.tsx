@@ -14,24 +14,23 @@ export const Input = ({
   ...props
 }: InputProps) => {
   return (
-    <div className="relative">
-      <label className="block">
-        <span className="absolute bg-white left-4 -top-2 px-2 border-0 shadow-none text-[13px]">
-          { label }
-        </span>
+    <label className="relative block">
+      <span className="absolute bg-white left-4 -top-2 px-2 text-[13px]">
+        { label }
+      </span>
 
-        <input
-          className={cn(
-            "border border-black p-4 text-xs w-full",
-            className
-          )}
-          {...props}
-        />
+      <input
+        className={cn(
+          "border p-4 text-xs w-full",
+          error ? "border-red-500" : "border-black",
+          className
+        )}
+        {...props}
+      />
 
-        {error ? (
-          <span className="text-red-500 text-xs">{ error }</span>
-        ): null}
-      </label>
-    </div>
+      {error ? (
+        <span className="absolute top-full left-0 text-red-500 text-xs">{ error }</span>
+      ): null}
+    </label>
   )
 }

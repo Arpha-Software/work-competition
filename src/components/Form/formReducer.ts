@@ -10,7 +10,7 @@ export enum FormActionTypes {
 export type FormState = {
   formData: FormData;
   file: File | null;
-  validationErrors: Record<string, string>;
+  validationErrors: Record<string, any>;
 };
 
 export type FormAction =
