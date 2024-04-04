@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { FormData } from '@/utils/types';
-import { Pages } from '@/utils/enums';
+import { ErrorMessages, Pages, Regions } from '@/utils/enums';
 
 export type ValidationResult = {
   success: boolean;
@@ -8,95 +8,67 @@ export type ValidationResult = {
   errors?: { field: string; message: string }[];
 };
 
-const agreement = z.boolean({
-  required_error: "Ви повинні надати згоду на обробку персональних даних.",
-});
+const MAX_UPLOAD_SIZE = 1024 * 1024 * 20;
+const ACCEPTED_FILE_TYPES = [
+  "image/jpeg",
+  "image/jpg",
+  "image/png",
+  "image/webp",
+  "application/pdf",
+  "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+  "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+];
 
-const MAX_UPLOAD_SIZE = 1024 * 1024 * 3; // 3MB
-const ACCEPTED_FILE_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
-
-const fileSchema = z
-.instanceof(File, { message: 'Файл є обов\'язковим' })
-.optional()
-.refine((file) => {
-  return !file || file.size <= MAX_UPLOAD_SIZE;
-}, 'File size must be less than 3MB')
-.refine((file) => {
-  return file?.type ? ACCEPTED_FILE_TYPES.includes(file.type) : false;
-}, 'File must be a PNG');
-
-export const inovativeSolutionsSchema = z.object({
-  companyName: z.string().min(1, "Company name is required"),
-  primaryActivityType: z.string().min(1, "Activity field is required"),
-  employerRegion: z.string().min(1, "Region is required"),
-  employerLocality: z.string().min(1, "City is required"),
-  employeeCount: z.string().min(1, "Number of workers must be at least 1"),
-  fullName: z.string().min(1, "Contact name is required"),
-  email: z.string().email("Invalid email format"),
-  mobilePhone: z.string().min(10, "Phone number is too small").max(13, "Phone number is too long"),
+const baseSchemaFields = {
+  companyName: z.string().min(1, `Назва компанії ${ErrorMessages.Required}`),
+  primaryActivityType: z.string().min(1, `Оберіть галузь діяльності ${ErrorMessages.Required}`),
+  employerLocality: z.string().min(1, `Місто ${ErrorMessages.Required}`),
+  employeeCount: z.string().min(1, `Кількість працівників має бути не менше 1`),
+  fullName: z.string().min(1, `Ім'я контактної особи ${ErrorMessages.Required}`),
+  email: z.string().email(ErrorMessages.EmailInvalid),
   additionalInfo: z.string().optional(),
-  agreement,
-  file: fileSchema,
-});
+  agreement: z.boolean({ required_error: ErrorMessages.ConsentRequired }),
+  employerRegion: z.nativeEnum(Regions, {
+    errorMap: () => {
+      return {message: ErrorMessages.RegionInvalid};
+    },
+  }),
+  mobilePhone: z.string()
+    .min(10, ErrorMessages.PhoneInvalid)
+    .max(14, ErrorMessages.PhoneInvalid)
+    .refine((value: string) => /^\+380\d{9}$/.test(value), ErrorMessages.PhoneInvalid),
+};
 
-export const bestSpecialistSchema = z.object({
-  companyName: z.string().min(1, "Company name is required"),
-  activity: z.string().min(1, "Activity field is required"),
-  region: z.string().min(1, "Region is required"),
-  city: z.string().min(1, "City is required"),
-  workers: z.string().min(1, "Number of workers must be at least 1"),
-  name: z.string().min(1, "Contact name is required"),
-  email: z.string().email("Invalid email format"),
-  phone: z.string().min(10, "Phone number is too small").max(13, "Phone number is too long"),
-  additionalInfo: z.string().optional(),
-  agreement,
-  file: fileSchema,
-});
+const specificFields = {
+  birthYear: z
+    .string({ required_error: `Рік народження ${ErrorMessages.Required}`})
+    .min(4, ErrorMessages.BirthDateInvalid)
+    .max(4, ErrorMessages.BirthDateInvalid),
+};
 
-export const effectiveSupportSchema = z.object({
-  companyName: z.string().min(1, "Company name is required"),
-  primaryActivityType: z.string().min(1, "Activity field is required"),
-  employerRegion: z.string().min(1, "Region is required"),
-  employerLocality: z.string().min(1, "City is required"),
-  employeeCount: z.string().min(1, "Number of workers must be at least 1"),
-  fullName: z.string().min(1, "Contact name is required"),
-  email: z.string().email("Invalid email format"),
-  mobilePhone: z.string().min(10, "Phone number is too small").max(13, "Phone number is too long"),
-  additionalInfo: z.string().optional(),
-  agreement,
-  file: fileSchema,
-});
+const fileSchema = z.instanceof(File, { message: ErrorMessages.FileRequired })
+  .optional()
+  .refine(file => !file || file.size <= MAX_UPLOAD_SIZE, ErrorMessages.FileSize)
+  .refine(file => file?.type ? ACCEPTED_FILE_TYPES.includes(file.type) : false, ErrorMessages.FileType);
 
-export const artSchema = z.object({
-  fullName: z.string().min(1, "Name is required"),
-  birthYear: z.string().min(1, "Birth year field is required"),
-  employerRegion: z.string().min(1, "Region is required"),
-  employerLocality: z.string().min(1, "City is required"),
-  email: z.string().min(1, "Email is required"),
-  mobilePhone: z.string().min(10, "Phone number is too small").max(13, "Phone number is too long"),
-  additionalInfo: z.string().optional(),
-  agreement,
-  file: fileSchema,
-});
+const { companyName, employeeCount, ...baseSchemaFieldsWithoutCompanyName } = baseSchemaFields;
+
+const schemas = {
+  [Pages.inovativeSolutions]: z.object({ ...baseSchemaFields, file: fileSchema }),
+  [Pages.bestSpecialist]: z.object({ ...baseSchemaFields, file: fileSchema }),
+  [Pages.effectiveSupport]: z.object({ ...baseSchemaFields, file: fileSchema }),
+  [Pages.art]: z.object({
+    ...baseSchemaFieldsWithoutCompanyName,
+    ...specificFields,
+    file: fileSchema
+    })
+};
 
 export const validateFormData = (formData: FormData, page: Pages): ValidationResult => {
-  let schema;
+  const schema = schemas[page];
 
-  switch (page) {
-    case Pages.inovativeSolutions:
-      schema = inovativeSolutionsSchema;
-      break;
-    case Pages.bestSpecialist:
-      schema = bestSpecialistSchema;
-      break;
-    case Pages.effectiveSupport:
-      schema = effectiveSupportSchema;
-      break;
-    case Pages.art:
-      schema = artSchema;
-      break;
-    default:
-      return { success: false, errors: [{ field: '', message: "Page not found" }] };
+  if (!schema) {
+    return { success: false, errors: [{ field: '', message: ErrorMessages.PageNotFound }] };
   }
 
   const result = schema.safeParse(formData);
@@ -106,6 +78,7 @@ export const validateFormData = (formData: FormData, page: Pages): ValidationRes
       field: String(err.path[0]),
       message: err.message
     }));
+
     return { success: false, errors };
   }
 

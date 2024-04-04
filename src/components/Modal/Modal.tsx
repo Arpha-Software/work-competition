@@ -8,23 +8,20 @@ import { ArrowLink } from "../ArrowLink";
 import CloseIcon from "/public/icons/exit-button.svg";
 
 type ModalProps = {
-  children: ReactNode;
-  className?: string;
+  children: ReactNode,
+  className?: string,
+  openModal: () => void,
+  closeModal: () => void,
+  isOpen: boolean,
 }
 
-export const Modal = ({ children, className }: ModalProps) => {
-  const [isOpen, setIsOpen] = useState(false);
-
-  const openModal = () => {
-    setIsOpen(true);
-    document.body.style.overflow = 'hidden';
-  };
-
-  const closeModal = () => {
-    setIsOpen(false);
-    document.body.style.overflow = 'auto';
-  };
-
+export const Modal = ({
+  children,
+  className,
+  openModal,
+  closeModal,
+  isOpen
+}: ModalProps) => {
   return (
     <>
       <ArrowLink

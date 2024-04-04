@@ -1,12 +1,10 @@
 import { Container } from '@/components/Container';
 
-import { Modal } from '@/components/Modal';
+import { Pages } from '@/utils/enums';
+import { FormModal } from '@/components/Form/Form';
 import { content } from './content';
 
 import styles from './InnerPage.module.scss';
-import { Input } from '@/components/Input';
-import { Form } from '@/components/Form';
-import { Pages } from '@/utils/enums';
 
 type PageParams = {
   params: {
@@ -41,14 +39,7 @@ export default async function Page({ params: { slug } }: PageParams) {
             {subtitle}
           </p>
 
-          <Modal className='w-full max-w-[620px] h-[550px] top-4 overflow-auto'>
-            <div className='space-y-4'>
-              <h2 className='text-3xl text-center uppercase'>Реєстрація</h2>
-              <p className='text-sm text-center uppercase w-96 mx-auto'>Категорія: {title}</p>
-            </div>
-
-            <Form page={slug} />
-          </Modal>
+          <FormModal page={slug} />
         </div>
       </Container>
     </main>
