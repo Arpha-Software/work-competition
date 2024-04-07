@@ -28,11 +28,6 @@ const baseSchemaFields = {
   email: z.string().email(ErrorMessages.EmailInvalid),
   additionalInfo: z.string().optional(),
   agreement: z.boolean({ required_error: ErrorMessages.ConsentRequired }),
-  employerRegion: z.nativeEnum(Regions, {
-    errorMap: () => {
-      return {message: ErrorMessages.RegionInvalid};
-    },
-  }),
   mobilePhone: z.string()
     .min(10, ErrorMessages.PhoneInvalid)
     .max(14, ErrorMessages.PhoneInvalid)

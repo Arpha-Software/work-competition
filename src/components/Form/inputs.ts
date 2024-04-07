@@ -46,11 +46,6 @@ const commonInputs = {
     'Введіть основний вид діяльності',
     'primaryActivityType'
   ),
-  employerRegion: createInput(
-    'Область, в якій знаходиться роботодавець',
-    'Введіть область, в якій знаходиться роботодавець',
-    'employerRegion'
-  ),
   employerLocality: createInput(
     'Населений пункт, в якому розміщений роботодавець',
     'Введіть населений пункт, в якому розміщений роботодавець',
@@ -80,7 +75,6 @@ function getInnovativeSolutionsInputs() {
     mainInputs: [
       commonInputs.companyName,
       commonInputs.primaryActivityType,
-      commonInputs.employerRegion,
       commonInputs.employerLocality,
       commonInputs.employeeCount,
     ],
@@ -111,7 +105,6 @@ export const pages: Record<Pages, FormT> = {
       createInput('Прізвище, ім’я, по батькові (повністю)', 'Введіть прізвище, ім’я, по батькові', 'fullName'),
       createInput('Місце роботи/навчання/вид зайнятості', 'Введіть місце роботи/навчання/вид зайнятості', 'primaryActivityType'),
       createInput('Рік народження', 'Введіть рік народження', 'birthYear'),
-      commonInputs.employerRegion,
       commonInputs.employerLocality,
     ],
     contactInputs: [
