@@ -1,7 +1,9 @@
+'use client';
+
 import cn from "@/tools/cn";
 
 import { Container } from '@/components/Container';
-import { ArrowLink } from "@/components/ArrowLink";
+import { ArrowLink } from '@/components/ArrowLink';
 
 import { content } from './content';
 import styles from './InnerPage.module.scss';
@@ -16,7 +18,12 @@ type PageParams = {
   };
 };
 
+// eslint-disable-next-line @next/next/no-async-client-component
 export default async function Page({ params: { slug } }: PageParams) {
+  const handleClick = () => {
+    console.log('Взяти участь');
+  };
+
   return (
     <main>
       <Container className='pb-15 lg:flex lg:pt-10 lg:pb-20 lg:gap-x-8 xl:gap-x-20'>
@@ -48,7 +55,7 @@ export default async function Page({ params: { slug } }: PageParams) {
             </li>
 
             <li className='mb-2'>
-              Завантажити фото чи сканкопію малюнку на <a className="text-primary hover:underline" href="">сайт конкурсу</a>, вказавши ім’я, прізвище, вік,
+              Завантажити фото чи сканкопію малюнку на сайт конкурсу, вказавши ім’я, прізвище, вік,
               місце постійного проживання та номер телефону.
             </li>
 
@@ -72,7 +79,7 @@ export default async function Page({ params: { slug } }: PageParams) {
                 styles.arrowLink,
               )
             }
-            href=''
+            onClick={handleClick}
           >
             Взяти участь
           </ArrowLink>
