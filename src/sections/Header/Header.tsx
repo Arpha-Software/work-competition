@@ -4,7 +4,7 @@ import styles from './Header.module.scss';
 
 export const Header = () => {
   return (
-    <header className='px-5 py-7 bg-primary rounded-b-lg sticky top-0 md:py-4.5'>
+    <header className='px-5 py-7 bg-primary rounded-b-lg sticky top-0 md:py-4.5 z-10'>
       <Container>
         <div className={styles.title}>
           <span className='px-8 text-center text-white text-sm md:text-4.5xl/[56px]'>

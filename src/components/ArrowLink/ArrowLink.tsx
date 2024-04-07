@@ -1,27 +1,53 @@
-import { AnchorHTMLAttributes } from "react";
 import Link from "next/link";
-import { LinkProps } from "next/link";
 import { cva } from "class-variance-authority";
 import cn from "@/tools/cn";
 
 import ArrowIcon from "/public/icons/arrow.svg";
 
-type ArrowLinkProps = LinkProps & AnchorHTMLAttributes<HTMLAnchorElement> & {
+import type { UrlObject } from 'url';
+
+type ArrowLinkProps = {
+  href?: string | UrlObject;
+  className?: string;
+  children: React.ReactNode;
   variant?: "primary" | "disabled";
+  onClick?: () => void;
 }
 
 export const ArrowLink = ({
   className,
   variant,
   children,
+  href,
+  onClick,
   ...props
 }: ArrowLinkProps) => {
+  if (!href) {
+    return (
+      <button
+        className={cn(
+          arrowLinkVariants({ variant }),
+          className
+        )}
+        onClick={onClick}
+        {...props}
+      >
+        { children }
+
+        <span className={cn(arrowLinkIconVariants({ variant }))}>
+          <ArrowIcon />
+        </span>
+      </button>
+    )
+  }
+
   return (
     <Link
       className={cn(
         arrowLinkVariants({ variant }),
         className
       )}
+      href={href}
       {...props}
     >
       { children }

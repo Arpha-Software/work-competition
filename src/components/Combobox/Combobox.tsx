@@ -33,7 +33,7 @@ export function Combobox({ value, dispatch, error }: ComboboxProps) {
             variant="outline"
             role="combobox"
             aria-expanded={open}
-            className="w-full justify-between flex border-black h-12"
+            className="w-full justify-between flex border-black h-12 px-4"
           >
             {value
               ? regions && (regions.find((region) => region.value === value)?.value ?? 'Область')

@@ -120,7 +120,7 @@ const Agreements = ({
 
 type FormProps = {
   page: Pages;
-  closeModal?: () => void;
+  closeModal: () => void;
 }
 
 export const Form = ({ page, closeModal }: FormProps) => {
@@ -302,25 +302,11 @@ export const Form = ({ page, closeModal }: FormProps) => {
   )
 }
 
-export const FormModal = ({ page }: FormProps) => {
-  const [isOpen, setIsOpen] = useState(false);
-
-  const openModal = () => {
-    setIsOpen(true);
-    document.body.style.overflow = 'hidden';
-  };
-
-  const closeModal = () => {
-    setIsOpen(false);
-    document.body.style.overflow = 'auto';
-  };
-
+export const FormModal = ({ page, closeModal }: FormProps) => {
   return (
     <Modal
-      className='w-full max-w-[620px] h-[550px] top-4 overflow-auto'
-      openModal={openModal}
+      className='w-full max-w-[620px] md:min-h-[550px] top-4 bottom-4 overflow-auto'
       closeModal={closeModal}
-      isOpen={isOpen}
     >
       <div className='space-y-4'>
         <h2 className='text-3xl text-center uppercase'>Реєстрація</h2>
