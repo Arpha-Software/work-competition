@@ -23,6 +23,7 @@ const config: Config = {
       },
       colors: {
         primary: "#2C64DF",
+        "primary-50": "#E9EAFC",
         secondary: "#FFCC2E",
         disabled: "#BCBCBC",
       }

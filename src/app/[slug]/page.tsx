@@ -1,48 +1,59 @@
 'use client';
 
+import { useState } from "react";
 import cn from "@/tools/cn";
 
 import { Container } from '@/components/Container';
 import { ArrowLink } from '@/components/ArrowLink';
 
+import { Pages } from '@/utils/enums';
+import { FormModal } from '@/components/Form/Form';
 import { content } from './content';
+
 import styles from './InnerPage.module.scss';
 
 type PageParams = {
   params: {
     slug:
-      | 'inovative-solutions'
-      | 'best-specialist'
-      | 'effective-support'
-      | 'art';
+        Pages.inovativeSolutions
+      | Pages.bestSpecialist
+      | Pages.effectiveSupport
+      | Pages.art
   };
 };
 
-// eslint-disable-next-line @next/next/no-async-client-component
-export default async function Page({ params: { slug } }: PageParams) {
-  const handleClick = () => {
-    console.log('Взяти участь');
+export default function Page({ params: { slug } }: PageParams) {
+  const { img, title, subtitle } = content[slug] || { img: '', title: '', subtitle: '' };
+  const [isOpen, setIsOpen] = useState(false);
+
+  const openModal = () => {
+    setIsOpen(true);
+    document.body.style.overflow = 'hidden';
+  };
+
+  const closeModal = () => {
+    setIsOpen(false);
+    document.body.style.overflow = 'auto';
   };
 
   return (
-    <main>
+    <main className='relative'>
       <Container className='pb-15 lg:flex lg:pt-10 lg:pb-20 lg:gap-x-8 xl:gap-x-20'>
         <div className='mb-10 -mr-5 lg:grow lg:w-1/2 lg:order-1 lg:mb-0 lg:-mt-10'>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             className={styles.img}
-            src={content[slug].img}
-            alt={`Картинка для ${content[slug].title} категорії`}
+            src={img}
+            alt={`Картинка для ${title} категорії`}
           />
         </div>
 
         <div className='lg:grow lg:w-1/2'>
           <h1 className='mb-4 text-2lg font-black text-primary lg:mb-6 lg:text-4.5xl/[55px]'>
-            {content[slug].title}
+            {title}
           </h1>
 
           <p className='text-primary text-sm lg:text-base'>
-            {content[slug].subtitle}
+            {subtitle}
           </p>
 
           <h2 className='mt-6 mb-4 text-black font-bold text-base/[22px] lg:mt-8'>Для участі в конкурсі потрібно зробити кілька кроків:</h2>
@@ -79,10 +90,12 @@ export default async function Page({ params: { slug } }: PageParams) {
                 styles.arrowLink,
               )
             }
-            onClick={handleClick}
+            onClick={openModal}
           >
             Взяти участь
           </ArrowLink>
+
+          {isOpen ? <FormModal page={slug} closeModal={closeModal} /> : null}
         </div>
       </Container>
     </main>
