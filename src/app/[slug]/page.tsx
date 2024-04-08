@@ -1,10 +1,12 @@
 'use client';
 
 import { useState } from "react";
+import Link from "next/link";
 import cn from "@/tools/cn";
 
 import { Container } from '@/components/Container';
 import { ArrowLink } from '@/components/ArrowLink';
+import { Button } from '@/components/Button';
 
 import { Pages } from '@/utils/enums';
 import { FormModal } from '@/components/Form/Form';
@@ -39,17 +41,31 @@ export default function Page({ params: { slug } }: PageParams) {
   return (
     <main className='relative'>
       <Container className='pb-15 lg:flex lg:pt-10 lg:pb-20 lg:gap-x-8 xl:gap-x-20'>
-        <div className='mb-10 -mr-5 lg:grow lg:w-1/2 lg:order-1 lg:mb-0 lg:-mt-10'>
+        <div className='relative mb-10 -mr-5 lg:grow lg:w-1/2 lg:order-1 lg:mb-0 lg:-mt-10 lg:flex lg:flex-col'>
           <img
             className={styles.img}
             src={img}
             alt={`Картинка для ${title} категорії`}
           />
+
+          <Button
+            tag="a"
+            className="absolute bottom-0 right-0 lg:static lg:mt-6 lg:ml-auto"
+            variant="primary"
+            href='/'
+          >
+            Повернутись назад
+          </Button>
         </div>
 
         <div className='lg:grow lg:w-1/2'>
-          <h1 className='mb-4 text-2lg font-black text-primary lg:mb-6 lg:text-4.5xl/[55px]'>
-            {title}
+          <h1 className='mb-4 text-2lg font-black lg:mb-6 lg:text-4.5xl/[55px]'>
+            <Link
+              href='/'
+              className="text-primary"
+            >
+              {title}
+            </Link>
           </h1>
 
           <p className='text-primary text-sm lg:text-base'>

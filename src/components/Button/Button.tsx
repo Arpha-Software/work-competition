@@ -1,4 +1,4 @@
-import { ButtonHTMLAttributes, ReactNode } from "react";
+import { ReactNode } from "react";
 import { cva } from "class-variance-authority";
 import cn from "@/tools/cn";
 
@@ -8,6 +8,7 @@ type ButtonProps = {
   className?: string;
   type?: "button" | "submit" | "reset";
   onClick?: () => void;
+  href?: string;
   children: ReactNode;
 }
 
@@ -17,6 +18,7 @@ export const Button = ({
   tag: Tag = "button",
   children,
   type = "button",
+  href,
   onClick,
   ...props
 }: ButtonProps) => {
@@ -28,6 +30,7 @@ export const Button = ({
         className
       )}
       type={type}
+      href={href}
       onClick={onClick}
     >
       { children }
