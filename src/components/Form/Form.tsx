@@ -269,7 +269,6 @@ export const Form = ({ page, closeModal }: FormProps) => {
             type="file"
             id="file"
             name="file"
-            capture="environment"
             className="w-full h-full hidden"
             onChange={handleChange}
           />

@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { FormData } from '@/utils/types';
-import { ErrorMessages, Pages, Regions } from '@/utils/enums';
+import { ErrorMessages, Pages } from '@/utils/enums';
 
 export type ValidationResult = {
   success: boolean;
@@ -23,15 +23,21 @@ const baseSchemaFields = {
   companyName: z.string().min(1, `Назва компанії ${ErrorMessages.Required}`),
   primaryActivityType: z.string().min(1, `Оберіть галузь діяльності ${ErrorMessages.Required}`),
   employerLocality: z.string().min(1, `Місто ${ErrorMessages.Required}`),
-  employeeCount: z.string().min(1, `Кількість працівників має бути не менше 1`),
+  employeeCount: z.string().min(0, `Кількість працівників має бути не менше 0`),
   fullName: z.string().min(1, `Ім'я контактної особи ${ErrorMessages.Required}`),
   email: z.string().email(ErrorMessages.EmailInvalid),
   additionalInfo: z.string().optional(),
   agreement: z.boolean({ required_error: ErrorMessages.ConsentRequired }),
   mobilePhone: z.string()
-    .min(10, ErrorMessages.PhoneInvalid)
-    .max(14, ErrorMessages.PhoneInvalid)
-    .refine((value: string) => /^\+380\d{9}$/.test(value), ErrorMessages.PhoneInvalid),
+    .transform((value) => value.replace(/\D/g, ''))
+    .refine((value) => value.length >= 10 && value.length <= 12, ErrorMessages.PhoneInvalid)
+    .refine((value) => {
+      if (value.length === 9) {
+        return `380${value}`;
+      }
+      return value;
+    })
+    .refine((value) => /^\d+$/.test(value), ErrorMessages.PhoneInvalid) // Ensure the value is numeric
 };
 
 const specificFields = {

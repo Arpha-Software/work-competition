@@ -59,7 +59,7 @@ export function Combobox({ value, dispatch, error }: ComboboxProps) {
                 {regions && (
                   regions.map((region) => (
                     <CommandItem
-                      className="py-2"
+                      className="py-2 hover:bg-primary hover:bg-opacity-10 transition-all"
                       key={region.value}
                       onSelect={(currentValue) => {
                         setSelectValue(currentValue === value ? '' : region.value)
