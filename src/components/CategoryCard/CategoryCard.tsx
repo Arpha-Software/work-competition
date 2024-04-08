@@ -22,25 +22,25 @@ export const CategoryCard = ({
   const { title, description } = content;
 
   return (
-    <div className={cn("max-w-[600px] w-full", className)}>
+    <div className={cn("max-w-[600px] w-full lg:flex lg:flex-col lg:rounded lg:shadow-lg lg:py-6 lg:overflow-hidden", className)}>
       <Image
         src={src}
         alt={alt}
         width={600}
         height={500}
-        className="w-full h-[500px] bg-slate-300 mb-6 object-cover"
+        className="w-full h-[500px] bg-slate-300 mb-6 object-cover lg:h-auto lg:rounded-t"
       />
 
-      <div className="space-y-4">
-        <h2 className="text-3.5xl font-black text-primary">
+      <div className="lg:px-4 lg:flex lg:flex-col lg:grow">
+        <h2 className="text-3.5xl font-black text-primary mb-4 lg:text-lg lg:font-extrabold">
           { title }
         </h2>
 
-        <p className="text-primary">
+        <p className="text-primary mb-4 lg:mb-6">
           { description }
         </p>
 
-        <ArrowLink href={linkHref}>Подивитись докладніше</ArrowLink>
+        <ArrowLink href={linkHref} className="lg:mt-auto">Подивитись докладніше</ArrowLink>
       </div>
     </div>
   )

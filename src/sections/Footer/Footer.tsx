@@ -1,6 +1,9 @@
 import Image from 'next/image';
+import cn from '@/tools/cn';
 
 import { Container } from '@/components/Container';
+
+import styles from './Footer.module.scss';
 
 export const Footer = () => {
   return (
@@ -26,13 +29,17 @@ export const Footer = () => {
           </li>
         </ul>
 
-        <div className='mt-15 md:mt-0'>
+        <div className='flex flex-col items-center mt-15 md:mt-0 md:grow'>
           <Image
             className='mx-auto'
             src='/images/logo_mobile.png'
             alt='Logo'
             width={112}
             height={40}
+          />
+
+          <div
+            className={cn(styles.pattern, 'mt-4 w-full')}
           />
         </div>
 
