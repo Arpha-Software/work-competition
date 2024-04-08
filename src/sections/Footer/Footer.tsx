@@ -4,7 +4,7 @@ import { Container } from '@/components/Container';
 
 export const Footer = () => {
   return (
-    <footer className='bg-black py-20'>
+    <footer className='bg-black py-20 mt-20'>
       <Container className='text-center text-white md:flex md:justify-between md:items-center'>
         <ul className='list-none p-0 m-0 md:text-left'>
           <li className='mb-3.5'>

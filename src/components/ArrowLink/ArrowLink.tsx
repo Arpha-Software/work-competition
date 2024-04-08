@@ -12,6 +12,7 @@ type ArrowLinkProps = {
   children: React.ReactNode;
   variant?: "primary" | "disabled";
   onClick?: () => void;
+  target?: string;
 }
 
 export const ArrowLink = ({
@@ -20,6 +21,7 @@ export const ArrowLink = ({
   children,
   href,
   onClick,
+  target,
   ...props
 }: ArrowLinkProps) => {
   if (!href) {
@@ -47,6 +49,7 @@ export const ArrowLink = ({
         arrowLinkVariants({ variant }),
         className
       )}
+      target={target}
       href={href}
       {...props}
     >

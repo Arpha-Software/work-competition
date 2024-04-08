@@ -23,7 +23,7 @@ type PageParams = {
 };
 
 export default function Page({ params: { slug } }: PageParams) {
-  const { img, title, subtitle } = content[slug] || { img: '', title: '', subtitle: '' };
+  const { img, title, subtitle, description } = content[slug] || { img: '', title: '', subtitle: '' };
   const [isOpen, setIsOpen] = useState(false);
 
   const openModal = () => {
@@ -59,28 +59,9 @@ export default function Page({ params: { slug } }: PageParams) {
           <h2 className='mt-6 mb-4 text-black font-bold text-base/[22px] lg:mt-8'>Для участі в конкурсі потрібно зробити кілька кроків:</h2>
 
           <ul className='m-0 pl-4 text-black list-decimal text-base/[22px]'>
-            <li className='mb-2'>
-              Намалювати малюнок на папері на тему «Мистецтво, що рятує життя».
-              Немає значення, скільки вам років, вмієте ви малювати чи користуєтеся відповідним програмним
-              забезпеченням. Фантазія і почуття – ось що робить ескіз, постер, малюнок витвором мистецтва.
-            </li>
-
-            <li className='mb-2'>
-              Завантажити фото чи сканкопію малюнку на сайт конкурсу, вказавши ім’я, прізвище, вік,
-              місце постійного проживання та номер телефону.
-            </li>
-
-            <li className='mb-2'>
-              На конкурс можна подати один малюнок.
-            </li>
-
-            <li className='mb-2'>
-              Оригінал малюнку потрібно зберігати до оголошення фіналістів конкурсу.
-            </li>
-
-            <li>
-              Фіналісти конкурси мають надіслати оригінал малюнка організатору конкурсу.
-            </li>
+            {description.map((item, index) => (
+              <li key={index} className='mb-2'>{item}</li>
+            ))}
           </ul>
 
           <ArrowLink
@@ -90,6 +71,8 @@ export default function Page({ params: { slug } }: PageParams) {
                 styles.arrowLink,
               )
             }
+            href={slug === Pages.bestSpecialist ? 'https://ratingop.expertus.com.ua/' : ''}
+            target='_blank'
             onClick={openModal}
           >
             Взяти участь
