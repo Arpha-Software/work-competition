@@ -15,7 +15,7 @@ export const Input = ({
 }: InputProps) => {
   return (
     <label className="relative block">
-      <span className="absolute bg-white left-4 -top-2 px-2 text-[13px]">
+      <span className="absolute bg-white left-4 -top-2 px-2 text-xs md:text-[13px] truncate max-w-48 sm:max-w-full">
         { label }
       </span>
 

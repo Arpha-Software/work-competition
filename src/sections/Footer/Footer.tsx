@@ -16,7 +16,7 @@ export const Footer = () => {
       <Container className='text-center text-white md:flex md:justify-between md:items-center'>
         <ul className='list-none p-0 m-0 md:text-left'>
           {footerLinks.map(({ href, label, title }) => (
-            <li key={href} className='mb-3.5'>
+            <li key={href} className='mb-3.5 hover:opacity-70 transition-all'>
               <a href={href} className='text-white' title={title || ''}>
                 { label }
               </a>
