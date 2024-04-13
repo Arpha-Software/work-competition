@@ -188,7 +188,7 @@ export const Form = ({ page, closeModal }: FormProps) => {
 
     const formFormData = new FormData();
 
-    formFormData.append('data', new Blob([JSON.stringify({...formData, category: content[page].title, employerRegion: selectedRegion})], { type: 'application/json' }));
+    formFormData.append('data', new Blob([JSON.stringify({...formData, category: content[page].title, employerRegion: selectedRegion || 'Львівська'})], { type: 'application/json' }));
     if (file) {
       formFormData.append('file', file as Blob, file.name);
     }
@@ -219,7 +219,13 @@ export const Form = ({ page, closeModal }: FormProps) => {
 
   return (
     <form className="mt-8 space-y-6 last:space-y-8" onSubmit={handleSubmit}>
-      <Combobox value={selectedRegion} dispatch={dispatch} error="Це поле є обов'язковим" />
+      {page === Pages.art ? (
+        <Combobox
+          value={selectedRegion}
+          dispatch={dispatch}
+          error="Це поле є обов'язковим"
+        />
+       ) : null}
 
       {pages[page].mainInputs.map(({ label, placeholder, name, type, min, max, className }, index) => (
         <Input
