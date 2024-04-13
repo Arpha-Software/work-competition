@@ -26,6 +26,15 @@ const config: Config = {
         "primary-50": "#E9EAFC",
         secondary: "#FFCC2E",
         disabled: "#BCBCBC",
+      },
+      keyframes: {
+        loop: {
+          '0%': { transform: 'translateX(0)' },
+          '100%': { transform: 'translateX(-50%)' },
+        }
+      },
+      animation: {
+        'scroll': 'loop 20s linear infinite',
       }
     },
   },

@@ -1,37 +1,31 @@
 import Image from 'next/image';
-import cn from '@/tools/cn';
+import Link from 'next/link';
 
 import { Container } from '@/components/Container';
 
-import Link from 'next/link';
-
 export const Footer = () => {
+  const footerLinks = [
+    { href: "https://t.me/bezpeka_pratsi", label: "Telegram" },
+    { href: "https://www.facebook.com/mystetstvobezpekypratsi", label: "Facebook" },
+    { href: "tel:+380668685220", label: "+38066-868-52-20*", title: "*Вартість дзвінків згідно з тарифами вашого оператора" },
+    { href: "mailto:mystetstvobp@gmail.com", label: "mystetstvobp@gmail.com" }
+  ];
+
   return (
-    <footer className='relative bg-black py-20 mt-20'>
+    <footer className='relative bg-primary py-20 mt-20'>
       <Container className='text-center text-white md:flex md:justify-between md:items-center'>
         <ul className='list-none p-0 m-0 md:text-left'>
-          <li className='mb-3.5'>
-            <a className='text-white' href=''>
-              Facebook
-            </a>
-          </li>
-
-          <li className='mb-3.5'>
-            <a className='text-white' href='tel:+380938514359'>
-              +380938514359
-            </a>
-          </li>
-
-          <li>
-            <a className='text-white' href='mailto:example@gmail.com'>
-              example@gmail.com
-            </a>
-          </li>
+          {footerLinks.map(({ href, label, title }) => (
+            <li key={href} className='mb-3.5 hover:opacity-70 transition-all'>
+              <a href={href} className='text-white' title={title || ''}>
+                { label }
+              </a>
+            </li>
+          ))}
         </ul>
 
         <Link href='/' className='flex flex-col items-center mt-15 md:mt-0 md:grow'>
           <Image
-            className='mx-auto'
             src='/images/logo_mobile.png'
             alt='Logo'
             width={112}
@@ -40,11 +34,10 @@ export const Footer = () => {
         </Link>
 
         <div className='mt-15 md:mt-0 md:text-right'>
-          <div className='mb-3.5 text-base/["19px"]'>
-            Створено командою Arpha Software
+          <div className='mb-3.5 text-base'>
+            Створено командою ДСУ з питань праці
           </div>
-
-          <div className='text-sm/["17px"]'>2024 © All rights reserved</div>
+          <div className='text-sm'>2024 © All rights reserved</div>
         </div>
       </Container>
     </footer>

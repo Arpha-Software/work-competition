@@ -26,7 +26,6 @@ import { Modal } from "../Modal";
 import { Combobox } from "@/components/Combobox";
 
 type AgreementsProps = {
-  page: Pages;
   formData: FormData;
   validationErrors: Record<string, string>;
   updateAgreementState: (value: boolean) => void;
@@ -34,7 +33,6 @@ type AgreementsProps = {
 }
 
 const Agreements = ({
-  page,
   formData,
   validationErrors,
   updateAgreementState,
@@ -57,65 +55,46 @@ const Agreements = ({
     updateAgreementState(isCheckedFirst && newState);
   };
 
-  if (page === Pages.art) {
-    return (
-      <>
-        <label htmlFor="agreement" className='flex items-center select-none relative'>
-          <input
-            type="checkbox"
-            id="agreement"
-            name="agreement"
-            checked={isCheckedFirst}
-            onChange={onFirstCheckboxChange}
-            className='mr-2'
-            required
-          />
-
-          <span className="text-sm">
-            Я надаю згоду на обробку персональних даних <span className="font-semibold">(якщо учасник неповнолітній – згоду надає один з батьків, зазначивши своє ПІБ)</span>
-          </span>
-
-          {validationErrors.agreement ? <span className="absolute top-full text-xs text-red-500">{validationErrors.agreement}</span> : null}
-        </label>
-
-        <label htmlFor="agreement2" className='flex items-center select-none relative'>
-          <input
-            type="checkbox"
-            id="agreement2"
-            name="agreement2"
-            checked={isCheckedSecond}
-            onChange={onSecondCheckboxChange}
-            className='mr-2'
-            required
-          />
-
-          <span className="text-sm">
-            Я надаю згоду на реалізацію шляхом продажу на аукціоні, організованому Держпраці, твору образотворчого мистецтва, виконаного мною особисто, із подальшим направленням отриманих коштів на потреби Збройних сил України.
-            <span className="font-semibold">(якщо учасник неповнолітній – згоду надає один з батьків, зазначивши своє ПІБ)</span>
-          </span>
-
-          {validationErrors.agreement2 ? <span className="absolute top-full text-xs text-red-500">{validationErrors.agreement2}</span> : null}
-        </label>
-      </>
-    )
-  } else {
-    return (
+  return (
+    <>
       <label htmlFor="agreement" className='flex items-center select-none relative'>
         <input
           type="checkbox"
           id="agreement"
           name="agreement"
-          checked={!!formData.agreement}
-          onChange={handleChange}
+          checked={isCheckedFirst}
+          onChange={onFirstCheckboxChange}
           className='mr-2'
           required
         />
 
-        <span className="text-sm">Надаю згоду на обробку персональних даних</span>
+        <span className="text-sm">
+          Я надаю згоду на обробку персональних даних
+        </span>
+
         {validationErrors.agreement ? <span className="absolute top-full text-xs text-red-500">{validationErrors.agreement}</span> : null}
       </label>
-    )
-  }
+
+      <label htmlFor="agreement2" className='flex items-center select-none relative'>
+        <input
+          type="checkbox"
+          id="agreement2"
+          name="agreement2"
+          checked={isCheckedSecond}
+          onChange={onSecondCheckboxChange}
+          className='mr-2'
+          required
+        />
+
+        <span className="text-sm">
+          Я надаю згоду на реалізацію шляхом продажу на аукціоні, організованому Держпраці,
+          твору образотворчого мистецтва, виконаного мною особисто, із подальшим направленням отриманих коштів на потреби Збройних сил України.
+        </span>
+
+        {validationErrors.agreement2 ? <span className="absolute top-full text-xs text-red-500">{validationErrors.agreement2}</span> : null}
+      </label>
+    </>
+  )
 }
 
 type FormProps = {
@@ -209,7 +188,7 @@ export const Form = ({ page, closeModal }: FormProps) => {
 
     const formFormData = new FormData();
 
-    formFormData.append('data', new Blob([JSON.stringify({...formData, category: content[page].title, employerRegion: selectedRegion})], { type: 'application/json' }));
+    formFormData.append('data', new Blob([JSON.stringify({...formData, category: content[page].title, employerRegion: selectedRegion || 'Львівська'})], { type: 'application/json' }));
     if (file) {
       formFormData.append('file', file as Blob, file.name);
     }
@@ -240,7 +219,13 @@ export const Form = ({ page, closeModal }: FormProps) => {
 
   return (
     <form className="mt-8 space-y-6 last:space-y-8" onSubmit={handleSubmit}>
-      <Combobox value={selectedRegion} dispatch={dispatch} error="Це поле є обов'язковим" />
+      {page === Pages.art ? (
+        <Combobox
+          value={selectedRegion}
+          dispatch={dispatch}
+          error="Це поле є обов'язковим"
+        />
+       ) : null}
 
       {pages[page].mainInputs.map(({ label, placeholder, name, type, min, max, className }, index) => (
         <Input
@@ -289,7 +274,6 @@ export const Form = ({ page, closeModal }: FormProps) => {
       </div>
 
       <Agreements
-        page={page}
         formData={formData}
         validationErrors={validationErrors}
         updateAgreementState={updateAgreementState}
