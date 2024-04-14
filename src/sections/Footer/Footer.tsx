@@ -35,7 +35,7 @@ export const Footer = () => {
 
         <div className='mt-15 md:mt-0 md:text-right'>
           <div className='mb-3.5 text-base'>
-            Створено командою ДСУ з питань праці
+            Створено командою Держпраці
           </div>
           <div className='text-sm'>2024 © All rights reserved</div>
         </div>
