@@ -7,7 +7,7 @@ export const Footer = () => {
   const footerLinks = [
     { href: "https://t.me/bezpeka_pratsi", label: "Telegram" },
     { href: "https://www.facebook.com/mystetstvobezpekypratsi", label: "Facebook" },
-    { href: "tel:+380668685220", label: "+38066-868-52-20*", title: "*Вартість дзвінків згідно з тарифами вашого оператора" },
+    { href: "tel:+380668685220", label: "+38 066-868-52-20*", title: "*Вартість дзвінків згідно з тарифами вашого оператора" },
     { href: "mailto:mystetstvobp@gmail.com", label: "mystetstvobp@gmail.com" }
   ];
 
