@@ -10,6 +10,7 @@ const images = {
     partner2: "/images/partner2.png",
     partner3: "/images/partner3.png",
     partner4: "/images/partner4.png",
+    partner5: "/images/partner5.png",
   }
 }
 
