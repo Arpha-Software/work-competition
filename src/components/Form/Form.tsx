@@ -234,7 +234,11 @@ export const Form = ({ page, closeModal }: FormProps) => {
         />
       ))}
 
-      <h3 className="text-lg font-semibold mt-8 mb-6">Контактна особа</h3>
+      {page !== Pages.art ? (
+        <h3 className="text-lg font-semibold mt-8 mb-6">
+          Контактна особа
+        </h3>
+      ) : null}
 
       {pages[page].contactInputs.map(({ label, placeholder, name, type, className }, index) => (
         <Input
