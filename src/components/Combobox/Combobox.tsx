@@ -37,7 +37,7 @@ export function Combobox({ value, dispatch, error }: ComboboxProps) {
           >
             {value
               ? regions && (regions.find((region) => region.value === value)?.value ?? 'Область')
-              : <span className="truncate text-xs">Оберіть область, в якій знаходиться роботодавець</span>}
+              : <span className="truncate text-xs">Оберіть область</span>}
             <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
           </Button>
         </PopoverTrigger>

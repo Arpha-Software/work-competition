@@ -8,7 +8,7 @@ export type ValidationResult = {
   errors?: { field: string; message: string }[];
 };
 
-const MAX_UPLOAD_SIZE = 1024 * 1024 * 20;
+const MAX_UPLOAD_SIZE = 1024 * 1024 * 50;
 const ACCEPTED_FILE_TYPES = [
   "image/jpeg",
   "image/jpg",
@@ -16,7 +16,10 @@ const ACCEPTED_FILE_TYPES = [
   "image/webp",
   "application/pdf",
   "application/vnd.openxmlformats-officedocument.presentationml.presentation",
-  "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+  "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+  "video/mp4",
+  "video/x-msvideo",
+  "video/quicktime",
 ];
 
 const baseSchemaFields = {
@@ -52,14 +55,14 @@ const fileSchema = z.instanceof(File, { message: ErrorMessages.FileRequired })
   .refine(file => !file || file.size <= MAX_UPLOAD_SIZE, ErrorMessages.FileSize)
   .refine(file => file?.type ? ACCEPTED_FILE_TYPES.includes(file.type) : false, ErrorMessages.FileType);
 
-const { companyName, employeeCount, ...baseSchemaFieldsWithoutCompanyName } = baseSchemaFields;
+const { companyName, employeeCount, primaryActivityType, email, mobilePhone, ...baseSchemaFieldsArt } = baseSchemaFields;
 
 const schemas = {
   [Pages.inovativeSolutions]: z.object({ ...baseSchemaFields, file: fileSchema }),
   [Pages.bestSpecialist]: z.object({ ...baseSchemaFields, file: fileSchema }),
   [Pages.effectiveSupport]: z.object({ ...baseSchemaFields, file: fileSchema }),
   [Pages.art]: z.object({
-    ...baseSchemaFieldsWithoutCompanyName,
+    ...baseSchemaFieldsArt,
     ...specificFields,
     file: fileSchema
     })

@@ -13,6 +13,7 @@ import { FormModal } from '@/components/Form/Form';
 import { content } from './content';
 
 import styles from './InnerPage.module.scss';
+import { Toaster } from "react-hot-toast";
 
 type PageParams = {
   params: {
@@ -97,6 +98,11 @@ export default function Page({ params: { slug } }: PageParams) {
           {isOpen ? <FormModal page={slug} closeModal={closeModal} /> : null}
         </div>
       </Container>
+
+      <Toaster
+        position="top-right"
+        reverseOrder={false}
+      />
     </main>
   );
 }

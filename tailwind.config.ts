@@ -34,7 +34,7 @@ const config: Config = {
         }
       },
       animation: {
-        'scroll': 'loop 24s linear infinite',
+        'scroll': 'loop 30s linear infinite',
       }
     },
   },

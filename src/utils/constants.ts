@@ -11,6 +11,7 @@ const images = {
     partner3: "/images/partner3.png",
     partner4: "/images/partner4.png",
     partner5: "/images/partner5.png",
+    partner6: "/images/partner6.png",
   }
 }
 
