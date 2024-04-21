@@ -8,7 +8,7 @@ export type ValidationResult = {
   errors?: { field: string; message: string }[];
 };
 
-const MAX_UPLOAD_SIZE = 1024 * 1024 * 20;
+const MAX_UPLOAD_SIZE = 1024 * 1024 * 50;
 const ACCEPTED_FILE_TYPES = [
   "image/jpeg",
   "image/jpg",
@@ -16,7 +16,10 @@ const ACCEPTED_FILE_TYPES = [
   "image/webp",
   "application/pdf",
   "application/vnd.openxmlformats-officedocument.presentationml.presentation",
-  "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+  "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+  "video/mp4",
+  "video/x-msvideo",
+  "video/quicktime",
 ];
 
 const baseSchemaFields = {

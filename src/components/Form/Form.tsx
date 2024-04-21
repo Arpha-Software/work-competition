@@ -21,7 +21,7 @@ import {
 import { validateFormData } from "./form-types";
 import { cutFileName } from "@/tools/helpers";
 import { content } from "@/app/[slug]/content";
-import { submitForm } from "@/api/form";
+import { putFile, submitForm } from "@/api/form";
 import { Modal } from "../Modal";
 import { Combobox } from "@/components/Combobox";
 
@@ -186,20 +186,23 @@ export const Form = ({ page, closeModal }: FormProps) => {
 
     dispatch({ type: FormActionTypes.SET_VALIDATION_ERRORS, validationErrors: {} });
 
-    const formFormData = new FormData();
-
-    formFormData.append('data', new Blob([JSON.stringify({...formData, category: content[page].title, employerRegion: selectedRegion || 'Львівська'})], { type: 'application/json' }));
-    if (file) {
-      formFormData.append('file', file as Blob, file.name);
+    const body = {
+      ...formData,
+      category: content[page].title,
+      employerRegion: selectedRegion || 'Львівська',
+      file: {
+        type: file?.type,
+      },
     }
 
-    submitForm(formFormData).then(response => {
-      if (response.success) {
-        console.log("Form submitted successfully");
-        closeModal && closeModal();
-      } else {
-        console.error("Form submission failed");
-      }
+    submitForm(body).then(response => {
+      putFile(file, response.fileAccessLink.url).then((res) => {
+        if (res.ok && response) {
+          closeModal();
+        }
+      }).catch((error) => {
+        console.error("error", error);
+      });
     }).finally(() => {
       dispatch({ type: FormActionTypes.IS_LOADING, isLoading: false });
     });
