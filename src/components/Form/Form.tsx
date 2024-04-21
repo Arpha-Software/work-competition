@@ -24,6 +24,7 @@ import { content } from "@/app/[slug]/content";
 import { putFile, submitForm } from "@/api/form";
 import { Modal } from "../Modal";
 import { Combobox } from "@/components/Combobox";
+import { Toaster, toast } from "react-hot-toast";
 
 type AgreementsProps = {
   formData: FormData;
@@ -196,13 +197,14 @@ export const Form = ({ page, closeModal }: FormProps) => {
     }
 
     submitForm(body).then(response => {
-      putFile(file, response.fileAccessLink.url).then((res) => {
-        if (res.ok && response) {
-          closeModal();
-        }
+      putFile(file, response.fileAccessLink.url).then(() => {
+        closeModal();
       }).catch((error) => {
-        console.error("error", error);
+        console.error("file error", error);
+        toast.error('Помилка при завантаженні файлу');
       });
+    }).catch((error) => {
+      console.error("submit error", error);
     }).finally(() => {
       dispatch({ type: FormActionTypes.IS_LOADING, isLoading: false });
     });
@@ -221,74 +223,76 @@ export const Form = ({ page, closeModal }: FormProps) => {
   }
 
   return (
-    <form className="mt-8 space-y-6 last:space-y-8" onSubmit={handleSubmit}>
-      {page === Pages.art ? (
-        <Combobox
-          value={selectedRegion}
-          dispatch={dispatch}
-          error="Це поле є обов'язковим"
-        />
-       ) : null}
-
-      {pages[page].mainInputs.map(({ label, placeholder, name, type, min, max, className }, index) => (
-        <Input
-          {...getInputConfig({ label, placeholder, name, type, min, max, className })}
-          key={`${label}-${index}`}
-        />
-      ))}
-
-      {page !== Pages.art ? (
-        <h3 className="text-lg font-semibold mt-8 mb-6">
-          Контактна особа
-        </h3>
-      ) : null}
-
-      {pages[page].contactInputs.map(({ label, placeholder, name, type, className }, index) => (
-        <Input
-          {...getInputConfig({ label, placeholder, name, type, className })}
-          key={`${label}-${index}`}
-        />
-      ))}
-
-      <div className="flex items-center relative">
-        <Button className="w-36 h-14 p-0" tag="div" variant="secondary">
-          <label htmlFor="file" className="flex items-center w-full h-full px-3 justify-between cursor-pointer">
-            <FileIcon />
-            <span>Ваша робота</span>
-          </label>
-
-          <input
-            type="file"
-            id="file"
-            name="file"
-            className="w-full h-full hidden"
-            onChange={handleChange}
+    <>
+      <form className="mt-8 space-y-6 last:space-y-8" onSubmit={handleSubmit}>
+        {page === Pages.art ? (
+          <Combobox
+            value={selectedRegion}
+            dispatch={dispatch}
+            error="Це поле є обов'язковим"
           />
-        </Button>
-
-        {validationErrors.file ? (
-          <span className="absolute top-full text-xs text-red-500">
-            {validationErrors.file}
-          </span>
         ) : null}
 
-        {file && (
-          <div className="text-sm">
-            <span className="block ml-3">Обраний файл: {cutFileName(file.name)}</span>
-            <span className="ml-3">Розмір файлу: {file.size} байт</span>
-          </div>
-        )}
-      </div>
+        {pages[page].mainInputs.map(({ label, placeholder, name, type, min, max, className }, index) => (
+          <Input
+            {...getInputConfig({ label, placeholder, name, type, min, max, className })}
+            key={`${label}-${index}`}
+          />
+        ))}
 
-      <Agreements
-        formData={formData}
-        validationErrors={validationErrors}
-        updateAgreementState={updateAgreementState}
-        handleChange={handleChange}
-      />
+        {page !== Pages.art ? (
+          <h3 className="text-lg font-semibold mt-8 mb-6">
+            Контактна особа
+          </h3>
+        ) : null}
 
-      <Button className="w-full mt-8" type="submit">Відправити</Button>
-    </form>
+        {pages[page].contactInputs.map(({ label, placeholder, name, type, className }, index) => (
+          <Input
+            {...getInputConfig({ label, placeholder, name, type, className })}
+            key={`${label}-${index}`}
+          />
+        ))}
+
+        <div className="flex items-center relative">
+          <Button className="w-36 h-14 p-0" tag="div" variant="secondary">
+            <label htmlFor="file" className="flex items-center w-full h-full px-3 justify-between cursor-pointer">
+              <FileIcon />
+              <span>Ваша робота</span>
+            </label>
+
+            <input
+              type="file"
+              id="file"
+              name="file"
+              className="w-full h-full hidden"
+              onChange={handleChange}
+            />
+          </Button>
+
+          {validationErrors.file ? (
+            <span className="absolute top-full text-xs text-red-500">
+              {validationErrors.file}
+            </span>
+          ) : null}
+
+          {file && (
+            <div className="text-sm">
+              <span className="block ml-3">Обраний файл: {cutFileName(file.name)}</span>
+              <span className="ml-3">Розмір файлу: {file.size} байт</span>
+            </div>
+          )}
+        </div>
+
+        <Agreements
+          formData={formData}
+          validationErrors={validationErrors}
+          updateAgreementState={updateAgreementState}
+          handleChange={handleChange}
+        />
+
+        <Button className="w-full mt-8" type="submit">Відправити</Button>
+      </form>
+    </>
   )
 }
 

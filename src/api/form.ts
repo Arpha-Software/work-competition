@@ -1,3 +1,5 @@
+import toast from "react-hot-toast";
+
 export async function submitForm(data: any) {
   console.log("data", data);
   const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/users`, {
@@ -7,6 +9,11 @@ export async function submitForm(data: any) {
       "Content-Type": "application/json",
     }
   });
+
+  if (!response.ok) {
+    toast.error('Не вдалося відправити, перевірте будь ласка введені дані!');
+    return;
+  }
 
   return response.json();
 }
@@ -20,5 +27,11 @@ export async function putFile(file: any, url: string) {
     }
   });
 
+  if (!response.ok) {
+    toast.error('Не вдалося відправити, перевірте будь ласка введені дані!');
+    return;
+  }
+
+  toast.success('Дані успішно відправлені!');
   return response;
 }
