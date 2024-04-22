@@ -46,8 +46,8 @@ export function Combobox({ value, dispatch, error }: ComboboxProps) {
             <span className="absolute top-full left-0 text-red-500 text-xs">{ error }</span>
         ): null}
 
-        <PopoverContent className="bg-white w-full h-96 overflow-auto" hideWhenDetached align="start">
-          <Command className="block">
+        <PopoverContent className="bg-white w-full h-96" hideWhenDetached align="start">
+          <Command className="block overflow-auto">
             <CommandInput placeholder='Пошук областей' className="py-2 outline-none"/>
 
             <CommandEmpty>
