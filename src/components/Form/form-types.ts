@@ -55,7 +55,7 @@ const fileSchema = z.instanceof(File, { message: ErrorMessages.FileRequired })
   .refine(file => !file || file.size <= MAX_UPLOAD_SIZE, ErrorMessages.FileSize)
   .refine(file => file?.type ? ACCEPTED_FILE_TYPES.includes(file.type) : false, ErrorMessages.FileType);
 
-const { companyName, employeeCount, primaryActivityType, email, mobilePhone, ...baseSchemaFieldsArt } = baseSchemaFields;
+const { companyName, employeeCount, ...baseSchemaFieldsArt } = baseSchemaFields;
 
 const schemas = {
   [Pages.inovativeSolutions]: z.object({ ...baseSchemaFields, file: fileSchema }),
