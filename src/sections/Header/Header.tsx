@@ -8,16 +8,17 @@ import styles from './Header.module.scss';
 
 export const Header = () => {
   return (
-    <header className={cn('px-5 pt-7 pb-15 rounded-b-lg sticky top-0 md:pt-4.5 z-10 overflow-hidden', styles.bg)}>
-      <Container>
-        <Link href="/" className='block px-8 text-center text-white text-sm md:text-4.5xl/[56px] uppercase'>
+    <header className={cn('pb-10 rounded-b-lg sticky top-0 z-10 overflow-hidden', styles.bg)}>
+      <Container className='mx-0 lg:mx-0'>
+        <Link href="/" className='block relative text-center text-white text-sm md:text-4.5xl/[56px] uppercase'>
           <Image
-            src='/images/header-image.jpg'
+            src='/images/image.jpg'
             alt='logo'
             width={240}
             height={50}
-            className='block mx-auto mb-2'
+            className='block w-full h-20 md:h-full'
           />
+          <h1 className='absolute text-[#1960C4] font-bold text-base lg:text-5xl flex h-full top-0 justify-center items-center w-full'>Мистецтво безпеки праці</h1>
         </Link>
       </Container>
 
