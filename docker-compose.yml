@@ -3,7 +3,7 @@ services:
   app:
     image: work-competition
     environment:
-      NEXT_PUBLIC_BASE_URL: "https://best-image-competition-bc327bfa5fa3.herokuapp.com"
+      - NEXT_PUBLIC_BASE_URL
     build:
       context: ./
       dockerfile: Dockerfile
