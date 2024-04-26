@@ -18,7 +18,7 @@ export const Header = () => {
             height={50}
             className='block w-full h-20 md:h-full'
           />
-          <h1 className='absolute text-[#1960C4] font-bold text-base lg:text-5xl flex h-full top-0 justify-center items-center w-full'>Мистецтво безпеки праці</h1>
+          <h1 className='absolute text-[#1960C4] font-black text-base lg:text-5xl flex h-full top-0 justify-center items-center w-full'>Мистецтво безпеки праці</h1>
         </Link>
       </Container>
 
