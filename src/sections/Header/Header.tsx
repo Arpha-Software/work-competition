@@ -14,9 +14,10 @@ export const Header = () => {
           <Image
             src='/images/image.jpg'
             alt='logo'
-            width={240}
-            height={50}
+            width={1920}
+            height={800}
             className='block w-full h-20 md:h-full'
+            quality={100}
           />
           <h1 className='absolute text-[#1960C4] font-black text-base lg:text-5xl flex h-full top-0 justify-center items-center w-full'>Мистецтво безпеки праці</h1>
         </Link>
