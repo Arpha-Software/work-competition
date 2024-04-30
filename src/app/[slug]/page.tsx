@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import cn from "@/tools/cn";
+import { Toaster } from "react-hot-toast";
 
 import { Container } from '@/components/Container';
 import { ArrowLink } from '@/components/ArrowLink';
@@ -13,7 +14,6 @@ import { FormModal } from '@/components/Form/Form';
 import { content } from './content';
 
 import styles from './InnerPage.module.scss';
-import { Toaster } from "react-hot-toast";
 
 type PageParams = {
   params: {
@@ -76,9 +76,21 @@ export default function Page({ params: { slug } }: PageParams) {
           <h2 className='mt-6 mb-4 text-black font-bold text-base/[22px] lg:mt-8'>Для участі в конкурсі потрібно зробити кілька кроків:</h2>
 
           <ul className='m-0 pl-4 text-black list-decimal text-base/[22px]'>
-            {description.map((item, index) => (
-              <li key={index} className='mb-2'>{item}</li>
-            ))}
+            {description.map((item, index) => {
+              if (Array.isArray(item)) {
+                return (
+                  <ul key={index} className='pl-4'>
+                    {item.map((subItem, subIndex) => (
+                      <li key={subIndex} className='mb-2'>{subItem}</li>
+                    ))}
+                  </ul>
+                );
+              }
+
+              return (
+                <li key={index} className='mb-2'>{item}</li>
+              );
+            })}
           </ul>
 
           <ArrowLink
