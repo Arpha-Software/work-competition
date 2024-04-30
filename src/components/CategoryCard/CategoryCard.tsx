@@ -2,6 +2,7 @@ import Image from "next/image";
 import cn from "@/tools/cn";
 
 import { ArrowLink } from "../ArrowLink";
+import Link from 'next/link';
 
 import type { ContentT, ImageT } from "@/utils/types";
 
@@ -23,13 +24,15 @@ export const CategoryCard = ({
 
   return (
     <div className={cn("max-w-[600px] w-full lg:flex lg:flex-col lg:rounded lg:shadow-lg lg:py-6 lg:overflow-hidden", className)}>
-      <Image
-        src={src}
-        alt={alt}
-        width={600}
-        height={500}
-        className="w-full h-[500px] bg-slate-300 mb-6 object-cover lg:h-auto lg:rounded-t"
-      />
+      <Link href={linkHref} className="block w-full h-[500px] lg:h-auto">
+        <Image
+          src={src}
+          alt={alt}
+          width={600}
+          height={500}
+          className="w-full h-full bg-slate-300 mb-6 object-cover lg:rounded-t"
+        />
+      </Link>
 
       <div className="lg:px-4 lg:flex lg:flex-col lg:grow">
         <h2 className="text-3.5xl font-black text-primary mb-4 lg:text-lg lg:font-extrabold">
