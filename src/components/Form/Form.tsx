@@ -30,14 +30,14 @@ type AgreementsProps = {
   formData: FormData;
   validationErrors: Record<string, string>;
   updateAgreementState: (value: boolean) => void;
-  handleChange: (e: ChangeEvent<HTMLInputElement>) => void;
+  page: Pages;
 }
 
 const Agreements = ({
   formData,
   validationErrors,
   updateAgreementState,
-  handleChange,
+  page,
 }: AgreementsProps) => {
   const [isCheckedFirst, setIsCheckedFirst] = useState(!!formData.agreement);
   const [isCheckedSecond, setIsCheckedSecond] = useState(!!formData.agreement);
@@ -46,7 +46,7 @@ const Agreements = ({
     const newState = e.target.checked;
     setIsCheckedFirst(newState);
 
-    updateAgreementState(newState && isCheckedSecond);
+    page === Pages.inovativeSolutions ? updateAgreementState(true) : updateAgreementState(newState && isCheckedSecond);
   };
 
   const onSecondCheckboxChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -76,24 +76,26 @@ const Agreements = ({
         {validationErrors.agreement ? <span className="absolute top-full text-xs text-red-500">{validationErrors.agreement}</span> : null}
       </label>
 
-      <label htmlFor="agreement2" className='flex items-center select-none relative'>
-        <input
-          type="checkbox"
-          id="agreement2"
-          name="agreement2"
-          checked={isCheckedSecond}
-          onChange={onSecondCheckboxChange}
-          className='mr-2'
-          required
-        />
+      {page !== Pages.inovativeSolutions ? (
+        <label htmlFor="agreement2" className='flex items-center select-none relative'>
+          <input
+            type="checkbox"
+            id="agreement2"
+            name="agreement2"
+            checked={isCheckedSecond}
+            onChange={onSecondCheckboxChange}
+            className='mr-2'
+            required
+          />
 
-        <span className="text-sm">
-          Я надаю згоду на реалізацію шляхом продажу на аукціоні, організованому Держпраці,
-          твору образотворчого мистецтва, виконаного мною особисто, із подальшим направленням отриманих коштів на потреби Збройних сил України.
-        </span>
+          <span className="text-sm">
+            Я надаю згоду на реалізацію шляхом продажу на аукціоні, організованому Держпраці,
+            твору образотворчого мистецтва, виконаного мною особисто, із подальшим направленням отриманих коштів на потреби Збройних сил України.
+          </span>
 
-        {validationErrors.agreement2 ? <span className="absolute top-full text-xs text-red-500">{validationErrors.agreement2}</span> : null}
-      </label>
+          {validationErrors.agreement2 ? <span className="absolute top-full text-xs text-red-500">{validationErrors.agreement2}</span> : null}
+        </label>
+      ) : null}
     </>
   )
 }
@@ -287,7 +289,7 @@ export const Form = ({ page, closeModal }: FormProps) => {
           formData={formData}
           validationErrors={validationErrors}
           updateAgreementState={updateAgreementState}
-          handleChange={handleChange}
+          page={page}
         />
 
         <Button className="w-full mt-8" type="submit">Відправити</Button>
