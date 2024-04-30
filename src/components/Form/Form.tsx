@@ -46,7 +46,7 @@ const Agreements = ({
     const newState = e.target.checked;
     setIsCheckedFirst(newState);
 
-    page === Pages.inovativeSolutions ? updateAgreementState(true) : updateAgreementState(newState && isCheckedSecond);
+    page === Pages.art ? updateAgreementState(newState && isCheckedSecond) : updateAgreementState(true);
   };
 
   const onSecondCheckboxChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -76,7 +76,7 @@ const Agreements = ({
         {validationErrors.agreement ? <span className="absolute top-full text-xs text-red-500">{validationErrors.agreement}</span> : null}
       </label>
 
-      {page !== Pages.inovativeSolutions ? (
+      {page === Pages.art ? (
         <label htmlFor="agreement2" className='flex items-center select-none relative'>
           <input
             type="checkbox"
