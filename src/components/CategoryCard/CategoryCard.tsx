@@ -2,7 +2,7 @@ import Image from "next/image";
 import cn from "@/tools/cn";
 
 import { ArrowLink } from "../ArrowLink";
-import Link from 'next/link'
+import Link from 'next/link';
 
 import type { ContentT, ImageT } from "@/utils/types";
 
