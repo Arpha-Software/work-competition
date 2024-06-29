@@ -1,5 +1,5 @@
-export const getWorksByCategoryId = async (categoryName: string) => {
-  const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/jobs/${categoryName}`);
+export const getWorksByCategoryId = async (categoryName: string, isApproved: boolean) => {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/jobs/${categoryName}?forVoting=${isApproved}`);
 
   if (!response.ok) {
     throw new Error("Failed to fetch works");

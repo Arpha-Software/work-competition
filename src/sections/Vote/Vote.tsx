@@ -5,6 +5,7 @@ import { getWorksByCategoryId, likeWork } from "@/api/works";
 
 import WorkCard from "@/components/WorkCard";
 import { Loader } from "@/components/Loader";
+import { shuffleItems } from "@/tools/helpers";
 
 type VoteProps = {
   category: string;
@@ -25,19 +26,25 @@ type Work = {
 export const Vote = ({ category }: VoteProps) => {
   const [works, setWorks] = useState<Work[] | null>(null);
   const [likedCards, setLikedCards] = useState<number[]>([]);
+  const [initialLoad, setInitialLoad] = useState(true);
+
+  const forVoting = category === "Мистецтво, що рятує життя";
 
   useEffect(() => {
     const fetchWorks = async () => {
       try {
-        const response = await getWorksByCategoryId(category);
-        setWorks(response);
+        const response = await getWorksByCategoryId(category, forVoting);
+        setWorks(shuffleItems(response));
+        setInitialLoad(false);
       } catch (error: any) {
         toast.error(error.details);
       }
     };
 
-    fetchWorks();
-  }, []);
+    if (initialLoad) {
+      fetchWorks();
+    }
+  }, [category, forVoting, initialLoad]);
 
   const handleLike = async (id: number) => {
     const response = await likeWork(id);
