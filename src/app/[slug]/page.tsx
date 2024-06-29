@@ -117,10 +117,10 @@ export default function Page({ params: { slug } }: PageParams) {
 
         </div>
       </Container>
-      
+
       {title !== 'Кращий спеціаліст з охорони праці' ? (
         <Container>
-          <h2 className="text-primary font-extrabold text-3xl mb-6">Відкрите голосування триватиме з 00.00.24 до 00.00.24</h2>
+          <h2 className="text-primary font-extrabold text-3xl mb-6">Відкрите голосування триватиме з 01.07.24 до 01.09.24</h2>
           <h2 className="text-primary font-extrabold text-3xl mb-10">Конкурсні роботи:</h2>
 
           <Vote category={title} />
