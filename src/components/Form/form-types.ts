@@ -40,7 +40,7 @@ const baseSchemaFields = {
       }
       return value;
     })
-    .refine((value) => /^\d+$/.test(value), ErrorMessages.PhoneInvalid) // Ensure the value is numeric
+    .refine((value) => /^\d+$/.test(value), ErrorMessages.PhoneInvalid)
 };
 
 const specificFields = {

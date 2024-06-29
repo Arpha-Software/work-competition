@@ -8,6 +8,7 @@ import { Toaster } from "react-hot-toast";
 import { Container } from '@/components/Container';
 import { ArrowLink } from '@/components/ArrowLink';
 import { Button } from '@/components/Button';
+import { Vote } from "@/sections/Vote";
 
 import { Pages } from '@/utils/enums';
 import { FormModal } from '@/components/Form/Form';
@@ -93,23 +94,38 @@ export default function Page({ params: { slug } }: PageParams) {
             })}
           </ul>
 
-          <ArrowLink
-            className={
-              cn(
-                'mt-10',
-                styles.arrowLink,
-              )
-            }
-            href={slug === Pages.bestSpecialist ? 'https://ratingop.expertus.com.ua/' : ''}
-            target='_blank'
-            onClick={openModal}
-          >
-            Взяти участь
-          </ArrowLink>
+          <div className="flex gap-10 items-center mt-10">
+            <ArrowLink
+              className={
+                cn(
+                  styles.arrowLink,
+                  'pointer-events-none'
+                )
+              }
+              variant="disabled"
+              href={slug === Pages.bestSpecialist ? 'https://ratingop.expertus.com.ua/' : ''}
+              target='_blank'
+              onClick={openModal}
+            >
+              Взяти участь
+            </ArrowLink>
+
+            <span className="font-bold text-red-700">Реєстрацію завершено</span>
+          </div>
 
           {isOpen ? <FormModal page={slug} closeModal={closeModal} /> : null}
+
         </div>
       </Container>
+      
+      {title !== 'Кращий спеціаліст з охорони праці' ? (
+        <Container>
+          <h2 className="text-primary font-extrabold text-3xl mb-6">Відкрите голосування триватиме з 00.00.24 до 00.00.24</h2>
+          <h2 className="text-primary font-extrabold text-3xl mb-10">Конкурсні роботи:</h2>
+
+          <Vote category={title} />
+        </Container>
+      ) : null}
 
       <Toaster
         position="top-right"

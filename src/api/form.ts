@@ -1,7 +1,6 @@
 import toast from "react-hot-toast";
 
 export async function submitForm(data: any) {
-  console.log("data", data);
   const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/users`, {
     method: "POST",
     body: JSON.stringify(data),
