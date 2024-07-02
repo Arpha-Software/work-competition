@@ -30,25 +30,22 @@ export const Vote = ({ category }: VoteProps) => {
   const [initialLoad, setInitialLoad] = useState(true);
   const loaderRef = useRef<HTMLDivElement | null>(null);
 
-  const forVoting = category === "Мистецтво, що рятує життя";
-
   useEffect(() => {
     const fetchWorks = async () => {
       try {
-        const response = await getWorksByCategoryId(category, forVoting);
-        const shuffledWorks = shuffleItems(response);
-        setWorks(shuffledWorks);
-        setInitialLoad(false);
-        setVisibleWorks(shuffledWorks.slice(0, 6));
+        const response = await getWorksByCategoryId(category, true);
+
+        setWorks(response);
+        setVisibleWorks(response.slice(0, 6));
       } catch (error: any) {
         toast.error(error.details);
+      } finally {
+        setInitialLoad(false);
       }
     };
 
-    if (initialLoad) {
-      fetchWorks();
-    }
-  }, [category, forVoting, initialLoad]);
+    fetchWorks();
+  }, [category]);
 
   const handleLike = async (id: number) => {
     const response = await likeWork(id);
@@ -97,40 +94,42 @@ export const Vote = ({ category }: VoteProps) => {
     }
   }, [loadMoreWorks]);
 
-  if (!works) {
-    return (
-      <div className="w-full flex justify-center items-center">
-        <Loader />
-      </div>
-    )
-  }
-
   return (
-    <section className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 items-center justify-items-center gap-10">
-      {visibleWorks.map(({ id, fullName, numberOfLikes, alreadyVoted, fileAccessLink }) => (
-        <WorkCard key={id}>
-          <WorkCard.File fileAccessLink={fileAccessLink} />
+    <div>
+      <section className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 items-center justify-items-center gap-10">
+        {visibleWorks.map(({ id, fullName, numberOfLikes, alreadyVoted, fileAccessLink }) => (
+          <WorkCard key={id}>
+            <WorkCard.File fileAccessLink={fileAccessLink} />
 
-          <div className="flex flex-col p-4">
-            {category === "Мистецтво, що рятує життя" ? (
-              <WorkCard.LikeCount
-                count={numberOfLikes + (alreadyVoted ? 1 : 0)}
-              />
-            ) : null}
+            <div className="flex flex-col p-4">
+              {category === "Мистецтво, що рятує життя" ? (
+                <WorkCard.LikeCount
+                  count={numberOfLikes + (alreadyVoted ? 1 : 0)}
+                />
+              ) : null}
 
-            <WorkCard.Title title={fullName} className="h-24 mt-4 mb-4" />
+              <WorkCard.Title title={fullName} className="h-24 mt-4 mb-4" />
 
-            {category === "Мистецтво, що рятує життя" ? (
-              <WorkCard.ButtonWrap
-                isLiked={alreadyVoted}
-                onClick={() => handleLike(id)}
-              >
-                Подобається
-              </WorkCard.ButtonWrap>
-            ) : null}
-          </div>
-        </WorkCard>
-      ))}
-    </section>
+              {category === "Мистецтво, що рятує життя" ? (
+                <WorkCard.ButtonWrap
+                  isLiked={alreadyVoted}
+                  onClick={() => handleLike(id)}
+                >
+                  Подобається
+                </WorkCard.ButtonWrap>
+              ) : null}
+            </div>
+          </WorkCard>
+        ))}
+      </section>
+      {initialLoad && (
+        <div className="w-full h-28 flex justify-center items-center">
+          <Loader />
+        </div>
+      )}
+      <div ref={loaderRef} className="w-full h-10 flex justify-center items-center">
+        {!initialLoad && visibleWorks.length < works.length && <Loader />}
+      </div>
+    </div>
   );
 };
