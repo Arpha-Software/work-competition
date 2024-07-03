@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import cn from "@/tools/cn";
 import { Toaster } from "react-hot-toast";
 
 import { Container } from '@/components/Container';
@@ -27,7 +26,23 @@ type PageParams = {
 };
 
 export default function Page({ params: { slug } }: PageParams) {
-  const { img, title, subtitle, description } = content[slug] || { img: '', title: '', subtitle: '' };
+  const { img, category, title, subtitle, description, support, winners, final } = content[slug]
+    || {
+        img: '',
+        title: '',
+        subtitle: '',
+        description: [],
+        support: {
+          title: '',
+          content: ''
+        },
+        winners: {
+          title: '',
+          content: ''
+        },
+        final: ''
+      };
+
   const [isOpen, setIsOpen] = useState(false);
 
   const openModal = () => {
@@ -47,7 +62,7 @@ export default function Page({ params: { slug } }: PageParams) {
           <img
             className={styles.img}
             src={img}
-            alt={`Картинка для ${title} категорії`}
+            alt={`Картинка для ${category} категорії`}
           />
 
           <Button
@@ -70,11 +85,13 @@ export default function Page({ params: { slug } }: PageParams) {
             </Link>
           </h1>
 
-          <p className='text-primary text-sm lg:text-base'>
+          <h2 className='text-primary text-sm lg:text-base'>Вітаємо на сторінці голосування!</h2>
+
+          <p className='mt-4'>
             {subtitle}
           </p>
 
-          <h2 className='mt-6 mb-4 text-black font-bold text-base/[22px] lg:mt-8'>Для участі в конкурсі потрібно зробити кілька кроків:</h2>
+          <h2 className='mt-6 mb-4 text-black font-bold text-base/[22px] lg:mt-8'>Як голосувати?</h2>
 
           <ul className='m-0 pl-4 text-black list-decimal text-base/[22px]'>
             {description.map((item, index) => {
@@ -94,15 +111,23 @@ export default function Page({ params: { slug } }: PageParams) {
             })}
           </ul>
 
+          <div className="mt-4">
+            <h3 className="text-primary font-semibold text-sm lg:text-base">{support.title}</h3>
+            <p className="mt-2 indent-8">{support.content}</p>
+          </div>
+
+          <div className="mt-4">
+            <h3 className="text-primary font-semibold text-sm lg:text-base">{winners.title}</h3>
+            <p className="mt-2 indent-8">{winners.content}</p>
+          </div>
+
+          <div className="mt-4">
+            <h3 className="indent-8">{final}</h3>
+          </div>
+
           <div className="flex gap-10 items-center mt-10">
             <ArrowLink
-              className={
-                cn(
-                  styles.arrowLink,
-                  'pointer-events-none'
-                )
-              }
-              variant="disabled"
+              variant="primary"
               href={slug === Pages.bestSpecialist ? 'https://ratingop.expertus.com.ua/' : ''}
               target='_blank'
               onClick={openModal}
@@ -118,12 +143,12 @@ export default function Page({ params: { slug } }: PageParams) {
         </div>
       </Container>
 
-      {title !== 'Кращий спеціаліст з охорони праці' ? (
+      {category !== 'Кращий спеціаліст з охорони праці' ? (
         <Container>
           <h2 className="text-primary font-extrabold text-3xl mb-6">Відкрите голосування триватиме з 01.07.24 до 01.09.24</h2>
           <h2 className="text-primary font-extrabold text-3xl mb-10">Конкурсні роботи:</h2>
 
-          <Vote category={title} />
+          <Vote category={category} />
         </Container>
       ) : null}
 

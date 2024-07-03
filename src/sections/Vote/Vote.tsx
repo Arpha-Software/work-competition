@@ -33,7 +33,7 @@ export const Vote = ({ category }: VoteProps) => {
   useEffect(() => {
     const fetchWorks = async () => {
       try {
-        const response = await getWorksByCategoryId(category, true);
+        const response = await getWorksByCategoryId(category, false);
 
         setWorks(response);
         setVisibleWorks(response.slice(0, 6));
