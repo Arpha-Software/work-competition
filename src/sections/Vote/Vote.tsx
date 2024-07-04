@@ -102,22 +102,18 @@ export const Vote = ({ category }: VoteProps) => {
             <WorkCard.File fileAccessLink={fileAccessLink} />
 
             <div className="flex flex-col p-4">
-              {category === "Мистецтво, що рятує життя" ? (
-                <WorkCard.LikeCount
-                  count={numberOfLikes + (alreadyVoted ? 1 : 0)}
-                />
-              ) : null}
+              <WorkCard.LikeCount
+                count={numberOfLikes + (alreadyVoted ? 1 : 0)}
+              />
 
               <WorkCard.Title title={fullName} className="h-24 mt-4 mb-4" />
 
-              {category === "Мистецтво, що рятує життя" ? (
-                <WorkCard.ButtonWrap
-                  isLiked={alreadyVoted}
-                  onClick={() => handleLike(id)}
-                >
-                  Подобається
-                </WorkCard.ButtonWrap>
-              ) : null}
+              <WorkCard.ButtonWrap
+                isLiked={alreadyVoted}
+                onClick={() => handleLike(id)}
+              >
+                Подобається
+              </WorkCard.ButtonWrap>
             </div>
           </WorkCard>
         ))}
