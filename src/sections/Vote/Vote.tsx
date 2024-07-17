@@ -1,14 +1,16 @@
-import { useState, useEffect, useRef, useCallback } from "react";
+'use client';
+
+import { useState, useEffect } from "react";
 import toast from "react-hot-toast";
 
 import { getWorksByCategoryId, likeWork } from "@/api/works";
-import { shuffleItems } from "@/tools/helpers";
 
 import WorkCard from "@/components/WorkCard";
 import { Loader } from "@/components/Loader";
 
 type VoteProps = {
   category: string;
+  subcategory: string;
 };
 
 type Work = {
@@ -23,29 +25,32 @@ type Work = {
   };
 };
 
-export const Vote = ({ category }: VoteProps) => {
+export const Vote = ({ category, subcategory }: VoteProps) => {
   const [works, setWorks] = useState<Work[]>([]);
-  const [visibleWorks, setVisibleWorks] = useState<Work[]>([]);
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState(0);
+  const [pageSize] = useState(9);
   const [initialLoad, setInitialLoad] = useState(true);
-  const loaderRef = useRef<HTMLDivElement | null>(null);
+  const [totalPages, setTotalPages] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const fetchWorks = async () => {
       try {
-        const response = await getWorksByCategoryId(category, false);
+        setIsLoading(true);
+        const response = await getWorksByCategoryId(category, subcategory, pageSize, page, true);
 
-        setWorks(response);
-        setVisibleWorks(response.slice(0, 6));
+        setWorks(response.content);
+        setTotalPages(response.totalPages);
       } catch (error: any) {
-        toast.error(error.details);
+        toast.error('Не вдалось отримати роботи.');
       } finally {
         setInitialLoad(false);
+        setIsLoading(false);
       }
     };
 
     fetchWorks();
-  }, [category]);
+  }, [category, page, pageSize]);
 
   const handleLike = async (id: number) => {
     const response = await likeWork(id);
@@ -55,49 +60,27 @@ export const Vote = ({ category }: VoteProps) => {
       return;
     }
 
-    setVisibleWorks((prevWorks) =>
+    setWorks((prevWorks) =>
       prevWorks.map((work) =>
         work.id === id ? { ...work, alreadyVoted: true } : work
       )
     );
   };
 
-  const loadMoreWorks = useCallback(() => {
-    setPage((prevPage) => {
-      const nextPage = prevPage + 1;
-      const newVisibleWorks = works.slice(0, nextPage * 9);
-      setVisibleWorks(newVisibleWorks);
-      return nextPage;
-    });
-  }, [works]);
-
-  useEffect(() => {
-    if (loaderRef.current) {
-      const observer = new IntersectionObserver(
-        (entries) => {
-          if (entries[0].isIntersecting) {
-            loadMoreWorks();
-          }
-        },
-        {
-          root: null,
-          rootMargin: "20px",
-          threshold: 1.0,
-        }
-      );
-
-      observer.observe(loaderRef.current);
-
-      return () => {
-        observer.disconnect();
-      };
-    }
-  }, [loadMoreWorks]);
+  const handlePageChange = (newPage: number) => {
+    setPage(newPage);
+  };
 
   return (
     <div>
       <section className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 items-center justify-items-center gap-10">
-        {visibleWorks.map(({ id, fullName, numberOfLikes, alreadyVoted, fileAccessLink }) => (
+        {isLoading && (
+          <div className="w-full h-28 flex justify-center items-center">
+            <Loader />
+          </div>
+        )}
+
+        {works.map(({ id, fullName, numberOfLikes, alreadyVoted, fileAccessLink }) => (
           <WorkCard key={id}>
             <WorkCard.File fileAccessLink={fileAccessLink} />
 
@@ -118,14 +101,37 @@ export const Vote = ({ category }: VoteProps) => {
           </WorkCard>
         ))}
       </section>
+
       {initialLoad && (
         <div className="w-full h-28 flex justify-center items-center">
           <Loader />
         </div>
       )}
-      <div ref={loaderRef} className="w-full h-10 flex justify-center items-center">
-        {!initialLoad && visibleWorks.length < works.length && <Loader />}
+
+      <div className="w-full h-10 flex justify-center items-center">
+        {!initialLoad && works.length === 0 && <div>Робіт не знайдено.</div>}
       </div>
+
+      {totalPages > 1 && (
+        <div className="flex justify-center items-center mt-4 gap-2">
+          <button
+            onClick={() => handlePageChange(page - 1)}
+            disabled={page === 0}
+            className="px-4 py-2 mx-2 bg-primary-50 rounded disabled:opacity-50"
+          >
+            &#60;
+          </button>
+
+          <span>{page + 1} із {totalPages}</span>
+          <button
+            onClick={() => handlePageChange(page + 1)}
+            disabled={page + 1 >= totalPages}
+            className="px-4 py-2 mx-2 bg-primary-50 rounded disabled:opacity-50"
+          >
+            &#62;
+          </button>
+        </div>
+      )}
     </div>
   );
 };

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import cn from '@/tools/cn';
 
 import { Button } from '../Button';
@@ -22,16 +22,52 @@ const WorkCard = ({ children, className }: WorkCardProps) => {
 };
 
 const Image = ({ url, className }: FileProps) => {
+  const [isFullScreen, setIsFullScreen] = useState(false);
+
+  const handleImageClick = () => {
+    setIsFullScreen(true);
+  };
+
+  const handleCloseClick = () => {
+    setIsFullScreen(false);
+  };
+
   return (
-    <img src={url} alt="work image" className={cn('w-full object-cover h-72', className)} />
+    <>
+      <img
+        src={url}
+        alt="work image"
+        className={cn('w-full object-contain h-72 cursor-pointer', className)}
+        onClick={handleImageClick}
+      />
+      {isFullScreen && (
+        <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50">
+          <div className="relative">
+            <button
+              className="absolute top-4 right-4 m-4 px-4 py-2 text-white bg-black hover:bg-opacity-80 bg-opacity-50 rounded-full transition-all"
+              onClick={handleCloseClick}
+            >
+              &times;
+            </button>
+            <div className="flex items-center justify-center h-screen w-screen">
+              <img
+                src={url}
+                alt="work image"
+                className="max-w-full max-h-full object-contain"
+              />
+            </div>
+          </div>
+        </div>
+      )}
+    </>
   );
 };
 
 const Video = ({ url, className }: FileProps) => {
   return (
-    <video controls className={cn('w-full object-cover h-72', className)}>
+    <video controls className={cn('w-full object-contain h-72', className)}>
       <source src={url} type="video/mp4" />
-      Your browser does not support the video tag.
+      Ваш браузер не підтримує відео тег.
     </video>
   );
 };
@@ -54,13 +90,13 @@ const FileRenderer = ({ fileAccessLink }: FileRendererProps) => {
   } else if (mimeType === 'application/vnd.openxmlformats-officedocument.presentationml.presentation') {
     return (
       <a href={url} className='h-72'>
-        <img src="/images/pptx_placeholder.png" alt="" className='h-72 w-full object-cover' />
+        <img src="/images/pptx_placeholder.png" alt="" className='h-72 w-full object-contain' />
       </a>
     );
   } else {
     return (
       <a href={url} className='h-72'>
-        <img src="/images/file_placeholder.jpg" alt="" className='h-72 object-cover w-full'/>
+        <img src="/images/file_placeholder.jpg" alt="" className='h-72 object-contain w-full'/>
       </a>
     );
   }

@@ -8,10 +8,12 @@ import { Container } from '@/components/Container';
 import { ArrowLink } from '@/components/ArrowLink';
 import { Button } from '@/components/Button';
 import { Vote } from "@/sections/Vote";
+import { Subcategories } from "@/sections/Home/Subcategories/Subcategories";
 
 import { Pages } from '@/utils/enums';
 import { FormModal } from '@/components/Form/Form';
 import { content } from './content';
+import cn from "@/tools/cn";
 
 import styles from './InnerPage.module.scss';
 
@@ -54,6 +56,14 @@ export default function Page({ params: { slug } }: PageParams) {
     setIsOpen(false);
     document.body.style.overflow = 'auto';
   };
+
+  if (category === 'Мистецтво, що рятує життя') {
+    return (
+      <Container>
+        <Subcategories />
+      </Container>
+    )
+  }
 
   return (
     <main className='relative'>
@@ -127,7 +137,13 @@ export default function Page({ params: { slug } }: PageParams) {
 
           <div className="flex gap-10 items-center mt-10">
             <ArrowLink
-              variant="primary"
+              className={
+                cn(
+                  styles.arrowLink,
+                  'pointer-events-none'
+                )
+              }
+              variant="disabled"
               href={slug === Pages.bestSpecialist ? 'https://ratingop.expertus.com.ua/' : ''}
               target='_blank'
               onClick={openModal}
@@ -148,7 +164,7 @@ export default function Page({ params: { slug } }: PageParams) {
           <h2 className="text-primary font-extrabold text-3xl mb-6">Відкрите голосування триватиме з 01.07.24 до 01.09.24</h2>
           <h2 className="text-primary font-extrabold text-3xl mb-10">Конкурсні роботи:</h2>
 
-          <Vote category={category} />
+          <Vote category={category} subcategory="" />
         </Container>
       ) : null}
 
