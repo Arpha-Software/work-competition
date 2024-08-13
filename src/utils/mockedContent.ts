@@ -53,7 +53,7 @@ export const subcategories = [
       title: "Постери та інформаційні плакати",
     },
     image: {
-      src: images.categories.category1,
+      src: images.subcategories.postersAndInformation,
       alt: "image1",
     },
     linkHref: "/art/posters-and-information",
@@ -63,7 +63,7 @@ export const subcategories = [
       title: "Художні фото та колажі"
     },
     image: {
-      src: images.categories.category2,
+      src: images.subcategories.photosAndCollages,
       alt: "image2",
     },
     linkHref: "/art/photos-and-collages",
@@ -73,7 +73,7 @@ export const subcategories = [
       title: "Малюнки"
     },
     image: {
-      src: images.categories.category3,
+      src: images.subcategories.drawings,
       alt: "image3",
     },
     linkHref: "/art/drawings",
@@ -83,7 +83,7 @@ export const subcategories = [
       title: "Відеоролики"
     },
     image: {
-      src: images.categories.category4,
+      src: images.subcategories.videos,
       alt: "image4",
     },
     linkHref: "/art/videos",

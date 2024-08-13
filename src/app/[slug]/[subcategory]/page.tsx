@@ -19,10 +19,22 @@ type PageParams = {
 
 export default function Page({ params: { subcategory } }: PageParams) {
   const subcategories = {
-    [Pages.postersAndInformation]: 'Постери та інформаційні плакати',
-    [Pages.photosAndCollages]: 'Художні фото та колажі',
-    [Pages.drawings]: 'Малюнки',
-    [Pages.videos]: 'Відеоролики',
+    [Pages.postersAndInformation]: {
+      title: 'Постери та інформаційні плакати',
+      img: '/images/posters.png',
+    },
+    [Pages.photosAndCollages]: {
+      title: 'Художні фото та колажі',
+      img: '/images/photo_collages.png',
+    },
+    [Pages.drawings]: {
+      title: 'Малюнки',
+      img: '/images/pictures.png',
+    },
+    [Pages.videos]: {
+      title: 'Відеоролики',
+      img: '/images/videos.png',
+    },
   }
 
   const { img, category, title, subtitle, description, support, winners, final } = content['art']
@@ -33,7 +45,7 @@ export default function Page({ params: { subcategory } }: PageParams) {
         <div className='relative mb-10 -mr-5 lg:grow lg:w-1/2 lg:order-1 lg:mb-0 lg:-mt-10 lg:flex lg:flex-col'>
           <img
             className={styles.img}
-            src={img}
+            src={subcategories[subcategory].img}
             alt={`Картинка для ${category} категорії`}
           />
 
@@ -53,7 +65,7 @@ export default function Page({ params: { subcategory } }: PageParams) {
               href='/'
               className="text-primary"
             >
-              Онлайн Голосування - Конкурс "Мистецтво, що рятує життя" - {subcategories[subcategory]}
+              Онлайн Голосування - Конкурс "Мистецтво, що рятує життя" - {subcategories[subcategory].title}
             </Link>
           </h1>
 
@@ -103,7 +115,7 @@ export default function Page({ params: { subcategory } }: PageParams) {
         <h2 className="text-primary font-extrabold text-3xl mb-6">Відкрите голосування триватиме з 01.07.24 до 01.09.24</h2>
         <h2 className="text-primary font-extrabold text-3xl mb-10">Конкурсні роботи:</h2>
 
-        <Vote category="Мистецтво, що рятує життя" subcategory={subcategories[subcategory]} />
+        <Vote category="Мистецтво, що рятує життя" subcategory={subcategories[subcategory].title} />
       </Container>
     </main>
   )
