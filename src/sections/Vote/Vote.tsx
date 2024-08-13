@@ -7,6 +7,7 @@ import { getWorksByCategoryId, likeWork } from "@/api/works";
 
 import WorkCard from "@/components/WorkCard";
 import { Loader } from "@/components/Loader";
+import { useAuth } from "@/context/AuthContext";
 
 type VoteProps = {
   category: string;
@@ -26,6 +27,8 @@ type Work = {
 };
 
 export const Vote = ({ category, subcategory }: VoteProps) => {
+  const { accessToken } = useAuth();
+
   const [works, setWorks] = useState<Work[]>([]);
   const [page, setPage] = useState(0);
   const [pageSize] = useState(9);
@@ -37,7 +40,7 @@ export const Vote = ({ category, subcategory }: VoteProps) => {
     const fetchWorks = async () => {
       try {
         setIsLoading(true);
-        const response = await getWorksByCategoryId(category, subcategory, pageSize, page, true);
+        const response = await getWorksByCategoryId(category, subcategory, pageSize, page, accessToken);
 
         setWorks(response.content);
         setTotalPages(response.totalPages);
@@ -53,7 +56,7 @@ export const Vote = ({ category, subcategory }: VoteProps) => {
   }, [category, page, pageSize]);
 
   const handleLike = async (id: number) => {
-    const response = await likeWork(id);
+    const response = await likeWork(id, accessToken);
 
     if (!response.ok) {
       toast.error("Ви вже голосували за цю роботу!");

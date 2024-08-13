@@ -49,3 +49,8 @@ export enum Regions {
   Chernihiv = 'Чернігівська',
   Crimea = 'АР Крим',
 }
+
+export enum EProvider {
+  Google = 'google',
+  Facebook = 'facebook',
+}
