@@ -15,16 +15,15 @@ export default function Login() {
     if (isAuthenticated) {
       router.push('/');
     }
-  }, []);
+  }, [pathname, isAuthenticated]);
 
   return (
     <div className="mb-full">
-      <h1 className="text-4xl text-center mt-8">Увійти</h1>
+      <h1 className="text-4xl text-center mt-16">Увійти</h1>
       <h1 className="text-center mt-4 mb-12">Щоб отримати доступ до голосування, вам необхідно увійти</h1>
 
       <div className="flex flex-col items-center justify-center w-full gap-4">
         <Button onClick={() => login(EProvider.Google)}>Увійти за допомогою Google</Button>
-        <Button onClick={() => login(EProvider.Facebook)}>Увійти за допомогою Facebook</Button>
       </div>
     </div>
   );

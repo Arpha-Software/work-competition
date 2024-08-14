@@ -4,7 +4,6 @@ import { Nunito_Sans } from 'next/font/google';
 import { Header } from '@/sections/Header';
 import { Footer } from '@/sections/Footer';
 import { AuthProvider } from '@/context/AuthContext';
-import { ProtectedLayout } from '@/components/ProtectedLayout';
 
 import '@/styles/globals.css';
 
@@ -25,7 +24,7 @@ export default function RootLayout({
       <body className={nunitoSans.className}>
         <AuthProvider>
           <Header />
-          <ProtectedLayout>{children}</ProtectedLayout>
+          {children}
           <Footer />
         </AuthProvider>
       </body>

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Toaster } from "react-hot-toast";
 
@@ -16,7 +16,9 @@ import { content } from './content';
 import cn from "@/tools/cn";
 
 import styles from './InnerPage.module.scss';
-
+import { usePathname, useRouter } from "next/navigation";
+import { useAuth } from "@/context/AuthContext";
+ 
 type PageParams = {
   params: {
     slug:
@@ -28,6 +30,10 @@ type PageParams = {
 };
 
 export default function Page({ params: { slug } }: PageParams) {
+  const pathname = usePathname();
+  const router = useRouter();
+  const { isAuthenticated } = useAuth();
+
   const { img, category, title, subtitle, description, support, winners, final } = content[slug]
     || {
         img: '',
@@ -56,6 +62,12 @@ export default function Page({ params: { slug } }: PageParams) {
     setIsOpen(false);
     document.body.style.overflow = 'auto';
   };
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      router.push('/login');
+    }
+  }, [pathname, isAuthenticated]);
 
   if (category === 'Мистецтво, що рятує життя') {
     return (

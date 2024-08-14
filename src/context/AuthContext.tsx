@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useContext, useState, ReactNode, useEffect } from 'react';
+import { createContext, useContext, useState, ReactNode, useEffect, Dispatch, SetStateAction } from 'react';
 import { EProvider } from '@/utils/enums';
 import { usePathname, useRouter } from 'next/navigation';
 
@@ -8,6 +8,7 @@ interface AuthContextProps {
   isAuthenticated: boolean;
   accessToken: string;
   login: (provider: EProvider) => void;
+  setIsAuthenticated: Dispatch<SetStateAction<boolean>>;
 }
 
 const AuthContext = createContext<AuthContextProps | undefined>(undefined);
@@ -40,7 +41,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [pathname, accessToken]);
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, login, accessToken }}>
+    <AuthContext.Provider value={{ isAuthenticated, accessToken, login, setIsAuthenticated }}>
         {children}
     </AuthContext.Provider>
   );
