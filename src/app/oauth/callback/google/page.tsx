@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react';
 
-import { useRouter, useSearchParams } from 'next/navigation'; 
+import { useRouter, useSearchParams } from 'next/navigation';
 import { exchangeCode } from '@/api/oauth';
 import { EProvider } from '@/utils/enums';
 import { useAuth } from '@/context/AuthContext';
@@ -23,7 +23,7 @@ export default function GoogleCallback() {
         const payload = {
           code: authCode
         };
-        
+
         const response = await exchangeCode(payload, EProvider.Google);
 
         if (response) {
@@ -31,7 +31,7 @@ export default function GoogleCallback() {
           console.log('accessToken:', response);
           const expiresDate = new Date();
           expiresDate.setSeconds(expiresDate.getSeconds() + expires_in);
-  
+
           document.cookie = `authToken=${id_token}; path=/; expires=${expiresDate.toUTCString()}`;
           setIsAuthenticated(true);
           router.replace('/')
