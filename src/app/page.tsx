@@ -18,7 +18,6 @@ export default function Home() {
     }
   }, [isAuthenticated, router]);
 
-
   return (
     <main>
       <h1 className='sr-only'>Категорії</h1>
