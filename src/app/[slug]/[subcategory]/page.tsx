@@ -37,7 +37,7 @@ export default function Page({ params: { subcategory } }: PageParams) {
     },
   }
 
-  const { img, category, title, subtitle, description, support, winners, final } = content['art']
+  const { category, subtitle, description, support, winners, final } = content['art']
 
   return (
     <main>
@@ -112,7 +112,7 @@ export default function Page({ params: { subcategory } }: PageParams) {
       </Container>
 
       <Container>
-        <h2 className="text-primary font-extrabold text-3xl mb-6">Відкрите голосування триватиме з 01.07.24 до 01.09.24</h2>
+        <h2 className="text-primary font-extrabold text-3xl mb-6">Відкрите голосування триватиме з 01.07.24 до 31.10.24</h2>
         <h2 className="text-primary font-extrabold text-3xl mb-10">Конкурсні роботи:</h2>
 
         <Vote category="Мистецтво, що рятує життя" subcategory={subcategories[subcategory].title} />

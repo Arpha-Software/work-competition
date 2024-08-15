@@ -18,7 +18,7 @@ import cn from "@/tools/cn";
 import styles from './InnerPage.module.scss';
 import { usePathname, useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
- 
+
 type PageParams = {
   params: {
     slug:
@@ -107,13 +107,13 @@ export default function Page({ params: { slug } }: PageParams) {
             </Link>
           </h1>
 
-          <h2 className='text-primary text-sm lg:text-base'>Вітаємо на сторінці голосування!</h2>
+          {category !== "Кращий спеціаліст з охорони праці" && <h2 className='text-primary text-sm lg:text-base'>Вітаємо на сторінці голосування!</h2>}
 
           <p className='mt-4'>
             {subtitle}
           </p>
 
-          <h2 className='mt-6 mb-4 text-black font-bold text-base/[22px] lg:mt-8'>Як голосувати?</h2>
+          {category !== "Кращий спеціаліст з охорони праці" && <h2 className='mt-6 mb-4 text-black font-bold text-base/[22px] lg:mt-8'>Як голосувати?</h2>}
 
           <ul className='m-0 pl-4 text-black list-decimal text-base/[22px]'>
             {description.map((item, index) => {
@@ -148,22 +148,24 @@ export default function Page({ params: { slug } }: PageParams) {
           </div>
 
           <div className="flex gap-10 items-center mt-10">
-            <ArrowLink
-              className={
-                cn(
-                  styles.arrowLink,
-                  'pointer-events-none'
-                )
-              }
-              variant="disabled"
-              href={slug === Pages.bestSpecialist ? 'https://ratingop.expertus.com.ua/' : ''}
-              target='_blank'
-              onClick={openModal}
-            >
-              Взяти участь
-            </ArrowLink>
+            {slug === Pages.bestSpecialist && (
+              <ArrowLink
+                className={
+                  cn(
+                    styles.arrowLink,
+                    slug !== Pages.bestSpecialist && 'pointer-events-none'
+                  )
+                }
+                variant={slug === Pages.bestSpecialist ? 'primary' : 'disabled'}
+                href={slug === Pages.bestSpecialist ? 'https://ratingop.expertus.com.ua/' : ''}
+                target='_blank'
+                onClick={openModal}
+              >
+                Взяти участь
+              </ArrowLink>
+            )}
 
-            <span className="font-bold text-red-700">Реєстрацію завершено</span>
+            {category !== "Кращий спеціаліст з охорони праці" && <span className="font-bold text-red-700">Реєстрацію завершено</span> }
           </div>
 
           {isOpen ? <FormModal page={slug} closeModal={closeModal} /> : null}
@@ -173,7 +175,7 @@ export default function Page({ params: { slug } }: PageParams) {
 
       {category !== 'Кращий спеціаліст з охорони праці' ? (
         <Container>
-          <h2 className="text-primary font-extrabold text-3xl mb-6">Відкрите голосування триватиме з 01.07.24 до 01.09.24</h2>
+          <h2 className="text-primary font-extrabold text-3xl mb-6">Відкрите голосування триватиме з 01.07.24 до 31.10.24</h2>
           <h2 className="text-primary font-extrabold text-3xl mb-10">Конкурсні роботи:</h2>
 
           <Vote category={category} subcategory="" />
