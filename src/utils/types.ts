@@ -5,7 +5,7 @@ export type ImageT = {
 
 export type ContentT = {
   title: string,
-  description: string,
+  description?: string,
 }
 
 export type FormData = Record<string, string | number | boolean | File | null>;

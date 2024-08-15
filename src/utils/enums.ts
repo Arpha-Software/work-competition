@@ -3,6 +3,10 @@ export enum Pages {
   bestSpecialist = 'best-specialist',
   effectiveSupport = 'effective-support',
   art = 'art',
+  postersAndInformation = 'posters-and-information',
+  photosAndCollages = 'photos-and-collages',
+  drawings = 'drawings',
+  videos = 'videos',
 }
 
 export enum ErrorMessages {
@@ -44,4 +48,9 @@ export enum Regions {
   Kirovohrad = 'Кіровоградська',
   Chernihiv = 'Чернігівська',
   Crimea = 'АР Крим',
+}
+
+export enum EProvider {
+  Google = 'google',
+  Facebook = 'facebook',
 }

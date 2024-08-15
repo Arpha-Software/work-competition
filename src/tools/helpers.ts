@@ -7,3 +7,7 @@ export const repeatArray = (arr: string[], count: number) => {
   }
   return result;
 };
+
+export const shuffleItems = (array: Array<any>) => {
+  return array.sort(() => Math.random() - 0.5);
+};

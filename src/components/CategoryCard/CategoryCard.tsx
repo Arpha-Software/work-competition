@@ -24,7 +24,7 @@ export const CategoryCard = ({
   const { title, description } = content;
 
   return (
-    <div className={cn("max-w-[600px] w-full lg:flex lg:flex-col lg:rounded lg:shadow-lg lg:py-6 lg:overflow-hidden", className)}>
+    <div className={cn("max-w-[600px] w-full lg:flex lg:flex-col lg:rounded lg:shadow-lg lg:pb-6 lg:overflow-hidden", className)}>
       <Link href={linkHref} className="block w-full h-[500px] lg:h-auto">
         <Image
           src={src}
@@ -35,7 +35,7 @@ export const CategoryCard = ({
         />
       </Link>
 
-      <div className="lg:px-4 lg:flex lg:flex-col lg:grow">
+      <div className="lg:px-4 lg:flex lg:flex-col lg:pt-6 lg:grow">
         <h2 className="text-3.5xl font-black text-primary mb-4 lg:text-lg lg:font-extrabold">
           { title }
         </h2>

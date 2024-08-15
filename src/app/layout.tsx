@@ -3,6 +3,7 @@ import { Nunito_Sans } from 'next/font/google';
 
 import { Header } from '@/sections/Header';
 import { Footer } from '@/sections/Footer';
+import { AuthProvider } from '@/context/AuthContext';
 
 import '@/styles/globals.css';
 
@@ -21,11 +22,11 @@ export default function RootLayout({
   return (
     <html lang='en'>
       <body className={nunitoSans.className}>
-        <Header />
-
-        {children}
-
-        <Footer />
+        <AuthProvider>
+          <Header />
+          {children}
+          <Footer />
+        </AuthProvider>
       </body>
     </html>
   );

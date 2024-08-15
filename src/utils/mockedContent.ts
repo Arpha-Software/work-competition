@@ -47,6 +47,49 @@ export const categories = [
   },
 ]
 
+export const subcategories = [
+  {
+    content: {
+      title: "Постери та інформаційні плакати",
+    },
+    image: {
+      src: images.subcategories.postersAndInformation,
+      alt: "image1",
+    },
+    linkHref: "/art/posters-and-information",
+  },
+  {
+    content: {
+      title: "Художні фото та колажі"
+    },
+    image: {
+      src: images.subcategories.photosAndCollages,
+      alt: "image2",
+    },
+    linkHref: "/art/photos-and-collages",
+  },
+  {
+    content: {
+      title: "Малюнки"
+    },
+    image: {
+      src: images.subcategories.drawings,
+      alt: "image3",
+    },
+    linkHref: "/art/drawings",
+  },
+  {
+    content: {
+      title: "Відеоролики"
+    },
+    image: {
+      src: images.subcategories.videos,
+      alt: "image4",
+    },
+    linkHref: "/art/videos",
+  },
+]
+
 export const regions = [
   { value: 'Волинська' },
   { value: 'Закарпатська' },
