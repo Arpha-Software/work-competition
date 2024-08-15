@@ -11,7 +11,7 @@ import { Vote } from "@/sections/Vote";
 import { Subcategories } from "@/sections/Home/Subcategories/Subcategories";
 
 import { Pages } from '@/utils/enums';
-import { FormModal } from '@/components/Form/Form';
+// import { FormModal } from '@/components/Form/Form';
 import { content } from './content';
 import cn from "@/tools/cn";
 
@@ -168,7 +168,7 @@ export default function Page({ params: { slug } }: PageParams) {
             {category !== "Кращий спеціаліст з охорони праці" && <span className="font-bold text-red-700">Реєстрацію завершено</span> }
           </div>
 
-          {isOpen ? <FormModal page={slug} closeModal={closeModal} /> : null}
+          {/* {isOpen ? <FormModal page={slug} closeModal={closeModal} /> : null} */}
 
         </div>
       </Container>

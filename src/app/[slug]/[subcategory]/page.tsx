@@ -65,7 +65,7 @@ export default function Page({ params: { subcategory } }: PageParams) {
               href='/'
               className="text-primary"
             >
-              Онлайн Голосування - Конкурс "Мистецтво, що рятує життя" - {subcategories[subcategory].title}
+              Онлайн Голосування - Конкурс &quot;Мистецтво, що рятує життя&quot; - {subcategories[subcategory].title}
             </Link>
           </h1>
 
