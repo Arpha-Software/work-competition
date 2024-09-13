@@ -6,7 +6,7 @@ import { getWorksByCategoryId, likeWork } from "@/api/works";
 import WorkCard from "@/components/WorkCard";
 import { Loader } from "@/components/Loader";
 import { useAuth } from "@/context/AuthContext";
-import { useRouter } from "next/navigation";  // To handle modal navigation
+import { useRouter } from "next/navigation";
 
 type VoteProps = {
   category: string;
@@ -40,7 +40,7 @@ export const Vote = ({ category, subcategory }: VoteProps) => {
     const fetchWorks = async () => {
       try {
         setIsLoading(true);
-        const response = await getWorksByCategoryId(category, subcategory, pageSize, page);
+        const response = await getWorksByCategoryId(category, subcategory, pageSize, page, accessToken);
         setWorks(response.content);
         setTotalPages(response.totalPages);
       } catch (error: any) {

@@ -69,7 +69,7 @@ export default function Page({ params: { slug } }: PageParams) {
 
   return (
     <main className='relative'>
-      <Container className='pb-15 lg:flex lg:pt-10 lg:pb-20 lg:gap-x-8 xl:gap-x-20'>
+      <Container className='pb-10 lg:flex lg:pt-10 lg:pb-10 lg:gap-x-8 xl:gap-x-20'>
         <div className='relative mb-10 -mr-5 lg:grow lg:w-1/2 lg:order-1 lg:mb-0 lg:-mt-10 lg:flex lg:flex-col'>
           <img
             className={styles.img}
@@ -155,7 +155,7 @@ export default function Page({ params: { slug } }: PageParams) {
               </ArrowLink>
             )}
 
-            {category !== "Кращий спеціаліст з охорони праці" && <span className="font-bold text-red-700">Реєстрацію завершено</span> }
+            {/* {category !== "Кращий спеціаліст з охорони праці" && <span className="font-bold text-red-700">Реєстрацію завершено</span> } */}
           </div>
 
           {/* {isOpen ? <FormModal page={slug} closeModal={closeModal} /> : null} */}

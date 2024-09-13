@@ -5,8 +5,18 @@ export const getWorksByCategoryId = async (
   subCategoryName: string,
   size: number,
   page: number,
+  accessToken?: string,
 ) => {
-  const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/jobs/${categoryName}?subcategory=${subCategoryName}&size=${size}&page=${page}&forVoting=true`);
+  let response;
+  if (accessToken) {
+    response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/jobs/${categoryName}?subcategory=${subCategoryName}&size=${size}&page=${page}&forVoting=true`, {
+      headers: {
+        "Authorization": `Bearer ${accessToken}`,
+      },
+    });
+  } else {
+    response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/jobs/${categoryName}?subcategory=${subCategoryName}&size=${size}&page=${page}&forVoting=true`);
+  }
 
   if (!response.ok) {
     throw new Error("Failed to fetch works");

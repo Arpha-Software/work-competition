@@ -15,7 +15,6 @@ export default function LoginModal() {
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
-    // Open modal if the URL is '/login'
     if (pathname === '/login') {
       setIsOpen(true);
     } else {
@@ -23,7 +22,6 @@ export default function LoginModal() {
     }
   }, [pathname]);
 
-  // If user is authenticated, navigate to home page
   useEffect(() => {
     if (isAuthenticated) {
       router.push('/');
@@ -31,7 +29,6 @@ export default function LoginModal() {
   }, [isAuthenticated, router]);
 
   const closeModal = () => {
-    // Go back to previous page when closing modal
     router.back();
   };
 
