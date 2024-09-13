@@ -30,10 +30,6 @@ type PageParams = {
 };
 
 export default function Page({ params: { slug } }: PageParams) {
-  const pathname = usePathname();
-  const router = useRouter();
-  const { isAuthenticated } = useAuth();
-
   const { img, category, title, subtitle, description, support, winners, final } = content[slug]
     || {
         img: '',
@@ -62,12 +58,6 @@ export default function Page({ params: { slug } }: PageParams) {
     setIsOpen(false);
     document.body.style.overflow = 'auto';
   };
-
-  useEffect(() => {
-    if (!isAuthenticated) {
-      router.push('/login');
-    }
-  }, [pathname, isAuthenticated]);
 
   if (category === 'Мистецтво, що рятує життя') {
     return (

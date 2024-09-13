@@ -2,29 +2,60 @@
 
 import { Button } from "@/components/Button";
 import { useAuth } from "@/context/AuthContext";
+import { Categories } from "@/sections/Home/Categories";
+import { Vote } from "@/sections/Vote";
 import { EProvider } from "@/utils/enums";
 import { usePathname, useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
-export default function Login() {
+export default function LoginModal() {
   const { login, isAuthenticated } = useAuth();
   const pathname = usePathname();
   const router = useRouter();
+  const [isOpen, setIsOpen] = useState(false);
 
+  useEffect(() => {
+    // Open modal if the URL is '/login'
+    if (pathname === '/login') {
+      setIsOpen(true);
+    } else {
+      setIsOpen(false);
+    }
+  }, [pathname]);
+
+  // If user is authenticated, navigate to home page
   useEffect(() => {
     if (isAuthenticated) {
       router.push('/');
     }
-  }, [pathname, isAuthenticated]);
+  }, [isAuthenticated, router]);
+
+  const closeModal = () => {
+    // Go back to previous page when closing modal
+    router.back();
+  };
+
+  if (!isOpen) return null;
 
   return (
-    <div className="mb-full">
-      <h1 className="text-4xl text-center mt-16">Увійти</h1>
-      <h1 className="text-center mt-4 mb-12">Щоб отримати доступ до голосування, вам необхідно увійти</h1>
-
-      <div className="flex flex-col items-center justify-center w-full gap-4">
-        <Button onClick={() => login(EProvider.Google)}>Увійти за допомогою Google</Button>
+    <>
+      <div>
+        <Vote category="Інноваційні та цифрові рішення для забезпечення безпеки на роботі" subcategory="" />
       </div>
-    </div>
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70 backdrop-blur-xl">
+        <div className="bg-white p-8 rounded-md shadow-lg max-w-md w-full">
+          <h1 className="text-4xl text-center mt-4">Увійти</h1>
+          <h1 className="text-center mt-4 mb-8">Щоб отримати доступ до голосування, вам необхідно увійти</h1>
+
+          <div className="flex flex-col items-center justify-center w-full gap-4">
+            <Button onClick={() => login(EProvider.Google)}>Увійти за допомогою Google</Button>
+          </div>
+
+          <div className="flex justify-center mt-6">
+            <Button onClick={closeModal} variant="secondary">Закрити</Button>
+          </div>
+        </div>
+      </div>
+    </>
   );
 }

@@ -2,12 +2,11 @@
 
 import { useState, useEffect } from "react";
 import toast from "react-hot-toast";
-
 import { getWorksByCategoryId, likeWork } from "@/api/works";
-
 import WorkCard from "@/components/WorkCard";
 import { Loader } from "@/components/Loader";
 import { useAuth } from "@/context/AuthContext";
+import { useRouter } from "next/navigation";  // To handle modal navigation
 
 type VoteProps = {
   category: string;
@@ -27,7 +26,8 @@ type Work = {
 };
 
 export const Vote = ({ category, subcategory }: VoteProps) => {
-  const { accessToken } = useAuth();
+  const { accessToken, isAuthenticated } = useAuth();
+  const router = useRouter();
 
   const [works, setWorks] = useState<Work[]>([]);
   const [page, setPage] = useState(0);
@@ -40,8 +40,7 @@ export const Vote = ({ category, subcategory }: VoteProps) => {
     const fetchWorks = async () => {
       try {
         setIsLoading(true);
-        const response = await getWorksByCategoryId(category, subcategory, pageSize, page, accessToken);
-
+        const response = await getWorksByCategoryId(category, subcategory, pageSize, page);
         setWorks(response.content);
         setTotalPages(response.totalPages);
       } catch (error: any) {
@@ -56,6 +55,12 @@ export const Vote = ({ category, subcategory }: VoteProps) => {
   }, [category, page, pageSize]);
 
   const handleLike = async (id: number) => {
+    if (!isAuthenticated) {
+      router.push('/login');
+
+      return;
+    }
+
     const response = await likeWork(id, accessToken);
 
     if (!response.ok) {
