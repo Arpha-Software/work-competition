@@ -1,14 +1,8 @@
-'use client';
-
 import { Pages } from "@/utils/enums";
 import { Container } from '@/components/Container';
 import { Vote } from "@/sections/Vote";
-import { ArrowLink } from "@/components/ArrowLink";
 import { content } from "../content";
-import styles from '../InnerPage.module.scss';
-import { Button } from "@/components/Button";
-import Link from "next/link";
-import { DescriptionList, ContentSection } from '@/components/Content';
+import { SubcategoryContent, SubcategoryImage } from '@/components/Subcategory';
 
 type PageParams = {
   params: {
@@ -20,73 +14,22 @@ type PageParams = {
   };
 };
 
-const subcategories = {
-  [Pages.postersAndInformation]: {
-    title: 'Постери та інформаційні плакати',
-    img: '/images/posters.png',
-  },
-  [Pages.photosAndCollages]: {
-    title: 'Художні фото та колажі',
-    img: '/images/photo_collages.png',
-  },
-  [Pages.drawings]: {
-    title: 'Малюнки',
-    img: '/images/pictures.png',
-  },
-  [Pages.videos]: {
-    title: 'Відеоролики',
-    img: '/images/videos.png',
-  },
-} as const;
-
 export default function Page({ params: { subcategory } }: PageParams) {
   const { category, subtitle, description, support, winners, final } = content['art'];
-  const currentSubcategory = subcategories[subcategory];
 
   return (
     <main>
       <Container className='pb-15 lg:flex lg:pt-10 lg:pb-20 lg:gap-x-8 xl:gap-x-20'>
-        <div className='relative mb-10 -mr-5 lg:grow lg:w-1/2 lg:order-1 lg:mb-0 lg:-mt-10 lg:flex lg:flex-col'>
-          <img
-            className={styles.img}
-            src={currentSubcategory.img}
-            alt={`Картинка для ${currentSubcategory.title}`}
-          />
-
-          <Button
-            tag="a"
-            className="absolute bottom-0 right-0 lg:static lg:mt-6 lg:ml-auto"
-            variant="primary"
-            href='/art'
-          >
-            Повернутись назад
-          </Button>
-        </div>
-
-        <div className='lg:grow lg:w-1/2'>
-          <h1 className='mb-4 text-2lg font-black lg:mb-6 lg:text-4.5xl/[55px]'>
-            <Link href='/' className="text-primary">
-              Онлайн Голосування - Конкурс &quot;Мистецтво, що рятує життя&quot; - {currentSubcategory.title}
-            </Link>
-          </h1>
-
-          <h2 className='text-primary text-sm lg:text-base'>
-            Вітаємо на сторінці голосування!
-          </h2>
-
-          <p className='mt-4'>{subtitle}</p>
-
-          <h2 className='mt-6 mb-4 text-black font-bold text-base/[22px] lg:mt-8'>
-            Як голосувати?
-          </h2>
-
-          <DescriptionList items={description} />
-          <ContentSection title={support.title} content={support.content} />
-          <ContentSection title={winners.title} content={winners.content} />
-          <div className="mt-4">
-            <h3 className="indent-8">{final}</h3>
-          </div>
-        </div>
+        <SubcategoryImage subcategory={subcategory} />
+        <SubcategoryContent
+          subcategory={subcategory}
+          category={category}
+          subtitle={subtitle}
+          description={description}
+          support={support}
+          winners={winners}
+          final={final}
+        />
       </Container>
 
       <Container>
@@ -99,7 +42,7 @@ export default function Page({ params: { subcategory } }: PageParams) {
 
         <Vote 
           category="Мистецтво, що рятує життя" 
-          subcategory={currentSubcategory.title} 
+          subcategory={subcategory} 
         />
       </Container>
     </main>
