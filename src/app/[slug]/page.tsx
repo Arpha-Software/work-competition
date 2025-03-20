@@ -3,55 +3,47 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Toaster } from "react-hot-toast";
+import { usePathname, useRouter } from "next/navigation";
 
 import { Container } from '@/components/Container';
 import { ArrowLink } from '@/components/ArrowLink';
 import { Button } from '@/components/Button';
 import { Vote } from "@/sections/Vote";
 import { Subcategories } from "@/sections/Home/Subcategories/Subcategories";
+import { useAuth } from "@/context/AuthContext";
+import { DescriptionList, ContentSection } from '@/components/Content';
 
 import { Pages } from '@/utils/enums';
-// import { FormModal } from '@/components/Form/Form';
 import { content } from './content';
 import cn from "@/tools/cn";
-
 import styles from './InnerPage.module.scss';
-import { usePathname, useRouter } from "next/navigation";
-import { useAuth } from "@/context/AuthContext";
 
 type PageParams = {
   params: {
-    slug:
-        Pages.inovativeSolutions
-      | Pages.bestSpecialist
-      | Pages.effectiveSupport
-      | Pages.art
+    slug: Pages.inovativeSolutions | Pages.bestSpecialist | Pages.effectiveSupport | Pages.art;
   };
+};
+
+const defaultContent = {
+  img: '',
+  title: '',
+  subtitle: '',
+  description: [],
+  support: { title: '', content: '' },
+  winners: { title: '', content: '' },
+  final: ''
 };
 
 export default function Page({ params: { slug } }: PageParams) {
   const pathname = usePathname();
   const router = useRouter();
   const { isAuthenticated } = useAuth();
-
-  const { img, category, title, subtitle, description, support, winners, final } = content[slug]
-    || {
-        img: '',
-        title: '',
-        subtitle: '',
-        description: [],
-        support: {
-          title: '',
-          content: ''
-        },
-        winners: {
-          title: '',
-          content: ''
-        },
-        final: ''
-      };
-
   const [isOpen, setIsOpen] = useState(false);
+
+  const pageContent = content[slug] || defaultContent;
+  const { img, category, title, subtitle, description, support, winners, final } = pageContent;
+  const isBestSpecialist = category === "Кращий спеціаліст з охорони праці";
+  const isArtCategory = category === 'Мистецтво, що рятує життя';
 
   const openModal = () => {
     setIsOpen(true);
@@ -63,18 +55,21 @@ export default function Page({ params: { slug } }: PageParams) {
     document.body.style.overflow = 'auto';
   };
 
+  // Authentication redirect temporarily disabled for debugging
+  /*
   useEffect(() => {
     if (!isAuthenticated) {
       router.push('/login');
     }
-  }, [pathname, isAuthenticated]);
+  }, [pathname, isAuthenticated, router]);
+  */
 
-  if (category === 'Мистецтво, що рятує життя') {
+  if (isArtCategory) {
     return (
       <Container>
         <Subcategories />
       </Container>
-    )
+    );
   }
 
   return (
@@ -99,93 +94,61 @@ export default function Page({ params: { slug } }: PageParams) {
 
         <div className='lg:grow lg:w-1/2'>
           <h1 className='mb-4 text-2lg font-black lg:mb-6 lg:text-4.5xl/[55px]'>
-            <Link
-              href='/'
-              className="text-primary"
-            >
-              {title}
-            </Link>
+            <Link href='/' className="text-primary">{title}</Link>
           </h1>
 
-          {category !== "Кращий спеціаліст з охорони праці" && <h2 className='text-primary text-sm lg:text-base'>Вітаємо на сторінці голосування!</h2>}
+          {!isBestSpecialist && (
+            <h2 className='text-primary text-sm lg:text-base'>
+              Вітаємо на сторінці голосування!
+            </h2>
+          )}
 
-          <p className='mt-4'>
-            {subtitle}
-          </p>
+          <p className='mt-4'>{subtitle}</p>
 
-          {category !== "Кращий спеціаліст з охорони праці" && <h2 className='mt-6 mb-4 text-black font-bold text-base/[22px] lg:mt-8'>Як голосувати?</h2>}
+          {!isBestSpecialist && (
+            <h2 className='mt-6 mb-4 text-black font-bold text-base/[22px] lg:mt-8'>
+              Як голосувати?
+            </h2>
+          )}
 
-          <ul className='m-0 pl-4 text-black list-decimal text-base/[22px]'>
-            {description.map((item, index) => {
-              if (Array.isArray(item)) {
-                return (
-                  <ul key={index} className='pl-4'>
-                    {item.map((subItem, subIndex) => (
-                      <li key={subIndex} className='mb-2'>{subItem}</li>
-                    ))}
-                  </ul>
-                );
-              }
-
-              return (
-                <li key={index} className='mb-2'>{item}</li>
-              );
-            })}
-          </ul>
-
-          <div className="mt-4">
-            <h3 className="text-primary font-semibold text-sm lg:text-base">{support.title}</h3>
-            <p className="mt-2 indent-8">{support.content}</p>
-          </div>
-
-          <div className="mt-4">
-            <h3 className="text-primary font-semibold text-sm lg:text-base">{winners.title}</h3>
-            <p className="mt-2 indent-8">{winners.content}</p>
-          </div>
-
+          <DescriptionList items={description} />
+          <ContentSection title={support.title} content={support.content} />
+          <ContentSection title={winners.title} content={winners.content} />
           <div className="mt-4">
             <h3 className="indent-8">{final}</h3>
           </div>
 
           <div className="flex gap-10 items-center mt-10">
-            {slug === Pages.bestSpecialist && (
+            {slug === Pages.bestSpecialist ? (
               <ArrowLink
-                className={
-                  cn(
-                    styles.arrowLink,
-                    slug !== Pages.bestSpecialist && 'pointer-events-none'
-                  )
-                }
-                variant={slug === Pages.bestSpecialist ? 'primary' : 'disabled'}
-                href={slug === Pages.bestSpecialist ? 'https://ratingop.expertus.com.ua/' : ''}
+                className={cn(styles.arrowLink, 'pointer-events-none')}
+                variant="primary"
+                href="https://ratingop.expertus.com.ua/"
                 target='_blank'
                 onClick={openModal}
               >
                 Взяти участь
               </ArrowLink>
+            ) : (
+              <span className="font-bold text-red-700">Реєстрацію завершено</span>
             )}
-
-            {category !== "Кращий спеціаліст з охорони праці" && <span className="font-bold text-red-700">Реєстрацію завершено</span> }
           </div>
-
-          {/* {isOpen ? <FormModal page={slug} closeModal={closeModal} /> : null} */}
-
         </div>
       </Container>
 
-      {category !== 'Кращий спеціаліст з охорони праці' ? (
+      {!isBestSpecialist && (
         <Container>
-          <h2 className="text-primary font-extrabold text-3xl mb-6">Відкрите голосування триватиме з 01.07.24 до 31.10.24</h2>
-          <h2 className="text-primary font-extrabold text-3xl mb-10">Конкурсні роботи:</h2>
-
+          <h2 className="text-primary font-extrabold text-3xl mb-6">
+            Відкрите голосування триватиме з 01.07.24 до 31.10.24
+          </h2>
+          <h2 className="text-primary font-extrabold text-3xl mb-10">
+            Конкурсні роботи:
+          </h2>
           <Vote category={category} subcategory="" />
         </Container>
-      ) : null}
+      )}
 
-      <Toaster
-        position="top-right"
-        reverseOrder={false}
-      />
+      <Toaster position="top-right" reverseOrder={false} />
     </main>
   );
 }
