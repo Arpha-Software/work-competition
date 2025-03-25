@@ -11,7 +11,7 @@ import { Vote } from "@/sections/Vote";
 import { Subcategories } from "@/sections/Home/Subcategories/Subcategories";
 
 import { Pages } from '@/utils/enums';
-// import { FormModal } from '@/components/Form/Form';
+import { FormModal } from '@/components/Form/Form';
 import { content } from './content';
 import cn from "@/tools/cn";
 
@@ -138,16 +138,14 @@ export default function Page({ params: { slug } }: PageParams) {
           </div>
 
           <div className="flex gap-10 items-center mt-10">
-            {slug === Pages.bestSpecialist && (
+            {slug !== Pages.bestSpecialist && (
               <ArrowLink
                 className={
                   cn(
                     styles.arrowLink,
-                    slug !== Pages.bestSpecialist && 'pointer-events-none'
                   )
                 }
-                variant={slug === Pages.bestSpecialist ? 'primary' : 'disabled'}
-                href={slug === Pages.bestSpecialist ? 'https://ratingop.expertus.com.ua/' : ''}
+                variant={'primary'}
                 target='_blank'
                 onClick={openModal}
               >
@@ -155,10 +153,10 @@ export default function Page({ params: { slug } }: PageParams) {
               </ArrowLink>
             )}
 
-            {/* {category !== "Кращий спеціаліст з охорони праці" && <span className="font-bold text-red-700">Реєстрацію завершено</span> } */}
+            {category !== "Кращий спеціаліст з охорони праці" && <span className="font-bold text-red-700">Реєстрацію завершено</span> }
           </div>
 
-          {/* {isOpen ? <FormModal page={slug} closeModal={closeModal} /> : null} */}
+          {isOpen ? <FormModal page={slug} closeModal={closeModal} /> : null}
 
         </div>
       </Container>
