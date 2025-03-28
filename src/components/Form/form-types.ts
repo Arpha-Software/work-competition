@@ -23,11 +23,12 @@ const ACCEPTED_FILE_TYPES = [
 ];
 
 const baseSchemaFields = {
-  companyName: z.string().min(1, `Назва компанії ${ErrorMessages.Required}`),
-  primaryActivityType: z.string().min(1, `Оберіть галузь діяльності ${ErrorMessages.Required}`),
-  employerLocality: z.string().min(1, `Місто ${ErrorMessages.Required}`),
+  companyName: z.string().min(1, `Назва компанії ${ErrorMessages.RequiredMan}`),
+  primaryActivityType: z.string().min(1, `Галузь діяльності ${ErrorMessages.RequiredWoman}`),
+  employerLocality: z.string().min(1, `Місто ${ErrorMessages.RequiredMan}`),
+  age: z.string().min(1, `Вік ${ErrorMessages.RequiredMan}`),
   employeeCount: z.string().min(0, `Кількість працівників має бути не менше 0`),
-  fullName: z.string().min(1, `Ім'я контактної особи ${ErrorMessages.Required}`),
+  fullName: z.string().min(1, `Ім'я контактної особи ${ErrorMessages.RequiredMan}`),
   email: z.string().email(ErrorMessages.EmailInvalid),
   additionalInfo: z.string().optional(),
   agreement: z.boolean({ required_error: ErrorMessages.ConsentRequired }),
@@ -43,12 +44,6 @@ const baseSchemaFields = {
     .refine((value) => /^\d+$/.test(value), ErrorMessages.PhoneInvalid)
 };
 
-const specificFields = {
-  birthYear: z
-    .string({ required_error: `Рік народження ${ErrorMessages.Required}`})
-    .min(4, ErrorMessages.BirthDateInvalid)
-    .max(4, ErrorMessages.BirthDateInvalid),
-};
 
 const fileSchema = z.instanceof(File, { message: ErrorMessages.FileRequired })
   .optional()
@@ -63,7 +58,6 @@ const schemas = {
   [Pages.effectiveSupport]: z.object({ ...baseSchemaFields, file: fileSchema }),
   [Pages.art]: z.object({
     ...baseSchemaFieldsArt,
-    ...specificFields,
     file: fileSchema
     })
 };

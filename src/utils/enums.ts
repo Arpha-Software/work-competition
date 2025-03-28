@@ -6,7 +6,8 @@ export enum Pages {
 }
 
 export enum ErrorMessages {
-  Required = "є обов'язковим",
+  RequiredMan = "є обов'язковим",
+  RequiredWoman = "є обов'язковою",
   EmailInvalid = "Невірний формат електронної пошти",
   PhoneInvalid = "Номер телефону невірний",
   RegionInvalid = "Неправильний формат області. Введіть: Львівська, Київська і т.д",
@@ -15,7 +16,6 @@ export enum ErrorMessages {
   FileRequired = "Файл є обов'язковим",
   PageNotFound = "Сторінку не знайдено",
   ConsentRequired = "Ви повинні надати згоду на обробку персональних даних.",
-  BirthDateInvalid = "Рік народження має містити 4 числа",
 }
 
 export enum Regions {
