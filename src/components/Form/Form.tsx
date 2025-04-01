@@ -24,81 +24,84 @@ import { content } from "@/app/[slug]/content";
 import { putFile, submitForm } from "@/api/form";
 import { Modal } from "../Modal";
 import { Combobox } from "@/components/Combobox";
-import { Toaster, toast } from "react-hot-toast";
+import { toast } from "react-hot-toast";
 
 type AgreementsProps = {
   formData: FormData;
   validationErrors: Record<string, string>;
   updateAgreementState: (value: boolean) => void;
   page: Pages;
-}
+};
 
-const Agreements = ({
+export const Agreements = ({
   formData,
   validationErrors,
   updateAgreementState,
   page,
 }: AgreementsProps) => {
-  const [isCheckedFirst, setIsCheckedFirst] = useState(!!formData.agreement);
-  const [isCheckedSecond, setIsCheckedSecond] = useState(!!formData.agreement);
+  const [isChecked, setIsChecked] = useState(Boolean(formData.agreement));
 
-  const onFirstCheckboxChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const onCheckboxChange = (e: ChangeEvent<HTMLInputElement>) => {
     const newState = e.target.checked;
-    setIsCheckedFirst(newState);
-
-    page === Pages.art ? updateAgreementState(newState && isCheckedSecond) : updateAgreementState(true);
+    setIsChecked(newState);
+    updateAgreementState(newState);
   };
-
-  const onSecondCheckboxChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const newState = e.target.checked;
-    setIsCheckedSecond(newState);
-
-    updateAgreementState(isCheckedFirst && newState);
-  };
+  
+  const agreementText =
+    page === Pages.art ? (
+      <ul className="list-disc pl-6 text-sm mt-1">
+        <li>Надаю згоду на обробку персональних даних.</li>
+        <li>
+          Надаю згоду на реалізацію шляхом продажу на аукціоні, організованому
+          Держпраці, твору образотворчого мистецтва, виконаного мною особисто,
+          із подальшим направленням отриманих коштів на потреби Збройних сил
+          України.
+        </li>
+        <li>Підтверджую, що отримав(-ла) згоду батьків або опікунів.</li>
+      </ul>
+    ) : (
+      <ul className="list-disc pl-6 text-sm mt-1">
+        <li>Надаю згоду на обробку персональних даних.</li>
+        <li>Надаю згоду на публікацію.</li>
+      </ul>
+    );
 
   return (
-    <>
-      <label htmlFor="agreement" className='flex items-center select-none relative'>
+    <div className="flex flex-col items-start relative">
+      <label htmlFor="agreement" className="flex items-start select-none">
         <input
           type="checkbox"
           id="agreement"
           name="agreement"
-          checked={isCheckedFirst}
-          onChange={onFirstCheckboxChange}
-          className='mr-2'
+          checked={isChecked}
+          onChange={onCheckboxChange}
+          className="mr-2 mt-1"
           required
         />
-
         <span className="text-sm">
-          Я надаю згоду на обробку персональних даних
+          Я згідний(-а) з{" "}
+          <a
+            href="https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-blue-600 underline"
+          >
+            правилами
+          </a>{" "}
+          та:
         </span>
-
-        {validationErrors.agreement ? <span className="absolute top-full text-xs text-red-500">{validationErrors.agreement}</span> : null}
       </label>
 
-      {page === Pages.art ? (
-        <label htmlFor="agreement2" className='flex items-center select-none relative'>
-          <input
-            type="checkbox"
-            id="agreement2"
-            name="agreement2"
-            checked={isCheckedSecond}
-            onChange={onSecondCheckboxChange}
-            className='mr-2'
-            required
-          />
+      <div className="mt-1">{agreementText}</div>
 
-          <span className="text-sm">
-            Я надаю згоду на реалізацію шляхом продажу на аукціоні, організованому Держпраці,
-            твору образотворчого мистецтва, виконаного мною особисто, із подальшим направленням отриманих коштів на потреби Збройних сил України.
-          </span>
-
-          {validationErrors.agreement2 ? <span className="absolute top-full text-xs text-red-500">{validationErrors.agreement2}</span> : null}
-        </label>
+      {validationErrors.agreement ? (
+        <span className="absolute top-full text-xs text-red-500">
+          {validationErrors.agreement}
+        </span>
       ) : null}
-    </>
-  )
-}
+    </div>
+  );
+};
 
 type FormProps = {
   page: Pages;

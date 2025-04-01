@@ -105,7 +105,7 @@ export const pages: Record<Pages, FormT> = {
       createInput('Населений пункт (Введіть назву населеного пункту)', 'Введіть назву населеного пункту', 'employerLocality'),
       createInput('Прізвище, ім’я, по батькові (повністю)', 'Введіть прізвище, ім’я, по батькові', 'fullName'),
       createInput('Місце роботи/навчання/вид зайнятості', 'Введіть місце роботи/навчання/вид зайнятості', 'primaryActivityType'),
-      createInput('Рік народження', 'Введіть рік народження', 'birthYear'),
+      createInput('Вік', 'Введіть ваш вік', 'age'),
     ],
     contactInputs: [
       ...contactInputsCommon,
