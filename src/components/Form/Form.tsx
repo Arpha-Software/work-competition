@@ -39,7 +39,7 @@ export const Agreements = ({
   updateAgreementState,
   page,
 }: AgreementsProps) => {
-  const [isChecked, setIsChecked] = useState(!!formData.agreement);
+  const [isChecked, setIsChecked] = useState(Boolean(formData.agreement));
 
   const onCheckboxChange = (e: ChangeEvent<HTMLInputElement>) => {
     const newState = e.target.checked;
