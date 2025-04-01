@@ -45,3 +45,8 @@ export enum Regions {
   Chernihiv = 'Чернігівська',
   Crimea = 'АР Крим',
 }
+
+export enum ECardType {
+  EVENT,
+  CATEGORY,
+}
