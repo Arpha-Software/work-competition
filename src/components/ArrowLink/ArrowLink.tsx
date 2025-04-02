@@ -63,7 +63,7 @@ export const ArrowLink = ({
 }
 
 const arrowLinkVariants = cva(
-  "group bg-transparent w-full flex justify-between items-center pl-2 max-w-75 font-bold text-start rounded-r-full select-none transition-all",
+  "group bg-transparent w-full flex justify-between items-center pl-2 max-w-52 font-bold text-start rounded-r-full select-none transition-all",
   {
     variants: {
       variant: {

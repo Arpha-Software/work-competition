@@ -1,14 +1,9 @@
-import { Categories } from '@/sections/Home/Categories';
-import { Partners } from '@/sections/Home/Partners';
+import { Home } from '@/sections/Home';
 
-export default async function Home() {
+export default async function HomePage() {
   return (
     <main>
-      <h1 className='sr-only'>Категорії</h1>
-
-      <Categories />
-
-      <Partners />
+      <Home />
     </main>
   );
 }
