@@ -69,7 +69,7 @@ export default function Page({ params: { slug } }: PageParams) {
             tag="a"
             className="absolute bottom-0 right-0 lg:static lg:mt-6 lg:ml-auto"
             variant="primary"
-            href='/'
+            href='/2025'
           >
             Повернутись назад
           </Button>
@@ -78,7 +78,7 @@ export default function Page({ params: { slug } }: PageParams) {
         <div className='lg:grow lg:w-1/2'>
           <h1 className='mb-4 text-2lg font-black lg:mb-6 lg:text-4.5xl/[55px]'>
             <Link
-              href='/'
+              href='/2025'
               className="text-primary"
             >
               {title}

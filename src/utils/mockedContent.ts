@@ -10,7 +10,7 @@ export const categories = [
       src: images.categories.category1,
       alt: "image1",
     },
-    linkHref: "/inovative-solutions",
+    linkHref: "/2025/inovative-solutions",
   },
   {
     content: {
@@ -21,7 +21,7 @@ export const categories = [
       src: images.categories.category2,
       alt: "image2",
     },
-    linkHref: "/best-specialist",
+    linkHref: "/2025/best-specialist",
   },
   {
     content: {
@@ -32,7 +32,7 @@ export const categories = [
       src: images.categories.category3,
       alt: "image3",
     },
-    linkHref: "/effective-support",
+    linkHref: "/2025/effective-support",
   },
   {
     content: {
@@ -43,7 +43,7 @@ export const categories = [
       src: images.categories.category4,
       alt: "image4",
     },
-    linkHref: "/art",
+    linkHref: "/2025/art",
   },
 ]
 
