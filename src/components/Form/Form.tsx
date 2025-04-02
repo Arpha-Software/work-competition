@@ -20,7 +20,7 @@ import {
 
 import { validateFormData } from "./form-types";
 import { cutFileName } from "@/tools/helpers";
-import { content } from "@/app/[slug]/content";
+import { content } from "@/app/2025/[slug]/content";
 import { putFile, submitForm } from "@/api/form";
 import { Modal } from "../Modal";
 import { Combobox } from "@/components/Combobox";
