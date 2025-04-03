@@ -75,7 +75,7 @@ export const Moderators = ({ isSuperuser }: ModeratorsProps) => {
     };
 
     if (!newModerator.username) {
-      newErrors.username = "Ім'я користувача обов'язкове";
+      newErrors.username = "Ім&apos;я користувача обов'язкове";
     }
 
     if (!newModerator.password) {
@@ -150,7 +150,7 @@ export const Moderators = ({ isSuperuser }: ModeratorsProps) => {
           <thead className="bg-gray-50">
             <tr>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Ім'я користувача
+                Ім&apos;я користувача
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Дозволені регіони
@@ -198,7 +198,7 @@ export const Moderators = ({ isSuperuser }: ModeratorsProps) => {
             <div className="space-y-6">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Ім'я користувача
+                  Ім&apos;я користувача
                 </label>
                 <input
                   type="text"
@@ -211,7 +211,7 @@ export const Moderators = ({ isSuperuser }: ModeratorsProps) => {
                     "w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary",
                     errors.username ? "border-red-500" : "border-gray-300"
                   )}
-                  placeholder="Введіть ім'я користувача"
+                  placeholder="Введіть ім&apos;я користувача"
                 />
                 {errors.username && (
                   <p className="mt-1 text-sm text-red-500">{errors.username}</p>
