@@ -8,7 +8,7 @@ import styles from './Header.module.scss';
 
 export const Header = () => {
   return (
-    <header className={cn('pb-10 rounded-b-lg sticky top-0 z-10 overflow-hidden', styles.bg)}>
+    <header className={cn('pb-10 rounded-b-lg sticky top-0 z-50 overflow-hidden', styles.bg)}>
       <Container className='mx-0 lg:mx-0'>
         <Link href="/" className='block relative text-center text-white text-sm md:text-4.5xl/[56px] uppercase'>
           <Image

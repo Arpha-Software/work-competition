@@ -4,7 +4,7 @@ import toast from "react-hot-toast";
 import { getWorksByCategoryId, likeWork } from "@/api/works";
 import { shuffleItems } from "@/tools/helpers";
 
-import WorkCard from "@/components/WorkCard";
+import { WorkCard } from "@/components/WorkCard";
 import { Loader } from "@/components/Loader";
 
 type VoteProps = {
