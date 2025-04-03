@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { getCookie } from 'cookies-next';
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://bicp2-15a28878e665.herokuapp.com';
+const API_URL = process.env.NEXT_PUBLIC_API_URL!;
 
 export const api = axios.create({
   baseURL: API_URL,
@@ -10,10 +10,9 @@ export const api = axios.create({
   }
 });
 
-// Add request interceptor to include token
 api.interceptors.request.use(
   (config) => {
-    const token = getCookie('adminToken');
+    const token = getCookie('authToken');
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -24,15 +23,16 @@ api.interceptors.request.use(
   }
 );
 
-// Add response interceptor
 api.interceptors.response.use(
   (response) => {
     return response;
   },
   (error) => {
     if (error.response?.status === 401) {
-      // Handle unauthorized access
-      window.location.href = '/admin/login';
+      document.cookie = 'authToken=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+      if (typeof window !== 'undefined') {
+        window.location.href = '/admin/login';
+      }
     }
     return Promise.reject(error);
   }

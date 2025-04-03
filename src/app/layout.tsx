@@ -1,31 +1,33 @@
 import type { Metadata } from 'next';
-import { Nunito_Sans } from 'next/font/google';
+import { Inter } from 'next/font/google';
+import '@/styles/globals.css';
+import { AuthProvider } from '@/contexts/AuthContext';
 
 import { Header } from '@/sections/Header';
 import { Footer } from '@/sections/Footer';
 
-import '@/styles/globals.css';
-
-const nunitoSans = Nunito_Sans({ subsets: ['latin-ext'] });
+const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'Мистецтво Безпеки Праці',
-  description: 'Мистецтво Безпеки Праці',
+  title: 'Work Competition',
+  description: 'Work Competition Platform',
 };
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
-    <html lang='en'>
-      <body className={nunitoSans.className}>
-        <Header />
+    <html lang="uk">
+      <body className={inter.className}>
+        <AuthProvider>
+          <Header />
 
-        {children}
+          {children}
 
-        <Footer />
+          <Footer />
+        </AuthProvider>
       </body>
     </html>
   );
