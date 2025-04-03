@@ -35,7 +35,7 @@ const transformSubmissionToWork = (submission: Submission): Work => ({
   subtitle: submission.category,
   fileAccessLink: {
     accessType: 'public',
-    url: `https://${submission.file.accessLink}`,
+    url: `//${submission.file.accessLink}`,
     mimeType: submission.file.mimeType
   },
   likes: 0,
