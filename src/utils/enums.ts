@@ -45,3 +45,18 @@ export enum Regions {
   Chernihiv = 'Чернігівська',
   Crimea = 'АР Крим',
 }
+
+export enum AdminTab {
+  WORKS = 'works',
+  MODERATORS = 'moderators',
+}
+
+export enum SortOrder {
+  NEWEST = 'newest',
+  OLDEST = 'oldest',
+}
+
+export enum WorkStatus {
+  PUBLIC = 'public',
+  HIDDEN = 'hidden',
+}

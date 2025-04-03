@@ -19,8 +19,8 @@ export const Checkbox = ({ checked, onChange, label, className }: CheckboxProps)
           className="sr-only"
         />
         <div className={cn(
-          "w-6 h-6 rounded border-2 transition-all duration-200",
-          checked 
+          "w-6 h-6 border-2 transition-all duration-200",
+          checked
             ? "border-secondary bg-secondary" 
             : "border-gray-300 hover:border-secondary"
         )}>

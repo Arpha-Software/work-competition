@@ -6,7 +6,6 @@ import { Button } from '@/components/Button';
 import { Input } from '@/components/Input';
 import { api } from '@/api/api';
 import { setCookie, getCookie } from 'cookies-next';
-import Image from 'next/image';
 
 type Token = {
   value: string;
@@ -23,12 +22,11 @@ export const Login = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    // Only redirect if we're on the login page and have a token
-    const token = getCookie('adminToken');
-    if (token && pathname === '/admin/login') {
+    const token = getCookie('authToken');
+    if (token) {
       router.push('/admin');
     }
-  }, [router, pathname]);
+  }, [router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -41,14 +39,12 @@ export const Login = () => {
         password
       });
 
-      // Save token to cookies
-      setCookie('adminToken', response.data.token.value, {
-        maxAge: 60 * 60 * 24, // 1 day
+      setCookie('authToken', response.data.token.value, {
+        maxAge: 60 * 60 * 24,
         path: '/'
       });
 
-      // Redirect to admin page
-      router.push('/admin');
+      window.location.href = '/admin';
     } catch (error: any) {
       if (error.response?.status === 401) {
         setError('Невірний логін або пароль');
@@ -128,4 +124,4 @@ export const Login = () => {
       </div>
     </div>
   );
-}; 
+};

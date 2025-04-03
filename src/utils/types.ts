@@ -9,3 +9,19 @@ export type ContentT = {
 }
 
 export type FormData = Record<string, string | number | boolean | File | null>;
+
+export type Work = {
+  id: number;
+  title: string;
+  subtitle: string;
+  fileAccessLink: {
+    accessType: string;
+    url: string;
+    mimeType: string;
+  };
+  likes: number;
+  date: string;
+  region: string;
+  public: boolean;
+  isVisible: boolean;
+};
