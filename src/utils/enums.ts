@@ -59,4 +59,8 @@ export enum SortOrder {
 export enum WorkStatus {
   PUBLIC = 'public',
   HIDDEN = 'hidden',
+=======
+export enum ECardType {
+  EVENT,
+  CATEGORY,
 }

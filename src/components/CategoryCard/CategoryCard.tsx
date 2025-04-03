@@ -6,19 +6,27 @@ import cn from "@/tools/cn";
 import { ArrowLink } from "../ArrowLink";
 
 import type { ContentT, ImageT } from "@/utils/types";
+import { Tag } from "../Tag";
+import { ECardType } from "@/utils/enums";
 
 type CategoryCardProps = {
   className?: string,
   image: ImageT,
   content: ContentT,
   linkHref: string,
+  buttonText?: string,
+  type?: ECardType,
+  tagLabel?: string,
 }
 
 export const CategoryCard = ({
   className,
   image,
   content,
-  linkHref
+  linkHref,
+  buttonText = 'Подивитись докладніше',
+  type = ECardType.CATEGORY,
+  tagLabel = '2025',
  }: CategoryCardProps) => {
   const { src, alt } = image;
   const { title, description } = content;
@@ -44,7 +52,10 @@ export const CategoryCard = ({
           { description }
         </p>
 
-        <ArrowLink href={linkHref} className="lg:mt-auto">Подивитись докладніше</ArrowLink>
+        <div className="lg:mt-auto flex items-center justify-between">
+          {type === ECardType.EVENT ? <Tag label={tagLabel} /> : null}
+          <ArrowLink href={linkHref}>{buttonText}</ArrowLink>
+        </div>
       </div>
     </div>
   )

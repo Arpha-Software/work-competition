@@ -1,4 +1,5 @@
 import { images } from "./constants";
+import { ECardType } from "./enums";
 
 export const categories = [
   {
@@ -10,7 +11,7 @@ export const categories = [
       src: images.categories.category1,
       alt: "image1",
     },
-    linkHref: "/inovative-solutions",
+    linkHref: "/2025/inovative-solutions",
   },
   {
     content: {
@@ -21,7 +22,7 @@ export const categories = [
       src: images.categories.category2,
       alt: "image2",
     },
-    linkHref: "/best-specialist",
+    linkHref: "/2025/best-specialist",
   },
   {
     content: {
@@ -32,7 +33,7 @@ export const categories = [
       src: images.categories.category3,
       alt: "image3",
     },
-    linkHref: "/effective-support",
+    linkHref: "/2025/effective-support",
   },
   {
     content: {
@@ -43,7 +44,7 @@ export const categories = [
       src: images.categories.category4,
       alt: "image4",
     },
-    linkHref: "/art",
+    linkHref: "/2025/art",
   },
 ]
 
@@ -73,3 +74,34 @@ export const regions = [
   { value: 'Черкаси' },
   { value: 'Чернігів' },
 ]
+
+export const homeContent = [
+  {
+    content: {
+      title: "Галерея кращих робіт ",
+      description: "Перегляньте архів найкращих робіт переможців минулих конкурсів. Надихайтеся унікальними ідеями та творчими рішеннями!",
+    },
+    image: {
+      src: images.home.gallery,
+      alt: "image1",
+    },
+    linkHref: "/gallery",
+    buttonText: "Переглянути",
+    type: ECardType.EVENT,
+    tagLabel: '2024'
+  },
+  {
+    content: {
+      title: "Мистецтво безпеки праці 2025",
+      description: "Долучайтеся до цьогорічного конкурсу! Створюйте, діліться своїми ідеями та робіть внесок у формування культури безпеки праці. Ваша робота може надихнути інших!",
+    },
+    image: {
+      src: images.home.thisYear,
+      alt: "image2",
+    },
+    linkHref: "/2025",
+    buttonText: "Взяти участь",
+    type: ECardType.EVENT,
+    tagLabel: '2025'
+  },
+];

@@ -1,4 +1,8 @@
 const images = {
+  home: {
+    gallery: "/images/gallery.png",
+    thisYear: "/images/thisYear.png",
+  },
   categories: {
     category1: "/images/cat1.png",
     category2: "/images/cat2.png",
