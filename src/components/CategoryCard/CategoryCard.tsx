@@ -48,7 +48,7 @@ export const CategoryCard = ({
           { title }
         </h2>
 
-        <p className="text-primary mb-4 lg:mb-6">
+        <p className="text-black mb-4 lg:mb-6">
           { description }
         </p>
 

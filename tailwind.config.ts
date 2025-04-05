@@ -26,6 +26,7 @@ const config: Config = {
         "primary-50": "#E9EAFC",
         secondary: "#FFCC2E",
         disabled: "#BCBCBC",
+        black: "#000000",
       },
       keyframes: {
         loop: {
