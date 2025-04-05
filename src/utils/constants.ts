@@ -17,7 +17,10 @@ const images = {
     partner4: "/images/partner4.png",
     partner5: "/images/partner5.png",
     partner6: "/images/partner6.png",
-  }
+  },
+  best_arts_2024: {
+    main: "/images/best_arts_2024.png",
+  },
 }
 
 export { images };

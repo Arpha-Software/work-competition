@@ -53,7 +53,7 @@ export default function Page({ params: { slug } }: PageParams) {
             tag="a"
             className="absolute bottom-0 right-0 lg:static lg:mt-6 lg:ml-auto"
             variant="primary"
-            href='/'
+            href='/2025'
           >
             Повернутись назад
           </Button>

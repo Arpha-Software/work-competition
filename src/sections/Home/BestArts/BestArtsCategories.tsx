@@ -2,7 +2,7 @@ import { CategoryCard } from '@/components/CategoryCard';
 import { Container } from '@/components/Container';
 import { bestArtsContent } from '@/utils/mockedContent';
 
-export const Categories = () => {
+export const BestArtsCategories = () => {
   return (
     <Container className="my-5">
       <section className='flex justify-center gap-8'>
