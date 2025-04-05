@@ -194,7 +194,7 @@ export const Form = ({ page, closeModal }: FormProps) => {
 
     const body = {
       ...formData,
-      category: content[page].category,
+      category: content[page].title,
       employerRegion: selectedRegion || 'Львівська',
       file: {
         type: file?.type,

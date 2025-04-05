@@ -37,7 +37,7 @@ export const Footer = () => {
           <div className='mb-3.5 text-base'>
             Створено командою Держпраці
           </div>
-          <div className='text-sm'>2024 © All rights reserved</div>
+          <div className='text-sm'>2025 © All rights reserved</div>
         </div>
       </Container>
     </footer>
