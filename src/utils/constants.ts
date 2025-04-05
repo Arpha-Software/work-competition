@@ -2,6 +2,7 @@ const images = {
   home: {
     gallery: "/images/gallery.png",
     thisYear: "/images/thisYear.png",
+    bestArts2024: "/images/2024.png",
   },
   categories: {
     category1: "/images/cat1.png",

@@ -64,4 +64,5 @@ export enum WorkStatus {
 export enum ECardType {
   EVENT,
   CATEGORY,
+  NONE,
 }
