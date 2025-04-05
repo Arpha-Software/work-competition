@@ -2,12 +2,12 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import cn from "@/tools/cn";
 import { Toaster } from "react-hot-toast";
 
 import { Container } from '@/components/Container';
 import { ArrowLink } from '@/components/ArrowLink';
 import { Button } from '@/components/Button';
-import { Vote } from "@/sections/Vote";
 
 import { Pages } from '@/utils/enums';
 import { FormModal } from '@/components/Form/Form';
@@ -26,23 +26,7 @@ type PageParams = {
 };
 
 export default function Page({ params: { slug } }: PageParams) {
-  const { img, category, title, subtitle, description, support, winners, final } = content[slug]
-    || {
-        img: '',
-        title: '',
-        subtitle: '',
-        description: [],
-        support: {
-          title: '',
-          content: ''
-        },
-        winners: {
-          title: '',
-          content: ''
-        },
-        final: ''
-      };
-
+  const { img, title, subtitle, description } = content[slug] || { img: '', title: '', subtitle: '' };
   const [isOpen, setIsOpen] = useState(false);
 
   const openModal = () => {
@@ -62,14 +46,14 @@ export default function Page({ params: { slug } }: PageParams) {
           <img
             className={styles.img}
             src={img}
-            alt={`Картинка для ${category} категорії`}
+            alt={`Картинка для ${title} категорії`}
           />
 
           <Button
             tag="a"
             className="absolute bottom-0 right-0 lg:static lg:mt-6 lg:ml-auto"
             variant="primary"
-            href='/2025'
+            href='/'
           >
             Повернутись назад
           </Button>
@@ -78,20 +62,18 @@ export default function Page({ params: { slug } }: PageParams) {
         <div className='lg:grow lg:w-1/2'>
           <h1 className='mb-4 text-2lg font-black lg:mb-6 lg:text-4.5xl/[55px]'>
             <Link
-              href='/2025'
+              href='/'
               className="text-primary"
             >
               {title}
             </Link>
           </h1>
 
-          <h2 className='text-primary text-sm lg:text-base'>Вітаємо на сторінці голосування!</h2>
-
-          <p className='mt-4'>
+          <p className='text-primary text-sm lg:text-base'>
             {subtitle}
           </p>
 
-          <h2 className='mt-6 mb-4 text-black font-bold text-base/[22px] lg:mt-8'>Як голосувати?</h2>
+          <h2 className='mt-6 mb-4 text-black font-bold text-base/[22px] lg:mt-8'>Для участі в конкурсі потрібно зробити кілька кроків:</h2>
 
           <ul className='m-0 pl-4 text-black list-decimal text-base/[22px]'>
             {description.map((item, index) => {
@@ -111,46 +93,23 @@ export default function Page({ params: { slug } }: PageParams) {
             })}
           </ul>
 
-          <div className="mt-4">
-            <h3 className="text-primary font-semibold text-sm lg:text-base">{support.title}</h3>
-            <p className="mt-2 indent-8">{support.content}</p>
-          </div>
-
-          <div className="mt-4">
-            <h3 className="text-primary font-semibold text-sm lg:text-base">{winners.title}</h3>
-            <p className="mt-2 indent-8">{winners.content}</p>
-          </div>
-
-          <div className="mt-4">
-            <h3 className="indent-8">{final}</h3>
-          </div>
-
-          <div className="flex gap-10 items-center mt-10">
-            <ArrowLink
-              variant="primary"
-              href={slug === Pages.bestSpecialist ? 'https://ratingop.expertus.com.ua/' : ''}
-              target='_blank'
-              onClick={openModal}
-            >
-              Взяти участь
-            </ArrowLink>
-
-            <span className="font-bold text-red-700">Реєстрацію завершено</span>
-          </div>
+          <ArrowLink
+            className={
+              cn(
+                'mt-10',
+                styles.arrowLink,
+              )
+            }
+            href={slug === Pages.bestSpecialist ? 'https://ratingop.expertus.com.ua/' : ''}
+            target='_blank'
+            onClick={openModal}
+          >
+            Взяти участь
+          </ArrowLink>
 
           {isOpen ? <FormModal page={slug} closeModal={closeModal} /> : null}
-
         </div>
       </Container>
-
-      {category !== 'Кращий спеціаліст з охорони праці' ? (
-        <Container>
-          <h2 className="text-primary font-extrabold text-3xl mb-6">Відкрите голосування триватиме з 01.07.24 до 01.09.24</h2>
-          <h2 className="text-primary font-extrabold text-3xl mb-10">Конкурсні роботи:</h2>
-
-          <Vote category={category} />
-        </Container>
-      ) : null}
 
       <Toaster
         position="top-right"
