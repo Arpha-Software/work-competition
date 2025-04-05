@@ -85,7 +85,7 @@ export const homeContent = [
       src: images.home.gallery,
       alt: "image1",
     },
-    linkHref: "/2024",
+    linkHref: "/best-arts",
     buttonText: "Переглянути",
     type: ECardType.NONE,
     tagLabel: '2024'
@@ -135,4 +135,33 @@ export const bestArtsContent = [
     type: ECardType.EVENT,
     tagLabel: '2025'
   },
+];
+
+export interface ArtSection {
+  id: number;
+  title: string;
+  link: string;
+}
+
+export const artSections: ArtSection[] = [
+  {
+    id: 1,
+    title: "Усі категорії 2024 року",
+    link: "/categories-2024"
+  },
+  {
+    id: 2,
+    title: "Інноваційні та цифрові рішення для забезпечення безпеки на роботі",
+    link: "/digital-solutions"
+  },
+  {
+    id: 3,
+    title: "Ефективні програми психосоціальної підтримки на роботі та її реалізація",
+    link: "/psychosocial-support"
+  },
+  {
+    id: 4,
+    title: "Мистецтво, що рятує життя",
+    link: "/life-saving-art"
+  }
 ];

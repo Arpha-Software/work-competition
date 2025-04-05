@@ -1,0 +1,133 @@
+.container {
+  padding: 0;
+  width: 100%;
+  max-width: 100%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 3rem;
+}
+
+.title {
+  text-align: center;
+  color: #0066cc;
+  margin-bottom: 2rem;
+  font-size: 2.5rem;
+}
+
+.sectionsGrid {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+  width: 100%;
+  max-width: 1600px;
+  padding: 0 2rem;
+}
+
+.section {
+  background: white;
+  border: 1px solid #0066cc;
+  border-radius: 8px;
+  padding: 1.5rem 2rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  flex: 1;
+  min-width: 280px;
+
+  h3 {
+    margin: 0;
+    font-size: 1rem;
+    color: #333;
+    font-weight: 700;
+    line-height: 1.4;
+  }
+
+  &:hover {
+    border-color: #0066cc;
+    background: #f5f9ff;
+  }
+
+  &.selected {
+    background: #0066cc;
+    border-color: #0066cc;
+
+    h3 {
+      color: white;
+    }
+  }
+}
+
+.imageContainer {
+  position: relative;
+  width: 100%;
+  max-width: 1550px;
+  display: flex;
+  justify-content: center;
+}
+
+.mainImage {
+  width: 100%;
+  height: auto;
+  margin: 0;
+  object-fit: fill;
+  max-width: 1550px;
+  max-height: 400px;
+}
+
+.buttonContainer {
+  position: absolute;
+  bottom: 60px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1;
+  width: fit-content;
+}
+
+.arrowLink {
+  max-width: 300px;
+  background: white;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: bold;
+  font-size: 18px;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 30px;
+
+  &:hover {
+    background: #f5f9ff;
+  }
+}
+
+@media (max-width: 768px) {
+  .sectionsGrid {
+    flex-direction: column;
+    padding: 0 2rem;
+  }
+
+  .section {
+    width: 100%;
+  }
+
+  .buttonContainer {
+    position: relative;
+    bottom: auto;
+    margin-top: 1rem;
+    transform: none;
+    left: auto;
+  }
+}
+
+@media (max-width: 480px) {
+  .sectionsGrid {
+    grid-template-columns: 1fr;
+  }
+} 
