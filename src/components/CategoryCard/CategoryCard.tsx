@@ -53,7 +53,7 @@ export const CategoryCard = ({
         </p>
 
         <div className="lg:mt-auto flex items-center justify-between">
-          {type === ECardType.CATEGORY ? <Tag label={tagLabel} /> : null}
+          {type === ECardType.CATEGORY || type === ECardType.EVENT ? <Tag label={tagLabel} /> : null}
           <ArrowLink href={linkHref}>{buttonText}</ArrowLink>
         </div>
       </div>
