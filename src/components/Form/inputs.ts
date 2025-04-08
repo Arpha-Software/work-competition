@@ -85,7 +85,6 @@ function getInnovativeSolutionsInputs() {
       commonInputs.primaryActivityType,
       commonInputs.employerLocality,
       commonInputs.employeeCount,
-      commonInputs.age,
     ],
     contactInputs: [
       createInput("Прізвище, ім'я, по батькові", "Введіть прізвище, ім'я, по батькові", "fullName"),

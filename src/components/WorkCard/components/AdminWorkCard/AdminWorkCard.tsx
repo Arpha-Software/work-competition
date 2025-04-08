@@ -1,8 +1,10 @@
-import WorkCard from './WorkCard';
+import WorkCard from '../../WorkCard';
 import { Button } from '@/components/Button';
 import { Checkbox } from '@/components/Checkbox';
 import cn from '@/tools/cn';
 import type { Work } from '@/utils/types';
+import { Tag } from '../Tag';
+import FileIcon from "../../../../../public/icons/file.svg";
 
 type AdminWorkCardProps = {
   work: Work;
@@ -25,7 +27,6 @@ export const AdminWorkCard = ({
   onHide,
   className,
 }: AdminWorkCardProps) => {
-  console.log('work', work)
   return (
     <div
       className={cn(
@@ -45,6 +46,7 @@ export const AdminWorkCard = ({
 
       <div className="aspect-w-16 aspect-h-9 relative">
         <WorkCard.File fileAccessLink={work.fileAccessLink} />
+
         <div className="absolute inset-0 bg-black/60 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-all duration-200 flex items-center justify-center gap-2 p-4">
           <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
             {!work.public && (
@@ -56,6 +58,7 @@ export const AdminWorkCard = ({
                 Опублікувати
               </Button>
             )}
+
             {work.public && !work.hidden && (
               <Button
                 variant="secondary"
@@ -65,6 +68,7 @@ export const AdminWorkCard = ({
                 Приховати
               </Button>
             )}
+
             {work.public && work.hidden && (
               <Button
                 variant="primary"
@@ -74,6 +78,7 @@ export const AdminWorkCard = ({
                 Показати
               </Button>
             )}
+
             {isSuperuser && (
               <Button
                 variant="secondary"
@@ -88,31 +93,32 @@ export const AdminWorkCard = ({
       </div>
 
       <div className="p-4">
-        <div className="flex items-start justify-between gap-4">
-          <div className="flex-1 min-w-0">
-            <h3 className="text-lg font-medium text-gray-900 truncate">{work.title}</h3>
-            <p className="text-sm text-gray-500 mt-1">{work.subtitle}</p>
-          </div>
+        <WorkCard.LikeCount count={work.likes} />
+
+        <div className="flex-1 min-w-0 mt-4">
+          <WorkCard.Title title={work.title} />
+          <WorkCard.Subtitle subtitle={work.subtitle} />
         </div>
 
         <div className="mt-4 flex flex-wrap gap-2">
-          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-            {work.region}
-          </span>
-          <span className={cn(
-            "inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium",
-            work.public
-              ? work.hidden
-                ? "bg-yellow-100 text-yellow-800"
-                : "bg-green-100 text-green-800"
-              : "bg-gray-100 text-gray-800"
-          )}>
-            {work.public
+          <Tag label={new Date(work.date).toLocaleString('uk-UA')} variant='secondary' />
+          <Tag label={work.region} variant='primary' />
+          <Tag
+            label={
+              work.public
               ? work.hidden
                 ? 'Приховано'
                 : 'Опубліковано'
-              : 'Не опубліковано'}
-          </span>
+              : 'Не опубліковано'
+              }
+            variant={
+              work.public
+              ? work.hidden
+                ? "hidden"
+                : "visible"
+              : "non-public"
+            }
+          />
         </div>
 
         <div className="mt-4">
@@ -131,4 +137,4 @@ export const AdminWorkCard = ({
       </div>
     </div>
   );
-}; 
+};

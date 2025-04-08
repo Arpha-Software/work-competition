@@ -15,7 +15,7 @@ type WorkCardProps = {
 
 const WorkCard = ({ children, className }: WorkCardProps) => {
   return (
-    <div className={cn('bg-primary-50 h-full w-full', className)}>
+    <div className={cn('bg-primary-50 h-full xl:max-w-96 w-full', className)}>
       {children}
     </div>
   );

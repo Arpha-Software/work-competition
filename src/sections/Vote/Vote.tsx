@@ -10,7 +10,6 @@ type VoteProps = {
   category: string;
 };
 
-// Transform submission to work format
 const transformSubmissionToWork = (submission: Submission): Work => ({
   id: submission.id,
   title: submission.fullName,
@@ -36,15 +35,13 @@ export const Vote = ({ category }: VoteProps) => {
     const fetchWorks = async () => {
       try {
         const response = await getSubmissions('all', category);
-        
-        // Filter only public and visible submissions
+
         const publicSubmissions = response.content.filter(
           submission => submission.public && !submission.hidden
         );
-        
-        // Transform submissions to work format
+
         const transformedWorks = publicSubmissions.map(transformSubmissionToWork);
-        
+
         setWorks(transformedWorks);
       } catch (error: any) {
         console.error('Error fetching submissions:', error);
@@ -73,19 +70,18 @@ export const Vote = ({ category }: VoteProps) => {
         return;
       }
 
-      // Update the work in the state to reflect the vote
       setWorks((prevWorks) =>
         prevWorks.map((work) =>
-          work.id === id 
-            ? { 
-                ...work, 
+          work.id === id
+            ? {
+                ...work,
                 currentUserVoted: true,
-                likes: work.likes + 1 
-              } 
+                likes: work.likes + 1
+              }
             : work
         )
       );
-      
+
       toast.success("Ваш голос успішно зараховано!");
     } catch (error) {
       console.error('Error voting for submission:', error);

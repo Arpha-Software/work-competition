@@ -69,7 +69,10 @@ export const validateFormData = (formData: FormData, page: Pages): ValidationRes
     return { success: false, errors: [{ field: '', message: ErrorMessages.PageNotFound }] };
   }
 
-  const result = schema.safeParse(formData);
+  const result = schema.safeParse({
+    ...formData,
+    age: "1",
+  });
 
   if (!result.success) {
     const errors = result.error.errors.map(err => ({

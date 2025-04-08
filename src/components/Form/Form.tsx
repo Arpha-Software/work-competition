@@ -46,7 +46,7 @@ export const Agreements = ({
     setIsChecked(newState);
     updateAgreementState(newState);
   };
-  
+
   const agreementText =
     page === Pages.art ? (
       <ul className="list-disc pl-6 text-sm mt-1">
@@ -206,6 +206,7 @@ export const Form = ({ page, closeModal }: FormProps) => {
 
     const submissionData = {
       ...formData,
+      age: page === Pages.art ? formData.age : 1,
       category: content[page].title,
       region: selectedRegion || 'Львівська',
       employerRegion: selectedRegion || 'Львівська',
@@ -218,7 +219,11 @@ export const Form = ({ page, closeModal }: FormProps) => {
         closeModal();
       })
       .catch((error) => {
-        console.error("submit error", error);
+        if (error.errors && Array.isArray(error.errors)) {
+          error.errors.map((err: any) => (
+            toast.error(err.errorMessage)
+          ));
+        }
       })
       .finally(() => {
         dispatch({ type: FormActionTypes.IS_LOADING, isLoading: false });
@@ -248,9 +253,9 @@ export const Form = ({ page, closeModal }: FormProps) => {
           />
         ) : null}
 
-        {pages[page].mainInputs.map(({ label, placeholder, name, type, min, max, className }, index) => (
+        {pages[page].mainInputs.map(({ label, placeholder, name, type, min, max, className, error }, index) => (
           <Input
-            {...getInputConfig({ label, placeholder, name, type, min, max, className })}
+            {...getInputConfig({ label, placeholder, name, type, min, max, className, error })}
             key={`${label}-${index}`}
           />
         ))}
@@ -261,9 +266,9 @@ export const Form = ({ page, closeModal }: FormProps) => {
           </h3>
         ) : null}
 
-        {pages[page].contactInputs.map(({ label, placeholder, name, type, className }, index) => (
+        {pages[page].contactInputs.map(({ label, placeholder, name, type, className, error }, index) => (
           <Input
-            {...getInputConfig({ label, placeholder, name, type, className })}
+            {...getInputConfig({ label, placeholder, name, type, className, error })}
             key={`${label}-${index}`}
           />
         ))}

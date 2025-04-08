@@ -1,4 +1,5 @@
-import { AdminWorkCard } from '@/components/WorkCard';
+import { AdminWorkCard } from '../WorkCard/components/AdminWorkCard';
+
 import type { Work } from '@/utils/types';
 
 type WorksListProps = {
@@ -36,4 +37,4 @@ export const WorksList = ({
       ))}
     </div>
   );
-}; 
+};
