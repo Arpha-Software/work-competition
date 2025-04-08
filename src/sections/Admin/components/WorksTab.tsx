@@ -20,14 +20,14 @@ const transformSubmissionToWork = (submission: Submission): Work => ({
   subtitle: submission.category,
   fileAccessLink: {
     accessType: 'public',
-    url: `//${submission.file.accessLink}`,
+    url: `${submission.file.accessLink}`,
     mimeType: submission.file.mimeType
   },
-  likes: 0,
+  likes: submission.numberOfVotes,
   date: submission.submittedAt,
   region: submission.region,
   public: submission.public,
-  isVisible: submission.isVisible
+  hidden: submission.hidden,
 });
 
 export const WorksTab = ({ isSuperuser }: WorksTabProps) => {
@@ -77,9 +77,6 @@ export const WorksTab = ({ isSuperuser }: WorksTabProps) => {
       await updatePublicity({
         records: [{ id: workId, isPublic: true }]
       });
-      await updateVisibility({
-        records: [{ id: workId, isVisible: true }]
-      });
       toast.success('Роботу успішно опубліковано');
       const response = await getSubmissions(selectedRegion, selectedCategory);
       setSubmissions(response.content);
@@ -92,19 +89,24 @@ export const WorksTab = ({ isSuperuser }: WorksTabProps) => {
 
   const handleHide = async (workId: number) => {
     try {
-      await updatePublicity({
-        records: [{ id: workId, isPublic: false }]
-      });
+      const work = submissions.find(s => s.id === workId);
+      if (!work) return;
+
       await updateVisibility({
-        records: [{ id: workId, isVisible: false }]
+        records: [{
+          id: workId,
+          isVisible: work.hidden
+        }]
       });
-      toast.success('Роботу успішно приховано');
+
+      toast.success(work.hidden ? 'Роботу успішно приховано' : 'Роботу успішно показано');
+
       const response = await getSubmissions(selectedRegion, selectedCategory);
       setSubmissions(response.content);
       setSelectedWorks(prev => prev.filter(id => id !== workId));
     } catch (error: any) {
-      console.error('Hide error:', error);
-      toast.error(error?.response?.data?.message || 'Помилка при приховуванні роботи');
+      console.error('Hide/Show error:', error);
+      toast.error(error?.response?.data?.message || 'Помилка при зміні видимості роботи');
     }
   };
 
@@ -154,6 +156,7 @@ export const WorksTab = ({ isSuperuser }: WorksTabProps) => {
             selectedWorksCount={selectedWorks.length}
             onPublish={() => selectedWorks.forEach(handlePublish)}
             onHide={() => selectedWorks.forEach(handleHide)}
+            works={filteredAndSortedWorks.filter(work => selectedWorks.includes(work.id))}
           />
           <WorksList
             works={filteredAndSortedWorks}

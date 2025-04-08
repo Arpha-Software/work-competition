@@ -16,13 +16,9 @@ export type Submission = {
     accessLink: string;
   };
   submittedAt: string;
+  numberOfVotes: number;
+  currentUserVoted: boolean;
   public: boolean;
-  companyName: string;
-  primaryActivityType: string;
-  employerRegion: string;
-  employerLocality: string;
-  employeeCount: number;
-  isVisible: boolean;
   hidden: boolean;
 };
 

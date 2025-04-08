@@ -59,11 +59,19 @@ const commonInputs = {
     0,
     1000
   ),
+  age: createInput(
+    'Вік',
+    'Введіть ваш вік',
+    'age',
+    'number',
+    0,
+    120
+  ),
 };
 
 const contactInputsCommon = [
   createInput('Електронна пошта', 'Введіть електронну пошту', 'email', 'email'),
-  createInput('Номер мобільного телефону', 'Введіть номер мобільного телефону', 'mobilePhone', 'tel'),
+  createInput('Номер мобільного телефону', 'Введіть номер мобільного телефону', 'phoneNumber', 'tel'),
 ];
 
 function additionalInfoInput(label: string, placeholder: string) {
@@ -77,11 +85,12 @@ function getInnovativeSolutionsInputs() {
       commonInputs.primaryActivityType,
       commonInputs.employerLocality,
       commonInputs.employeeCount,
+      commonInputs.age,
     ],
     contactInputs: [
-      createInput('Прізвище, ім’я, по батькові', 'Введіть прізвище, ім’я, по батькові', 'fullName'),
+      createInput("Прізвище, ім'я, по батькові", "Введіть прізвище, ім'я, по батькові", "fullName"),
       ...contactInputsCommon,
-      additionalInfoInput('Додаткова інформація про роботодавця (необов’язково)', 'Введіть додаткову інформацію про роботодавця'),
+      additionalInfoInput("Додаткова інформація про роботодавця (необов'язково)", "Введіть додаткову інформацію про роботодавця"),
     ],
   };
 }
@@ -89,13 +98,19 @@ function getInnovativeSolutionsInputs() {
 export const pages: Record<Pages, FormT> = {
   [Pages.inovativeSolutions]: getInnovativeSolutionsInputs(),
   [Pages.bestSpecialist]: {
-    mainInputs: [],
-    contactInputs: []
+    mainInputs: [
+      commonInputs.age,
+    ],
+    contactInputs: [
+      createInput("Прізвище, ім'я, по батькові", "Введіть прізвище, ім'я, по батькові", "fullName"),
+      ...contactInputsCommon,
+      additionalInfoInput('Додаткова інформація про себе', 'Введіть додаткову інформацію про себе'),
+    ],
   },
   [Pages.effectiveSupport]: {
     ...getInnovativeSolutionsInputs(),
     contactInputs: [
-      createInput('Прізвище, ім’я, по батькові', 'Введіть прізвище, ім’я, по батькові', 'fullName'),
+      createInput("Прізвище, ім'я, по батькові", "Введіть прізвище, ім'я, по батькові", "fullName"),
       ...contactInputsCommon,
       additionalInfoInput('Додаткова інформація про роботодавця або проект (за бажанням)', 'Введіть додаткову інформацію про роботодавця'),
     ],
@@ -103,13 +118,13 @@ export const pages: Record<Pages, FormT> = {
   [Pages.art]: {
     mainInputs: [
       createInput('Населений пункт (Введіть назву населеного пункту)', 'Введіть назву населеного пункту', 'employerLocality'),
-      createInput('Прізвище, ім’я, по батькові (повністю)', 'Введіть прізвище, ім’я, по батькові', 'fullName'),
+      createInput("Прізвище, ім'я, по батькові (повністю)", "Введіть прізвище, ім'я, по батькові", "fullName"),
       createInput('Місце роботи/навчання/вид зайнятості', 'Введіть місце роботи/навчання/вид зайнятості', 'primaryActivityType'),
-      createInput('Вік', 'Введіть ваш вік', 'age'),
+      commonInputs.age,
     ],
     contactInputs: [
       ...contactInputsCommon,
       additionalInfoInput('Додаткова інформація про себе за бажанням (мрії, особисті досягнення і т.д)', 'Введіть додаткову інформацію про себе'),
-    ]
-  }
+    ],
+  },
 };

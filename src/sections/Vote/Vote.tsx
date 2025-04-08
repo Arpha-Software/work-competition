@@ -1,46 +1,56 @@
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect } from "react";
 import toast from "react-hot-toast";
-
-import { getWorksByCategoryId, likeWork } from "@/api/works";
-import { shuffleItems } from "@/tools/helpers";
 
 import { WorkCard } from "@/components/WorkCard";
 import { Loader } from "@/components/Loader";
+import { getSubmissions, type Submission } from '@/api/submissions';
+import type { Work } from '@/utils/types';
 
 type VoteProps = {
   category: string;
 };
 
-type Work = {
-  id: number;
-  fullName: string;
-  numberOfLikes: number;
-  alreadyVoted: boolean;
+// Transform submission to work format
+const transformSubmissionToWork = (submission: Submission): Work => ({
+  id: submission.id,
+  title: submission.fullName,
+  subtitle: submission.category,
   fileAccessLink: {
-    accessType: string;
-    url: string;
-    mimeType: string;
-  };
-};
+    accessType: 'public',
+    url: `${submission.file.accessLink}`,
+    mimeType: submission.file.mimeType
+  },
+  likes: submission.numberOfVotes,
+  date: submission.submittedAt,
+  region: submission.region,
+  public: submission.public,
+  hidden: submission.hidden,
+  currentUserVoted: submission.currentUserVoted
+});
 
 export const Vote = ({ category }: VoteProps) => {
   const [works, setWorks] = useState<Work[]>([]);
-  const [visibleWorks, setVisibleWorks] = useState<Work[]>([]);
-  const [page, setPage] = useState(1);
-  const [initialLoad, setInitialLoad] = useState(true);
-  const loaderRef = useRef<HTMLDivElement | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchWorks = async () => {
       try {
-        const response = await getWorksByCategoryId(category, false);
-
-        setWorks(response);
-        setVisibleWorks(response.slice(0, 6));
+        const response = await getSubmissions('all', category);
+        
+        // Filter only public and visible submissions
+        const publicSubmissions = response.content.filter(
+          submission => submission.public && !submission.hidden
+        );
+        
+        // Transform submissions to work format
+        const transformedWorks = publicSubmissions.map(transformSubmissionToWork);
+        
+        setWorks(transformedWorks);
       } catch (error: any) {
-        toast.error(error.details);
+        console.error('Error fetching submissions:', error);
+        toast.error('Помилка при завантаженні робіт');
       } finally {
-        setInitialLoad(false);
+        setIsLoading(false);
       }
     };
 
@@ -48,88 +58,79 @@ export const Vote = ({ category }: VoteProps) => {
   }, [category]);
 
   const handleLike = async (id: number) => {
-    const response = await likeWork(id);
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/submissions/${id}/vote`, {
+        method: "PUT",
+        credentials: 'include'
+      });
 
-    if (!response.ok) {
-      toast.error("Ви вже голосували за цю роботу!");
-      return;
+      if (!response.ok) {
+        if (response.status === 409) {
+          toast.error("Ви вже голосували за цю роботу!");
+        } else {
+          toast.error("Помилка при голосуванні");
+        }
+        return;
+      }
+
+      // Update the work in the state to reflect the vote
+      setWorks((prevWorks) =>
+        prevWorks.map((work) =>
+          work.id === id 
+            ? { 
+                ...work, 
+                currentUserVoted: true,
+                likes: work.likes + 1 
+              } 
+            : work
+        )
+      );
+      
+      toast.success("Ваш голос успішно зараховано!");
+    } catch (error) {
+      console.error('Error voting for submission:', error);
+      toast.error("Помилка при голосуванні");
     }
-
-    setVisibleWorks((prevWorks) =>
-      prevWorks.map((work) =>
-        work.id === id ? { ...work, alreadyVoted: true } : work
-      )
-    );
   };
 
-  const loadMoreWorks = useCallback(() => {
-    setPage((prevPage) => {
-      const nextPage = prevPage + 1;
-      const newVisibleWorks = works.slice(0, nextPage * 9);
-      setVisibleWorks(newVisibleWorks);
-      return nextPage;
-    });
-  }, [works]);
-
-  useEffect(() => {
-    if (loaderRef.current) {
-      const observer = new IntersectionObserver(
-        (entries) => {
-          if (entries[0].isIntersecting) {
-            loadMoreWorks();
-          }
-        },
-        {
-          root: null,
-          rootMargin: "20px",
-          threshold: 1.0,
-        }
-      );
-
-      observer.observe(loaderRef.current);
-
-      return () => {
-        observer.disconnect();
-      };
-    }
-  }, [loadMoreWorks]);
+  if (isLoading) {
+    return (
+      <div className="w-full h-28 flex justify-center items-center">
+        <Loader />
+      </div>
+    );
+  }
 
   return (
     <div>
-      <section className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 items-center justify-items-center gap-10">
-        {visibleWorks.map(({ id, fullName, numberOfLikes, alreadyVoted, fileAccessLink }) => (
-          <WorkCard key={id}>
-            <WorkCard.File fileAccessLink={fileAccessLink} />
+      {works.length === 0 ? (
+        <div className="text-center py-12">
+          <p className="text-gray-500">Немає робіт для голосування в цій категорії</p>
+        </div>
+      ) : (
+        <section className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 items-center justify-items-center gap-10">
+          {works.map(({ id, title, likes, currentUserVoted, fileAccessLink }) => (
+            <WorkCard key={id}>
+              <WorkCard.File fileAccessLink={fileAccessLink} />
 
-            <div className="flex flex-col p-4">
-              {category === "Мистецтво, що рятує життя" ? (
+              <div className="flex flex-col p-4">
                 <WorkCard.LikeCount
-                  count={numberOfLikes + (alreadyVoted ? 1 : 0)}
+                  count={likes}
                 />
-              ) : null}
 
-              <WorkCard.Title title={fullName} className="h-24 mt-4 mb-4" />
+                <WorkCard.Title title={title} className="h-24 mt-4 mb-4" />
 
-              {category === "Мистецтво, що рятує життя" ? (
                 <WorkCard.ButtonWrap
-                  isLiked={alreadyVoted}
+                  isLiked={currentUserVoted || false}
                   onClick={() => handleLike(id)}
                 >
                   Подобається
                 </WorkCard.ButtonWrap>
-              ) : null}
-            </div>
-          </WorkCard>
-        ))}
-      </section>
-      {initialLoad && (
-        <div className="w-full h-28 flex justify-center items-center">
-          <Loader />
-        </div>
+              </div>
+            </WorkCard>
+          ))}
+        </section>
       )}
-      <div ref={loaderRef} className="w-full h-10 flex justify-center items-center">
-        {!initialLoad && visibleWorks.length < works.length && <Loader />}
-      </div>
     </div>
   );
 };

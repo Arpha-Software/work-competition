@@ -1,4 +1,5 @@
 import { Button } from '@/components/Button';
+import { useAuth } from '@/contexts/AuthContext';
 import cn from '@/tools/cn';
 
 type ActionButtonsProps = {

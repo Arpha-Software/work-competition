@@ -2,22 +2,10 @@ import WorkCard from './WorkCard';
 import { Button } from '@/components/Button';
 import { Checkbox } from '@/components/Checkbox';
 import cn from '@/tools/cn';
+import type { Work } from '@/utils/types';
 
 type AdminWorkCardProps = {
-  work: {
-    id: number;
-    title: string;
-    subtitle: string;
-    fileAccessLink: {
-      accessType: string;
-      url: string;
-      mimeType: string;
-    };
-    likes: number;
-    date: string;
-    region: string;
-    public: boolean;
-  };
+  work: Work;
   isSelected: boolean;
   isSuperuser: boolean;
   onSelect: () => void;
@@ -37,6 +25,7 @@ export const AdminWorkCard = ({
   onHide,
   className,
 }: AdminWorkCardProps) => {
+  console.log('work', work)
   return (
     <div
       className={cn(
@@ -67,13 +56,22 @@ export const AdminWorkCard = ({
                 Опублікувати
               </Button>
             )}
-            {work.public && (
+            {work.public && !work.hidden && (
               <Button
                 variant="secondary"
                 onClick={onHide}
                 className="w-full sm:w-auto shadow-lg bg-white/90 hover:bg-white"
               >
                 Приховати
+              </Button>
+            )}
+            {work.public && work.hidden && (
+              <Button
+                variant="primary"
+                onClick={onHide}
+                className="w-full sm:w-auto shadow-lg"
+              >
+                Показати
               </Button>
             )}
             {isSuperuser && (
@@ -104,10 +102,16 @@ export const AdminWorkCard = ({
           <span className={cn(
             "inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium",
             work.public
-              ? "bg-green-100 text-green-800"
+              ? work.hidden
+                ? "bg-yellow-100 text-yellow-800"
+                : "bg-green-100 text-green-800"
               : "bg-gray-100 text-gray-800"
           )}>
-            {work.public ? 'Опубліковано' : 'Приховано'}
+            {work.public
+              ? work.hidden
+                ? 'Приховано'
+                : 'Опубліковано'
+              : 'Не опубліковано'}
           </span>
         </div>
 

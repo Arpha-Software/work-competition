@@ -192,27 +192,37 @@ export const Form = ({ page, closeModal }: FormProps) => {
 
     dispatch({ type: FormActionTypes.SET_VALIDATION_ERRORS, validationErrors: {} });
 
-    const body = {
-      ...formData,
-      category: content[page].title,
-      employerRegion: selectedRegion || 'Львівська',
-      file: {
-        type: file?.type,
-      },
+    if (!file) {
+      dispatch({ type: FormActionTypes.SET_VALIDATION_ERRORS, validationErrors: { file: 'Файл є обов\'язковим' } });
+      dispatch({ type: FormActionTypes.IS_LOADING, isLoading: false });
+      return;
     }
 
-    submitForm(body).then(response => {
-      putFile(file, response.fileAccessLink.url).then(() => {
-        closeModal();
-      }).catch((error) => {
-        console.error("file error", error);
-        toast.error('Помилка при завантаженні файлу');
-      });
-    }).catch((error) => {
-      console.error("submit error", error);
-    }).finally(() => {
+    if (page === Pages.art && !selectedRegion) {
+      dispatch({ type: FormActionTypes.SET_VALIDATION_ERRORS, validationErrors: { region: 'Область є обов\'язковою' } });
       dispatch({ type: FormActionTypes.IS_LOADING, isLoading: false });
-    });
+      return;
+    }
+
+    const submissionData = {
+      ...formData,
+      category: content[page].title,
+      region: selectedRegion || 'Львівська',
+      employerRegion: selectedRegion || 'Львівська',
+      birthYear: page === Pages.art && formData.age ? new Date().getFullYear() - parseInt(String(formData.age)) : null
+    };
+
+    submitForm(submissionData, file)
+      .then(() => {
+        toast.success('Форму успішно відправлено!');
+        closeModal();
+      })
+      .catch((error) => {
+        console.error("submit error", error);
+      })
+      .finally(() => {
+        dispatch({ type: FormActionTypes.IS_LOADING, isLoading: false });
+      });
   };
 
   useEffect(() => {
