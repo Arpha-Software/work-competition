@@ -134,7 +134,7 @@ export default function Page({ params: { slug } }: PageParams) {
         <div className="mt-10 text-center"><Loader /></div>
       ) : isVotingEnabled ? (
         <Container className="mt-10">
-          <h2 className="text-xl font-bold mb-4">Голосування за роботи в категорії "{title}"</h2>
+          <h2 className="text-xl font-bold mb-4">Голосування за роботи в категорії &quot;{title}&quot;</h2>
           <Vote category={title} />
         </Container>
       ): null}
