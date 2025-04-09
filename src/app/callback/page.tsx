@@ -1,16 +1,13 @@
 'use client';
 
-import { useEffect } from 'react';
-
+import { useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Loader } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { setCookie } from 'cookies-next';
-import { decodeToken } from '@/tools/helpers';
 
-export default function GoogleCallback() {
-  const { user, setUser } = useAuth();
-
+const GoogleCallback = () => {
+  const { setUser } = useAuth();
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -32,7 +29,6 @@ export default function GoogleCallback() {
     });
 
     const lastRoute = localStorage.getItem('lastRoute');
-
     router.replace(lastRoute || '/');
   }, [searchParams, router]);
 
@@ -43,5 +39,13 @@ export default function GoogleCallback() {
         <p>Processing Google OAuth...</p>
       </div>
     </div>
+  );
+};
+
+export default function Page() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <GoogleCallback />
+    </Suspense>
   );
 }
