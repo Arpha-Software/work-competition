@@ -94,6 +94,7 @@ function getInnovativeSolutionsInputs() {
   };
 }
 
+//@ts-expect-error
 export const pages: Record<Pages, FormT> = {
   [Pages.inovativeSolutions]: getInnovativeSolutionsInputs(),
   [Pages.bestSpecialist]: {

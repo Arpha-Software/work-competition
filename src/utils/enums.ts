@@ -3,6 +3,10 @@ export enum Pages {
   bestSpecialist = 'best-specialist',
   effectiveSupport = 'effective-support',
   art = 'art',
+  postersAndInformation = 'posters-and-information',
+  photosAndCollages = 'photos-and-collages',
+  drawings = 'drawings',
+  videos = 'videos',
 }
 
 export enum ErrorMessages {

@@ -17,6 +17,7 @@ import { getFeature } from '@/api/submissions';
 
 import styles from './InnerPage.module.scss';
 import { Loader } from "@/components/Loader";
+import { Subcategories } from "@/sections/Home/Subcategories/Subcategories";
 
 type PageParams = {
   params: {
@@ -29,7 +30,7 @@ type PageParams = {
 };
 
 export default function Page({ params: { slug } }: PageParams) {
-  const { img, title, subtitle, description } = content[slug] || { img: '', title: '', subtitle: '' };
+  const { category, img, title, subtitle, description } = content[slug] || { img: '', title: '', subtitle: '' };
   const [isOpen, setIsOpen] = useState(false);
   const [isVotingEnabled, setIsVotingEnabled] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -60,6 +61,14 @@ export default function Page({ params: { slug } }: PageParams) {
     setIsOpen(false);
     document.body.style.overflow = 'auto';
   };
+
+  if (category === 'Мистецтво, що рятує життя') {
+    return (
+      <Container>
+        <Subcategories />
+      </Container>
+    )
+  }
 
   return (
     <main className='relative'>
@@ -132,10 +141,10 @@ export default function Page({ params: { slug } }: PageParams) {
 
       {isLoading ? (
         <div className="mt-10 text-center"><Loader /></div>
-      ) : isVotingEnabled ? (
+      ) : (isVotingEnabled && category !== 'Кращий спеціаліст з охорони праці') ? (
         <Container className="mt-10">
           <h2 className="text-xl font-bold mb-4">Голосування за роботи в категорії &quot;{title}&quot;</h2>
-          <Vote category={title} />
+          <Vote category={category} subcategory="all" />
         </Container>
       ): null}
 

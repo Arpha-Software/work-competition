@@ -1,3 +1,5 @@
+'use client';
+
 import { useState, useEffect } from "react";
 import toast from "react-hot-toast";
 import { getCookie } from 'cookies-next';
@@ -11,6 +13,7 @@ import { usePathname } from "next/navigation";
 
 type VoteProps = {
   category: string;
+  subcategory: string;
 };
 
 const transformSubmissionToWork = (submission: Submission): Work => ({
@@ -30,7 +33,7 @@ const transformSubmissionToWork = (submission: Submission): Work => ({
   currentUserVoted: submission.currentUserVoted
 });
 
-export const Vote = ({ category }: VoteProps) => {
+export const Vote = ({ category, subcategory }: VoteProps) => {
   const [works, setWorks] = useState<Work[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
@@ -40,7 +43,7 @@ export const Vote = ({ category }: VoteProps) => {
   useEffect(() => {
     const fetchWorks = async () => {
       try {
-        const response = await getSubmissions('all', category);
+        const response = await getSubmissions('all', category, subcategory);
 
         const publicSubmissions = response.content.filter(
           submission => submission.public && !submission.hidden
@@ -73,7 +76,7 @@ export const Vote = ({ category }: VoteProps) => {
     }
 
     try {
-      const response = await likeSubmission(id, token);
+      const response = await likeSubmission(id);
 
       if (response.status !== 200) {
         if (response.status === 409) {
@@ -150,9 +153,9 @@ export const Vote = ({ category }: VoteProps) => {
         </section>
       )}
 
-      <LoginModal 
-        isOpen={isLoginModalOpen} 
-        onClose={() => setIsLoginModalOpen(false)} 
+      <LoginModal
+        isOpen={isLoginModalOpen}
+        onClose={() => setIsLoginModalOpen(false)}
       />
     </div>
   );

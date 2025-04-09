@@ -45,7 +45,7 @@ export type PublicityRequest = {
   }[];
 };
 
-export const getSubmissions = async (region?: string, category?: string): Promise<SubmissionsResponse> => {
+export const getSubmissions = async (region?: string, category?: string, subcategory?: string): Promise<SubmissionsResponse> => {
   const params = new URLSearchParams();
   if (region && region !== 'all') {
     params.append('region', region);
@@ -53,6 +53,10 @@ export const getSubmissions = async (region?: string, category?: string): Promis
   if (category && category !== 'all') {
     params.append('category', category);
   }
+  if (subcategory && subcategory !== 'all') {
+    params.append('subcategory', subcategory);
+  }
+
   const response = await api.get<SubmissionsResponse>(`/submissions?${params.toString()}`);
   return response.data;
 };
@@ -69,12 +73,8 @@ export const deleteSubmission = async (id: number): Promise<void> => {
   await api.delete(`/submissions/${id}`);
 };
 
-export const likeSubmission = async (id: number, token: string) => {
-  return await api.post(`/submissions/${id}/vote`, {}, {
-    headers: {
-      Authorization: `Bearer ${token}`
-    }
-  });
+export const likeSubmission = async (id: number) => {
+  return await api.post(`/submissions/${id}/vote`);
 };
 
 export type FeatureResponse = {
