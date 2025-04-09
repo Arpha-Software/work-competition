@@ -46,7 +46,7 @@ export const Agreements = ({
     setIsChecked(newState);
     updateAgreementState(newState);
   };
-  
+
   const agreementText =
     page === Pages.art ? (
       <ul className="list-disc pl-6 text-sm mt-1">
@@ -192,27 +192,42 @@ export const Form = ({ page, closeModal }: FormProps) => {
 
     dispatch({ type: FormActionTypes.SET_VALIDATION_ERRORS, validationErrors: {} });
 
-    const body = {
-      ...formData,
-      category: content[page].title,
-      employerRegion: selectedRegion || 'Львівська',
-      file: {
-        type: file?.type,
-      },
+    if (!file) {
+      dispatch({ type: FormActionTypes.SET_VALIDATION_ERRORS, validationErrors: { file: 'Файл є обов\'язковим' } });
+      dispatch({ type: FormActionTypes.IS_LOADING, isLoading: false });
+      return;
     }
 
-    submitForm(body).then(response => {
-      putFile(file, response.fileAccessLink.url).then(() => {
-        closeModal();
-      }).catch((error) => {
-        console.error("file error", error);
-        toast.error('Помилка при завантаженні файлу');
-      });
-    }).catch((error) => {
-      console.error("submit error", error);
-    }).finally(() => {
+    if (page === Pages.art && !selectedRegion) {
+      dispatch({ type: FormActionTypes.SET_VALIDATION_ERRORS, validationErrors: { region: 'Область є обов\'язковою' } });
       dispatch({ type: FormActionTypes.IS_LOADING, isLoading: false });
-    });
+      return;
+    }
+
+    const submissionData = {
+      ...formData,
+      age: page === Pages.art ? formData.age : 1,
+      category: content[page].title,
+      region: selectedRegion || 'Львівська',
+      employerRegion: selectedRegion || 'Львівська',
+      birthYear: page === Pages.art && formData.age ? new Date().getFullYear() - parseInt(String(formData.age)) : null
+    };
+
+    submitForm(submissionData, file)
+      .then(() => {
+        toast.success('Форму успішно відправлено!');
+        closeModal();
+      })
+      .catch((error) => {
+        if (error.errors && Array.isArray(error.errors)) {
+          error.errors.map((err: any) => (
+            toast.error(err.errorMessage)
+          ));
+        }
+      })
+      .finally(() => {
+        dispatch({ type: FormActionTypes.IS_LOADING, isLoading: false });
+      });
   };
 
   useEffect(() => {
@@ -238,9 +253,9 @@ export const Form = ({ page, closeModal }: FormProps) => {
           />
         ) : null}
 
-        {pages[page].mainInputs.map(({ label, placeholder, name, type, min, max, className }, index) => (
+        {pages[page].mainInputs.map(({ label, placeholder, name, type, min, max, className, error }, index) => (
           <Input
-            {...getInputConfig({ label, placeholder, name, type, min, max, className })}
+            {...getInputConfig({ label, placeholder, name, type, min, max, className, error })}
             key={`${label}-${index}`}
           />
         ))}
@@ -251,9 +266,9 @@ export const Form = ({ page, closeModal }: FormProps) => {
           </h3>
         ) : null}
 
-        {pages[page].contactInputs.map(({ label, placeholder, name, type, className }, index) => (
+        {pages[page].contactInputs.map(({ label, placeholder, name, type, className, error }, index) => (
           <Input
-            {...getInputConfig({ label, placeholder, name, type, className })}
+            {...getInputConfig({ label, placeholder, name, type, className, error })}
             key={`${label}-${index}`}
           />
         ))}

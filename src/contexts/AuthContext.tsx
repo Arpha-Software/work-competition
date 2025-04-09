@@ -1,7 +1,10 @@
 'use client';
 
-import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { createContext, useContext, useState, useEffect, ReactNode, Dispatch, SetStateAction } from 'react';
 import { getCookie } from 'cookies-next';
+import { useRouter } from 'next/navigation';
+import { EProvider } from '@/utils/enums';
+import { decodeToken } from '@/tools/helpers';
 
 interface User {
   role: string;
@@ -11,11 +14,15 @@ interface User {
 interface AuthContextType {
   user: User | null;
   isLoading: boolean;
+  setUser: Dispatch<SetStateAction<User | null>>;
+  login: (provider: EProvider) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType>({
   user: null,
   isLoading: true,
+  setUser: () => {},
+  login: async (provider: EProvider) => {},
 });
 
 export const useAuth = () => useContext(AuthContext);
@@ -23,6 +30,7 @@ export const useAuth = () => useContext(AuthContext);
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const router = useRouter();
 
   useEffect(() => {
     const token = getCookie('authToken');
@@ -33,10 +41,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
 
     try {
-      const base64Url = (token as string).split('.')[1];
-      const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-      const jsonPayload = atob(base64);
-      const decoded = JSON.parse(jsonPayload);
+      const decoded = decodeToken(token);
 
       setUser({
         role: decoded.role || '',
@@ -50,8 +55,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   }, []);
 
+  const login = async (provider: EProvider) => {
+    router.push(`${process.env.NEXT_PUBLIC_API_URL}/oauth2/authorization/${provider}`);
+  };
+
   return (
-    <AuthContext.Provider value={{ user, isLoading }}>
+    <AuthContext.Provider value={{ user, isLoading, setUser, login }}>
       {children}
     </AuthContext.Provider>
   );

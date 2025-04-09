@@ -12,22 +12,7 @@ import { getSubmissions, updateVisibility, type Submission, updatePublicity, del
 import toast from 'react-hot-toast';
 import { useAuth } from '@/contexts/AuthContext';
 import { SortOrder } from '@/utils/enums';
-
-type Work = {
-  id: number;
-  title: string;
-  subtitle: string;
-  fileAccessLink: {
-    accessType: string;
-    url: string;
-    mimeType: string;
-  };
-  likes: number;
-  date: string;
-  region: string;
-  public: boolean;
-  isVisible: boolean;
-};
+import type { Work } from '@/utils/types';
 
 const transformSubmissionToWork = (submission: Submission): Work => ({
   id: submission.id,
@@ -35,14 +20,14 @@ const transformSubmissionToWork = (submission: Submission): Work => ({
   subtitle: submission.category,
   fileAccessLink: {
     accessType: 'public',
-    url: `//${submission.file.accessLink}`,
+    url: `${submission.file.accessLink}`,
     mimeType: submission.file.mimeType
   },
-  likes: 0,
+  likes: submission.numberOfVotes,
   date: submission.submittedAt,
   region: submission.region,
   public: submission.public,
-  isVisible: submission.isVisible
+  hidden: submission.hidden,
 });
 
 const regions = [
@@ -173,14 +158,9 @@ export const Admin = () => {
         records: [{ id: workId, isPublic: true }]
       });
 
-      await updateVisibility({
-        records: [{ id: workId, isVisible: true }]
-      });
-
       toast.success('Роботу успішно опубліковано');
 
       const response = await getSubmissions(selectedRegion, selectedCategory);
-
       setSubmissions(response.content);
       setSelectedWorks(prev => prev.filter(id => id !== workId));
     } catch (error: any) {
@@ -191,21 +171,24 @@ export const Admin = () => {
 
   const handleHide = async (workId: number) => {
     try {
-      await updatePublicity({
-        records: [{ id: workId, isPublic: false }]
-      });
+      const work = submissions.find(s => s.id === workId);
+      if (!work) return;
+
       await updateVisibility({
-        records: [{ id: workId, isVisible: false }]
+        records: [{
+          id: workId,
+          isVisible: work.hidden
+        }]
       });
-      toast.success('Роботу успішно приховано');
+
+      toast.success(work.hidden ? 'Роботу успішно приховано' : 'Роботу успішно показано');
 
       const response = await getSubmissions(selectedRegion, selectedCategory);
-
       setSubmissions(response.content);
       setSelectedWorks(prev => prev.filter(id => id !== workId));
     } catch (error: any) {
-      console.error('Hide error:', error);
-      toast.error(error?.response?.data?.message || 'Помилка при приховуванні роботи');
+      console.error('Hide/Show error:', error);
+      toast.error(error?.response?.data?.message || 'Помилка при зміні видимості роботи');
     }
   };
 
@@ -271,19 +254,21 @@ export const Admin = () => {
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
             <h1 className="text-2xl font-semibold text-gray-900">Панель адміністратора</h1>
             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 w-full sm:w-auto">
-              <div className="flex items-center gap-2">
-                <span className="text-sm text-gray-600">Голосування:</span>
-                <button
-                  onClick={handleVotingToggle}
-                  className={`px-3 py-1.5 rounded-md text-sm ${
-                    isVotingEnabled
-                      ? 'bg-green-500 hover:bg-green-600 text-white'
-                      : 'bg-red-500 hover:bg-red-600 text-white'
-                  }`}
-                >
-                  {isVotingEnabled ? 'Увімкнено' : 'Вимкнено'}
-                </button>
-              </div>
+              {isSuperuser && (
+                <div className="flex items-center gap-2">
+                  <span className="text-sm text-gray-600">Голосування:</span>
+                  <button
+                    onClick={handleVotingToggle}
+                    className={`px-3 py-1.5 rounded-md text-sm ${
+                      isVotingEnabled
+                        ? 'bg-green-500 hover:bg-green-600 text-white'
+                        : 'bg-red-500 hover:bg-red-600 text-white'
+                    }`}
+                  >
+                    {isVotingEnabled ? 'Увімкнено' : 'Вимкнено'}
+                  </button>
+                </div>
+              )}
               <div className="flex items-center gap-2">
                 <span className="text-sm text-gray-500">Роль:</span>
                 <span className="text-sm font-medium text-gray-700">
@@ -364,6 +349,7 @@ export const Admin = () => {
                         selectedWorksCount={selectedWorks.length}
                         onPublish={() => selectedWorks.forEach(handlePublish)}
                         onHide={() => selectedWorks.forEach(handleHide)}
+                        works={filteredAndSortedWorks.filter(work => selectedWorks.includes(work.id))}
                       />
                     )}
                   </>

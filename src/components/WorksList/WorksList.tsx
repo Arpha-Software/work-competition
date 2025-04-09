@@ -1,35 +1,21 @@
-import { AdminWorkCard } from '@/components/WorkCard';
+import { AdminWorkCard } from '../WorkCard/components/AdminWorkCard';
 
-type Work = {
-  id: number;
-  title: string;
-  subtitle: string;
-  fileAccessLink: {
-    accessType: string;
-    url: string;
-    mimeType: string;
-  };
-  likes: number;
-  date: string;
-  region: string;
-  public: boolean;
-  isVisible: boolean;
-};
+import type { Work } from '@/utils/types';
 
 type WorksListProps = {
   works: Work[];
-  selectedWorks: number[];
-  isSuperuser: boolean;
-  onWorkSelect: (workId: number) => void;
-  onDelete: (workId: number) => void;
-  onPublish: (workId: number) => void;
-  onHide: (workId: number) => void;
+  selectedWorks?: number[];
+  isSuperuser?: boolean;
+  onWorkSelect?: (workId: number) => void;
+  onDelete?: (workId: number) => void;
+  onPublish?: (workId: number) => void;
+  onHide?: (workId: number) => void;
 };
 
 export const WorksList = ({
   works,
-  selectedWorks,
-  isSuperuser,
+  selectedWorks = [],
+  isSuperuser = false,
   onWorkSelect,
   onDelete,
   onPublish,
@@ -43,12 +29,12 @@ export const WorksList = ({
           work={work}
           isSelected={selectedWorks.includes(work.id)}
           isSuperuser={isSuperuser}
-          onSelect={() => onWorkSelect(work.id)}
-          onDelete={() => onDelete(work.id)}
-          onPublish={() => onPublish(work.id)}
-          onHide={() => onHide(work.id)}
+          onSelect={() => onWorkSelect?.(work.id)}
+          onDelete={() => onDelete?.(work.id)}
+          onPublish={() => onPublish?.(work.id)}
+          onHide={() => onHide?.(work.id)}
         />
       ))}
     </div>
   );
-}; 
+};

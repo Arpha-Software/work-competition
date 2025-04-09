@@ -32,7 +32,7 @@ const baseSchemaFields = {
   email: z.string().email(ErrorMessages.EmailInvalid),
   additionalInfo: z.string().optional(),
   agreement: z.boolean({ required_error: ErrorMessages.ConsentRequired }),
-  mobilePhone: z.string()
+  phoneNumber: z.string()
     .transform((value) => value.replace(/\D/g, ''))
     .refine((value) => value.length >= 10 && value.length <= 12, ErrorMessages.PhoneInvalid)
     .refine((value) => {
@@ -69,7 +69,10 @@ export const validateFormData = (formData: FormData, page: Pages): ValidationRes
     return { success: false, errors: [{ field: '', message: ErrorMessages.PageNotFound }] };
   }
 
-  const result = schema.safeParse(formData);
+  const result = schema.safeParse({
+    ...formData,
+    age: "1",
+  });
 
   if (!result.success) {
     const errors = result.error.errors.map(err => ({

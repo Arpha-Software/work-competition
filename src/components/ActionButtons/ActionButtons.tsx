@@ -1,43 +1,49 @@
-import { Button } from '@/components/Button';
-import cn from '@/tools/cn';
+import type { Work } from '@/utils/types';
+import { Button } from '../Button';
 
-type ActionButtonsProps = {
+interface ActionButtonsProps {
   selectedWorksCount: number;
   onPublish: () => void;
   onHide: () => void;
-};
+  works: Work[];
+}
 
-export const ActionButtons = ({
-  selectedWorksCount,
-  onPublish,
-  onHide,
-}: ActionButtonsProps) => {
+export const ActionButtons = ({ selectedWorksCount, onPublish, onHide, works }: ActionButtonsProps) => {
+  if (selectedWorksCount === 0) return null;
+
+  const hasUnpublishedWorks = works.filter(work => !work.public);
+  const hasVisibleWorks = works.filter(work => work.public && !work.hidden);
+  const hasHiddenWorks = works.filter(work => work.public && work.hidden);
+
   return (
-    <div className={cn(
-      "fixed bottom-8 right-8 flex gap-4 transition-all duration-300 z-50",
-      selectedWorksCount === 0 ? "opacity-0 pointer-events-none" : "opacity-100"
-    )}>
-      <div className="bg-white rounded-lg shadow-lg p-4 flex flex-col gap-4">
-        <div className="text-sm text-gray-600">
-          Обрано робіт: {selectedWorksCount}
-        </div>
-        <div className="flex gap-4">
-          <Button
-            onClick={onPublish}
-            variant="primary"
-            className="min-w-[120px]"
-          >
-            Опублікувати
-          </Button>
-          <Button
-            variant="secondary"
-            onClick={onHide}
-            className="min-w-[120px]"
-          >
-            Приховати
-          </Button>
-        </div>
-      </div>
+    <div className="fixed bottom-4 right-4 flex flex-col sm:flex-row gap-2">
+      {hasUnpublishedWorks.length ? (
+        <Button
+          variant="primary"
+          onClick={onPublish}
+          className="w-full sm:w-auto shadow-lg"
+        >
+          Опублікувати ({hasUnpublishedWorks.length})
+        </Button>
+      ) : null}
+      {hasVisibleWorks.length ? (
+        <Button
+          variant="secondary"
+          onClick={onHide}
+          className="w-full sm:w-auto shadow-lg bg-white/90 hover:bg-white"
+        >
+          Приховати ({hasVisibleWorks.length})
+        </Button>
+      ) : null}
+      {hasHiddenWorks.length ? (
+        <Button
+          variant="primary"
+          onClick={onHide}
+          className="w-full sm:w-auto shadow-lg"
+        >
+          Показати ({hasHiddenWorks.length})
+        </Button>
+      ) : null}
     </div>
   );
-}; 
+};

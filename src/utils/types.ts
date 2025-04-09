@@ -23,5 +23,6 @@ export type Work = {
   date: string;
   region: string;
   public: boolean;
-  isVisible: boolean;
+  hidden: boolean;
+  currentUserVoted?: boolean;
 };

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import cn from "@/tools/cn";
 import { Toaster } from "react-hot-toast";
@@ -8,12 +8,15 @@ import { Toaster } from "react-hot-toast";
 import { Container } from '@/components/Container';
 import { ArrowLink } from '@/components/ArrowLink';
 import { Button } from '@/components/Button';
+import { Vote } from '@/sections/Vote';
 
 import { Pages } from '@/utils/enums';
 import { FormModal } from '@/components/Form/Form';
 import { content } from './content';
+import { getFeature } from '@/api/submissions';
 
 import styles from './InnerPage.module.scss';
+import { Loader } from "@/components/Loader";
 
 type PageParams = {
   params: {
@@ -28,10 +31,29 @@ type PageParams = {
 export default function Page({ params: { slug } }: PageParams) {
   const { img, title, subtitle, description } = content[slug] || { img: '', title: '', subtitle: '' };
   const [isOpen, setIsOpen] = useState(false);
+  const [isVotingEnabled, setIsVotingEnabled] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchVotingState = async () => {
+      try {
+        const featureResponse = await getFeature('VOTING');
+        setIsVotingEnabled(featureResponse.enabled);
+      } catch (error) {
+        console.error('Error fetching voting state:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchVotingState();
+  }, []);
 
   const openModal = () => {
-    setIsOpen(true);
-    document.body.style.overflow = 'hidden';
+    if (!isVotingEnabled) {
+      setIsOpen(true);
+      document.body.style.overflow = 'hidden';
+    }
   };
 
   const closeModal = () => {
@@ -93,23 +115,29 @@ export default function Page({ params: { slug } }: PageParams) {
             })}
           </ul>
 
-          <ArrowLink
-            className={
-              cn(
-                'mt-10',
-                styles.arrowLink,
-              )
-            }
-            href={slug === Pages.bestSpecialist ? 'https://ratingop.expertus.com.ua/' : ''}
-            target='_blank'
-            onClick={openModal}
-          >
-            Взяти участь
-          </ArrowLink>
+          {!isVotingEnabled ? (
+            <ArrowLink
+              className={cn('mt-10', styles.arrowLink)}
+              href={slug === Pages.bestSpecialist ? 'https://ratingop.expertus.com.ua/' : ''}
+              target='_blank'
+              onClick={openModal}
+            >
+              Взяти участь
+            </ArrowLink>
+          ) : null}
 
           {isOpen ? <FormModal page={slug} closeModal={closeModal} /> : null}
         </div>
       </Container>
+
+      {isLoading ? (
+        <div className="mt-10 text-center"><Loader /></div>
+      ) : isVotingEnabled ? (
+        <Container className="mt-10">
+          <h2 className="text-xl font-bold mb-4">Голосування за роботи в категорії &quot;{title}&quot;</h2>
+          <Vote category={title} />
+        </Container>
+      ): null}
 
       <Toaster
         position="top-right"
