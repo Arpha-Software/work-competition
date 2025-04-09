@@ -99,8 +99,14 @@ export const Vote = ({ category }: VoteProps) => {
       localStorage.removeItem('lastRoute');
 
       toast.success("Ваш голос успішно зараховано!");
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error voting for submission:', error);
+
+      if (error.status === 400) {
+        toast.error(error.response.data.title);
+        return;
+      }
+
       toast.error("Помилка при голосуванні");
     }
   };
