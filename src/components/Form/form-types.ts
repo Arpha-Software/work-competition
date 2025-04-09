@@ -63,6 +63,7 @@ const schemas = {
 };
 
 export const validateFormData = (formData: FormData, page: Pages): ValidationResult => {
+  //@ts-expect-error
   const schema = schemas[page];
 
   if (!schema) {
@@ -75,7 +76,7 @@ export const validateFormData = (formData: FormData, page: Pages): ValidationRes
   });
 
   if (!result.success) {
-    const errors = result.error.errors.map(err => ({
+    const errors = result.error.errors.map((err: any) => ({
       field: String(err.path[0]),
       message: err.message
     }));

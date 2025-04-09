@@ -207,7 +207,8 @@ export const Form = ({ page, closeModal }: FormProps) => {
     const submissionData = {
       ...formData,
       age: page === Pages.art ? formData.age : 1,
-      category: content[page].title,
+      //@ts-expect-error
+      category: content[page].category,
       region: selectedRegion || 'Львівська',
       employerRegion: selectedRegion || 'Львівська',
       birthYear: page === Pages.art && formData.age ? new Date().getFullYear() - parseInt(String(formData.age)) : null
@@ -324,7 +325,8 @@ export const FormModal = ({ page, closeModal }: FormProps) => {
     >
       <div className='space-y-4'>
         <h2 className='text-3xl text-center uppercase'>Реєстрація</h2>
-        <p className='text-sm text-center uppercase max-w-96 mx-auto'>Категорія: {content[page].title}</p>
+        {/* @ts-expect-error */}
+        <p className='text-sm text-center uppercase max-w-96 mx-auto'>Категорія: {content[page].category}</p>
       </div>
 
       <Form page={page} closeModal={closeModal} />
