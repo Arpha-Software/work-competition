@@ -1,10 +1,13 @@
 import { useState, useEffect } from "react";
 import toast from "react-hot-toast";
+import { getCookie } from 'cookies-next';
 
 import { WorkCard } from "@/components/WorkCard";
 import { Loader } from "@/components/Loader";
-import { getSubmissions, type Submission } from '@/api/submissions';
+import { LoginModal } from "../../components/LoginModal";
+import { getSubmissions, likeSubmission, type Submission } from '@/api/submissions';
 import type { Work } from '@/utils/types';
+import { usePathname } from "next/navigation";
 
 type VoteProps = {
   category: string;
@@ -30,6 +33,9 @@ const transformSubmissionToWork = (submission: Submission): Work => ({
 export const Vote = ({ category }: VoteProps) => {
   const [works, setWorks] = useState<Work[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+  const [selectedWorkId, setSelectedWorkId] = useState<number | null>(null);
+  const pathname = usePathname();
 
   useEffect(() => {
     const fetchWorks = async () => {
@@ -55,13 +61,21 @@ export const Vote = ({ category }: VoteProps) => {
   }, [category]);
 
   const handleLike = async (id: number) => {
-    try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/submissions/${id}/vote`, {
-        method: "PUT",
-        credentials: 'include'
-      });
+    const token = getCookie('authToken');
 
-      if (!response.ok) {
+    if (!token) {
+      localStorage.setItem('lastRoute', pathname);
+
+      setSelectedWorkId(id);
+      setIsLoginModalOpen(true);
+
+      return;
+    }
+
+    try {
+      const response = await likeSubmission(id, token);
+
+      if (response.status !== 200) {
         if (response.status === 409) {
           toast.error("Ви вже голосували за цю роботу!");
         } else {
@@ -81,6 +95,8 @@ export const Vote = ({ category }: VoteProps) => {
             : work
         )
       );
+
+      localStorage.removeItem('lastRoute');
 
       toast.success("Ваш голос успішно зараховано!");
     } catch (error) {
@@ -127,6 +143,11 @@ export const Vote = ({ category }: VoteProps) => {
           ))}
         </section>
       )}
+
+      <LoginModal 
+        isOpen={isLoginModalOpen} 
+        onClose={() => setIsLoginModalOpen(false)} 
+      />
     </div>
   );
 };

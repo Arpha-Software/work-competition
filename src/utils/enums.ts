@@ -66,3 +66,8 @@ export enum ECardType {
   CATEGORY,
   NONE,
 }
+
+export enum EProvider {
+  Google = 'google',
+  Facebook = 'facebook',
+}

@@ -11,3 +11,12 @@ export const repeatArray = (arr: string[], count: number) => {
 export const shuffleItems = (array: Array<any>) => {
   return array.sort(() => Math.random() - 0.5);
 };
+
+export const decodeToken = (token: string) => {
+  const base64Url = token.split('.')[1];
+  const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+  const jsonPayload = atob(base64);
+  const decoded = JSON.parse(jsonPayload);
+
+  return decoded;
+}

@@ -1,4 +1,5 @@
 import { api } from '@/api/api';
+import { headers } from 'next/headers';
 
 export type Submission = {
   id: number;
@@ -66,6 +67,14 @@ export const updatePublicity = async (data: PublicityRequest): Promise<void> => 
 
 export const deleteSubmission = async (id: number): Promise<void> => {
   await api.delete(`/submissions/${id}`);
+};
+
+export const likeSubmission = async (id: number, token: string) => {
+  return await api.post(`/submissions/${id}/vote`, {}, {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  });
 };
 
 export type FeatureResponse = {
