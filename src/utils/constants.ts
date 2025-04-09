@@ -10,6 +10,12 @@ const images = {
     category3: "/images/cat3.png",
     category4: "/images/cat4.png",
   },
+  subcategories: {
+    postersAndInformation: "/images/posters.png",
+    photosAndCollages: "/images/photo_collages.png",
+    drawings: "/images/pictures.png",
+    videos: "/images/videos.png",
+  },
   partners: {
     partner1: "/images/partner1.png",
     partner2: "/images/partner2.png",
