@@ -64,3 +64,6 @@ export const SORT_OPTIONS = [
   { value: 'newest', label: 'Найновіші' },
   { value: 'oldest', label: 'Найстаріші' },
 ];
+
+export const PAGE_SIZE = 12;
+export const API_URL = 'https://bicp2-15a28878e665.herokuapp.com/submissions/twenty-twenty-four';
