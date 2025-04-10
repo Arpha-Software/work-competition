@@ -21,7 +21,7 @@ import {
 import { validateFormData } from "./form-types";
 import { cutFileName } from "@/tools/helpers";
 import { content } from "@/app/2025/[slug]/content";
-import { putFile, submitForm } from "@/api/form";
+import { submitForm } from "@/api/form";
 import { Modal } from "../Modal";
 import { Combobox } from "@/components/Combobox";
 import { toast } from "react-hot-toast";
@@ -79,16 +79,7 @@ export const Agreements = ({
           required
         />
         <span className="text-sm">
-          Я згідний(-а) з{" "}
-          <a
-            href="https://www.youtube.com/watch?v=dQw4w9WgXcQ"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-blue-600 underline"
-          >
-            правилами
-          </a>{" "}
-          та:
+          Я згідний(-а) з правилами та:
         </span>
       </label>
 

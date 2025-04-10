@@ -36,7 +36,8 @@ export default function Page({ params: { subcategory } }: PageParams) {
     },
   }
 
-  const { category, subtitle, description, support, winners, final } = content['art']
+  const isVoteEnabled = true;
+  const { category, subtitle, description, support } = content['art']
 
   return (
     <main>
@@ -68,16 +69,14 @@ export default function Page({ params: { subcategory } }: PageParams) {
             </Link>
           </h1>
 
-          <h2 className='text-primary text-sm lg:text-base'>Вітаємо на сторінці голосування!</h2>
-
           <p className='mt-4'>
-            {subtitle}
+            {subtitle(isVoteEnabled)}
           </p>
 
           <h2 className='mt-6 mb-4 text-black font-bold text-base/[22px] lg:mt-8'>Як голосувати?</h2>
 
           <ul className='m-0 pl-4 text-black list-decimal text-base/[22px]'>
-            {description.map((item, index) => {
+            {description(isVoteEnabled).map((item: string | string[], index: number) => {
               if (Array.isArray(item)) {
                 return (
                   <ul key={index} className='pl-4'>
@@ -94,19 +93,12 @@ export default function Page({ params: { subcategory } }: PageParams) {
             })}
           </ul>
 
-          <div className="mt-4">
-            <h3 className="text-primary font-semibold text-sm lg:text-base">{support.title}</h3>
-            <p className="mt-2 indent-8">{support.content}</p>
-          </div>
-
-          <div className="mt-4">
-            <h3 className="text-primary font-semibold text-sm lg:text-base">{winners.title}</h3>
-            <p className="mt-2 indent-8">{winners.content}</p>
-          </div>
-
-          <div className="mt-4">
-            <h3 className="indent-8">{final}</h3>
-          </div>
+          {isVoteEnabled && (
+            <div className="mt-4">
+              <p className="font-bold text-black">{support.title(isVoteEnabled)}</p>
+              <p className="mt-2 font-bold text-black">{support.content(isVoteEnabled)}</p>
+            </div>
+          )}
         </div>
       </Container>
 

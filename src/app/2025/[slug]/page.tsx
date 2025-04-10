@@ -30,10 +30,17 @@ type PageParams = {
 };
 
 export default function Page({ params: { slug } }: PageParams) {
-  const { category, img, title, subtitle, description } = content[slug] || { img: '', title: '', subtitle: '' };
   const [isOpen, setIsOpen] = useState(false);
   const [isVotingEnabled, setIsVotingEnabled] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+
+  const pageContent = content[slug];
+  const { category, img } = pageContent;
+  const title = typeof pageContent.title === 'function' ? pageContent.title(isVotingEnabled) : pageContent.title;
+  const subtitle = typeof pageContent.subtitle === 'function' ? pageContent.subtitle(isVotingEnabled) : pageContent.subtitle;
+  const description = typeof pageContent.description === 'function' ? pageContent.description(isVotingEnabled) : pageContent.description;
+  const supportTitle = typeof pageContent.support.title === 'function' ? pageContent.support.title(isVotingEnabled) : pageContent.support.title;
+  const supportContent = typeof pageContent.support.content === 'function' ? pageContent.support.content(isVotingEnabled) : pageContent.support.content;
 
   useEffect(() => {
     const fetchVotingState = async () => {
@@ -62,7 +69,7 @@ export default function Page({ params: { slug } }: PageParams) {
     document.body.style.overflow = 'auto';
   };
 
-  if (category === 'Мистецтво, що рятує життя') {
+  if (category === 'Мистецтво, що рятує життя' && isVotingEnabled) {
     return (
       <Container>
         <Subcategories />
@@ -104,10 +111,16 @@ export default function Page({ params: { slug } }: PageParams) {
             {subtitle}
           </p>
 
-          <h2 className='mt-6 mb-4 text-black font-bold text-base/[22px] lg:mt-8'>Для участі в конкурсі потрібно зробити кілька кроків:</h2>
+          {isVotingEnabled ? (
+            <h2 className='mt-6 mb-4 text-black font-bold text-base/[22px] lg:mt-8'>
+              Як голосувати?
+            </h2>
+          ) : (
+            <div className='mt-6 mb-4 lg:mt-8' />
+          )}
 
           <ul className='m-0 pl-4 text-black list-decimal text-base/[22px]'>
-            {description.map((item, index) => {
+            {description.map((item: string | string[], index: number) => {
               if (Array.isArray(item)) {
                 return (
                   <ul key={index} className='pl-4'>
@@ -124,7 +137,14 @@ export default function Page({ params: { slug } }: PageParams) {
             })}
           </ul>
 
-          {!isVotingEnabled ? (
+          {isVotingEnabled && supportTitle && supportContent && (
+            <div className="mt-10">
+              <p className="font-bold text-base mb-2">{supportTitle}</p>
+              <p className="font-bold text-base">{supportContent}</p>
+            </div>
+          )}
+
+          {(!isVotingEnabled || slug === Pages.bestSpecialist) ? (
             <ArrowLink
               className={cn('mt-10', styles.arrowLink)}
               href={slug === Pages.bestSpecialist ? 'https://ratingop.expertus.com.ua/' : ''}
