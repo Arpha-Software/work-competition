@@ -75,3 +75,9 @@ export enum EProvider {
   Google = 'google',
   Facebook = 'facebook',
 }
+
+export enum EUserRole {
+  ADMIN = 'ADMIN',
+  MODERATOR = 'MODERATOR',
+  USER = 'USER',
+}

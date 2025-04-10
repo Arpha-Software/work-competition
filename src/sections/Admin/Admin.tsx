@@ -11,8 +11,9 @@ import { Loader } from '@/components/Loader';
 import { getSubmissions, updateVisibility, type Submission, updatePublicity, deleteSubmission, getFeature, updateFeature } from '@/api/submissions';
 import toast from 'react-hot-toast';
 import { useAuth } from '@/contexts/AuthContext';
-import { SortOrder } from '@/utils/enums';
+import { EUserRole, SortOrder } from '@/utils/enums';
 import type { Work } from '@/utils/types';
+import { UpdateSubmissionModal } from '@/components/UpdateSubmissionModal';
 
 const transformSubmissionToWork = (submission: Submission): Work => ({
   id: submission.id,
@@ -62,7 +63,7 @@ const regions = [
 export const Admin = () => {
   const router = useRouter();
   const pathname = usePathname();
-  const { user, isLoading: isAuthLoading } = useAuth();
+  const { user, setUser, isLoading: isAuthLoading } = useAuth();
   const [selectedRegion, setSelectedRegion] = useState('all');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [sortBy, setSortBy] = useState<SortOrder>(SortOrder.NEWEST);
@@ -73,6 +74,8 @@ export const Admin = () => {
   const [isVotingEnabled, setIsVotingEnabled] = useState(false);
   const [activeTab, setActiveTab] = useState<'works' | 'moderators'>('works');
   const [isVotingModalOpen, setIsVotingModalOpen] = useState(false);
+  const [selectedSubmission, setSelectedSubmission] = useState<Submission | null>(null);
+  const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
 
   const categories = [
     { value: 'all', label: 'Всі категорії' },
@@ -107,9 +110,7 @@ export const Admin = () => {
   }, [user?.allowedRegions, isSuperuser]);
 
   useEffect(() => {
-    const token = getCookie('authToken');
-
-    if (!token && pathname === '/admin') {
+    if ((!user || user.role === EUserRole.USER) && pathname === '/admin') {
       router.push('/admin/login');
       return;
     }
@@ -227,8 +228,23 @@ export const Admin = () => {
 
   const handleLogout = () => {
     deleteCookie('authToken');
+    setUser(null);
+
     router.push('/admin/login');
     toast.success('Ви успішно вийшли з системи');
+  };
+
+  const handleUpdate = (workId: number) => {
+    const submission = submissions.find(s => s.id === workId);
+    if (submission) {
+      setSelectedSubmission(submission);
+      setIsUpdateModalOpen(true);
+    }
+  };
+
+  const handleUpdateSuccess = async () => {
+    const response = await getSubmissions(selectedRegion, selectedCategory);
+    setSubmissions(response.content);
   };
 
   if (isAuthLoading) {
@@ -342,6 +358,7 @@ export const Admin = () => {
                       onDelete={handleDelete}
                       onPublish={handlePublish}
                       onHide={handleHide}
+                      onUpdate={handleUpdate}
                     />
 
                     {selectedWorks.length > 0 && (
@@ -390,6 +407,18 @@ export const Admin = () => {
             </div>
           </div>
         </div>
+      )}
+
+      {selectedSubmission && (
+        <UpdateSubmissionModal
+          isOpen={isUpdateModalOpen}
+          onClose={() => {
+            setIsUpdateModalOpen(false);
+            setSelectedSubmission(null);
+          }}
+          submission={selectedSubmission}
+          onSuccess={handleUpdateSuccess}
+        />
       )}
     </div>
   );

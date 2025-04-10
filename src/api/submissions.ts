@@ -10,7 +10,7 @@ export type Submission = {
   phoneNumber: string;
   age: number;
   comment: string;
-  agreement: string;
+  agreement: "YES" | "NO";
   file: {
     id: number;
     mimeType: string;
@@ -21,6 +21,13 @@ export type Submission = {
   currentUserVoted: boolean;
   public: boolean;
   hidden: boolean;
+  birthYear?: number;
+  primaryActivityType?: string;
+  employerRegion?: string;
+  employerLocality?: string;
+  subcategory?: string;
+  companyName?: string;
+  employeeCount?: number;
 };
 
 export type SubmissionsResponse = {
@@ -125,4 +132,58 @@ export const createModerator = async (data: CreateModeratorRequest): Promise<Mod
 
 export const deleteModerator = async (id: number): Promise<void> => {
   await api.delete(`/moderators/${id}`);
+};
+
+export type UpdateArtThatSavesLifeRequest = {
+  fullName: string;
+  region: string;
+  email: string;
+  phoneNumber: string;
+  age: number;
+  comment: string;
+  agreement: "YES" | "NO";
+  category: string;
+  birthYear: number;
+  primaryActivityType: string;
+  employerRegion: string;
+  employerLocality: string;
+  subcategory: string;
+};
+
+export type UpdateEffectiveProgramsRequest = {
+  fullName: string;
+  region: string;
+  email: string;
+  phoneNumber: string;
+  age: number;
+  comment: string;
+  agreement: "YES" | "NO";
+  category: string;
+  companyName: string;
+  primaryActivityType: string;
+  employerRegion: string;
+  employerLocality: string;
+  employeeCount: number;
+};
+
+export type UpdateInnovativeSolutionsRequest = {
+  fullName: string;
+  region: string;
+  email: string;
+  phoneNumber: string;
+  age: number;
+  comment: string;
+  agreement: "YES" | "NO";
+  category: string;
+  companyName: string;
+  primaryActivityType: string;
+  employerRegion: string;
+  employerLocality: string;
+  employeeCount: number;
+};
+
+export type UpdateSubmissionRequest = UpdateArtThatSavesLifeRequest | UpdateEffectiveProgramsRequest | UpdateInnovativeSolutionsRequest;
+
+export const updateSubmission = async (id: number, data: UpdateSubmissionRequest): Promise<void> => {
+  await api.put(`/submissions/${id}`, data);
 }; 

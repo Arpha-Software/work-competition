@@ -10,6 +10,7 @@ type WorksListProps = {
   onDelete?: (workId: number) => void;
   onPublish?: (workId: number) => void;
   onHide?: (workId: number) => void;
+  onUpdate?: (workId: number) => void;
 };
 
 export const WorksList = ({
@@ -20,6 +21,7 @@ export const WorksList = ({
   onDelete,
   onPublish,
   onHide,
+  onUpdate,
 }: WorksListProps) => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pb-24">
@@ -33,6 +35,7 @@ export const WorksList = ({
           onDelete={() => onDelete?.(work.id)}
           onPublish={() => onPublish?.(work.id)}
           onHide={() => onHide?.(work.id)}
+          onUpdate={() => onUpdate?.(work.id)}
         />
       ))}
     </div>

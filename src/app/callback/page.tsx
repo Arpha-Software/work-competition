@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { Loader } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { setCookie } from 'cookies-next';
+import { decodeToken } from '@/tools/helpers';
 
 const GoogleCallback = () => {
   const { setUser } = useAuth();
@@ -23,8 +24,10 @@ const GoogleCallback = () => {
       path: '/'
     });
 
+    const decoded = decodeToken(token || '');
+
     setUser({
-      role: "",
+      role: decoded.role,
       allowedRegions: []
     });
 

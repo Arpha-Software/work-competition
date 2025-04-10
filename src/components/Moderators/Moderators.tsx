@@ -3,6 +3,7 @@ import { getModerators, createModerator, deleteModerator, type Moderator } from 
 import toast from 'react-hot-toast';
 import { Select } from '@/components/Select';
 import { MultiSelect } from '@/components/MultiSelect';
+import { Modal } from '@/components/Modal';
 import cn from '@/tools/cn';
 
 const regions = [
@@ -33,9 +34,36 @@ const regions = [
   { value: 'Автономна Республіка Крим', label: 'Автономна Республіка Крим' },
 ];
 
+const MAX_VISIBLE_REGIONS = 2;
+
 interface ModeratorsProps {
   isSuperuser: boolean;
 }
+
+type RegionsModalProps = {
+  isOpen: boolean;
+  onClose: () => void;
+  regions: string[];
+}
+
+const RegionsModal = ({ isOpen, onClose, regions }: RegionsModalProps) => {
+  if (!isOpen) return null;
+
+  return (
+    <Modal closeModal={onClose}>
+      <div className="p-6 w-[500px]">
+        <h3 className="text-lg font-semibold mb-4">Дозволені регіони</h3>
+        <div className="space-y-2">
+          {regions.map((region, index) => (
+            <div key={index} className="p-2 bg-gray-50 rounded">
+              {region}
+            </div>
+          ))}
+        </div>
+      </div>
+    </Modal>
+  );
+};
 
 export const Moderators = ({ isSuperuser }: ModeratorsProps) => {
   const [moderators, setModerators] = useState<Moderator[]>([]);
@@ -43,6 +71,8 @@ export const Moderators = ({ isSuperuser }: ModeratorsProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [moderatorToDelete, setModeratorToDelete] = useState<Moderator | null>(null);
+  const [selectedRegions, setSelectedRegions] = useState<string[]>([]);
+  const [isRegionsModalOpen, setIsRegionsModalOpen] = useState(false);
   const [newModerator, setNewModerator] = useState({
     username: '',
     password: '',
@@ -168,12 +198,35 @@ export const Moderators = ({ isSuperuser }: ModeratorsProps) => {
                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                   {moderator.username}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  {moderator.allowedRegions.length === 0
-                    ? 'Всі регіони'
-                    : moderator.allowedRegions
+                <td className="px-6 py-4 text-sm text-gray-500">
+                  {moderator.allowedRegions.length === 0 ? (
+                    'Всі регіони'
+                  ) : (
+                    <div>
+                      {moderator.allowedRegions
+                        .slice(0, MAX_VISIBLE_REGIONS)
                         .map((region) => regions.find((r) => r.value === region)?.label)
                         .join(', ')}
+                      {moderator.allowedRegions.length > MAX_VISIBLE_REGIONS && (
+                        <>
+                          {' '}
+                          <button
+                            onClick={() => {
+                              setSelectedRegions(
+                                moderator.allowedRegions.map(
+                                  (region) => regions.find((r) => r.value === region)?.label || region
+                                )
+                              );
+                              setIsRegionsModalOpen(true);
+                            }}
+                            className="text-primary hover:text-primary-dark font-medium"
+                          >
+                            +{moderator.allowedRegions.length - MAX_VISIBLE_REGIONS} більше
+                          </button>
+                        </>
+                      )}
+                    </div>
+                  )}
                 </td>
                 {isSuperuser && (
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
@@ -319,6 +372,12 @@ export const Moderators = ({ isSuperuser }: ModeratorsProps) => {
           </div>
         </div>
       )}
+
+      <RegionsModal
+        isOpen={isRegionsModalOpen}
+        onClose={() => setIsRegionsModalOpen(false)}
+        regions={selectedRegions}
+      />
     </div>
   );
 }; 
