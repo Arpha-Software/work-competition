@@ -10,6 +10,7 @@ import { LoginModal } from "../../components/LoginModal";
 import { getSubmissions, likeSubmission, type Submission } from '@/api/submissions';
 import type { Work } from '@/utils/types';
 import { usePathname } from "next/navigation";
+import { PAGE_SIZE } from '@/utils/constants';
 
 type VoteProps = {
   category: string;
@@ -38,20 +39,20 @@ export const Vote = ({ category, subcategory }: VoteProps) => {
   const [isLoading, setIsLoading] = useState(true);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [selectedWorkId, setSelectedWorkId] = useState<number | null>(null);
+  const [page, setPage] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
   const pathname = usePathname();
 
   useEffect(() => {
     const fetchWorks = async () => {
       try {
-        const response = await getSubmissions('all', category, subcategory);
+        setIsLoading(true);
+        const response = await getSubmissions('all', category, subcategory, page, PAGE_SIZE);
 
-        const publicSubmissions = response.content.filter(
-          submission => submission.public && !submission.hidden
-        );
-
-        const transformedWorks = publicSubmissions.map(transformSubmissionToWork);
+        const transformedWorks = response.content.map(transformSubmissionToWork);
 
         setWorks(transformedWorks);
+        setTotalPages(response.totalPages);
       } catch (error: any) {
         console.error('Error fetching submissions:', error);
         toast.error('Помилка при завантаженні робіт');
@@ -61,7 +62,11 @@ export const Vote = ({ category, subcategory }: VoteProps) => {
     };
 
     fetchWorks();
-  }, [category]);
+  }, [category, subcategory, page]);
+
+  const handlePageChange = (newPage: number) => {
+    setPage(newPage);
+  };
 
   const handleLike = async (id: number) => {
     const token = getCookie('authToken');
@@ -114,43 +119,62 @@ export const Vote = ({ category, subcategory }: VoteProps) => {
     }
   };
 
-  if (isLoading) {
-    return (
-      <div className="w-full h-28 flex justify-center items-center">
-        <Loader />
-      </div>
-    );
-  }
-
   return (
     <div>
-      {works.length === 0 ? (
+      {isLoading ? (
+        <div className="w-full h-28 flex justify-center items-center">
+          <Loader />
+        </div>
+      ) : works.length === 0 ? (
         <div className="text-center py-12">
           <p className="text-gray-500">Немає робіт для голосування в цій категорії</p>
         </div>
       ) : (
-        <section className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 items-center justify-items-center gap-10">
-          {works.map(({ id, title, likes, currentUserVoted, fileAccessLink }) => (
-            <WorkCard key={id}>
-              <WorkCard.File fileAccessLink={fileAccessLink} />
+        <>
+          <section className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8 max-w-[1200px] mx-auto">
+            {works.map(({ id, title, likes, currentUserVoted, fileAccessLink }) => (
+              <WorkCard key={id} className="justify-self-center w-full max-w-[350px]">
+                <WorkCard.File fileAccessLink={fileAccessLink} />
 
-              <div className="flex flex-col p-4">
-                <WorkCard.LikeCount
-                  count={likes}
-                />
+                <div className="flex flex-col p-4">
+                  <WorkCard.LikeCount
+                    count={likes}
+                  />
 
-                <WorkCard.Title title={title} className="h-24 mt-4 mb-4" />
+                  <WorkCard.Title title={title} className="h-24 mt-4 mb-4" />
 
-                <WorkCard.ButtonWrap
-                  isLiked={currentUserVoted || false}
-                  onClick={() => handleLike(id)}
-                >
-                  Подобається
-                </WorkCard.ButtonWrap>
-              </div>
-            </WorkCard>
-          ))}
-        </section>
+                  <WorkCard.ButtonWrap
+                    isLiked={currentUserVoted || false}
+                    onClick={() => handleLike(id)}
+                  >
+                    Подобається
+                  </WorkCard.ButtonWrap>
+                </div>
+              </WorkCard>
+            ))}
+          </section>
+
+          {totalPages > 1 && (
+            <div className="flex justify-center items-center mt-4 gap-2">
+              <button
+                onClick={() => handlePageChange(page - 1)}
+                disabled={page === 0}
+                className="px-4 py-2 mx-2 bg-gray-300 rounded disabled:opacity-50"
+              >
+                &#60;
+              </button>
+
+              <span>{page + 1} із {totalPages}</span>
+              <button
+                onClick={() => handlePageChange(page + 1)}
+                disabled={page + 1 >= totalPages}
+                className="px-4 py-2 mx-2 bg-gray-300 rounded disabled:opacity-50"
+              >
+                &#62;
+              </button>
+            </div>
+          )}
+        </>
       )}
 
       <LoginModal
