@@ -6,6 +6,8 @@ import { Button } from '@/components/Button';
 import { Input } from '@/components/Input';
 import { api } from '@/api/api';
 import { setCookie, getCookie } from 'cookies-next';
+import { useAuth } from '@/contexts/AuthContext';
+import { EUserRole } from '@/utils/enums';
 
 type Token = {
   value: string;
@@ -15,15 +17,15 @@ type Token = {
 
 export const Login = () => {
   const router = useRouter();
-  const pathname = usePathname();
+  const { user } = useAuth();
+
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    const token = getCookie('authToken');
-    if (token) {
+    if (user && (user?.role === EUserRole.ADMIN || user?.role === EUserRole.MODERATOR)) {
       router.push('/admin');
     }
   }, [router]);

@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import { ReactNode, useEffect } from "react";
 
 import cn from "@/tools/cn";
 
@@ -15,22 +15,34 @@ export const Modal = ({
   className,
   closeModal,
 }: ModalProps) => {
+  useEffect(() => {
+    document.body.style.overflow = 'hidden';
+
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, []);
+
   return (
-    <div className="fixed top-0 left-0 w-full h-full flex justify-center items-center z-[100]">
+    <div className="fixed inset-0 z-[100]">
       <div
-        className="w-full h-full opacity-20 backdrop-blur bg-black"
+        className="fixed inset-0 bg-black bg-opacity-20 backdrop-blur"
         onClick={closeModal}
       />
 
-      <div className={cn("absolute bg-white shadow z-[100] py-10 px-15 rounded", className)}>
-        <button
-          className="absolute top-0 left-0 p-9 w-5 h-5"
-          onClick={closeModal}
-        >
-          <CloseIcon />
-        </button>
+      <div className="fixed inset-0 overflow-y-auto">
+        <div className="flex min-h-full items-center justify-center p-4">
+          <div className={cn("relative bg-white shadow z-[100] py-10 px-15 rounded", className)}>
+            <button
+              className="absolute top-0 left-0 p-9 w-5 h-5"
+              onClick={closeModal}
+            >
+              <CloseIcon />
+            </button>
 
-        { children }
+            {children}
+          </div>
+        </div>
       </div>
     </div>
   )
