@@ -163,7 +163,7 @@ export default function Page({ params: { slug } }: PageParams) {
         <div className="mt-10 text-center"><Loader /></div>
       ) : (isVotingEnabled && category !== 'Кращий спеціаліст з охорони праці') ? (
         <Container className="mt-10">
-          <h2 className="text-xl font-bold mb-4">Голосування за роботи в категорії &quot;{title}&quot;</h2>
+          <h2 className="text-primary font-extrabold text-3xl mb-6">Голосування за роботи в категорії &quot;{title}&quot;</h2>
           <Vote category={category} subcategory="all" />
         </Container>
       ): null}

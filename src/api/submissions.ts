@@ -52,7 +52,13 @@ export type PublicityRequest = {
   }[];
 };
 
-export const getSubmissions = async (region?: string, category?: string, subcategory?: string): Promise<SubmissionsResponse> => {
+export const getSubmissions = async (
+  region?: string,
+  category?: string,
+  subcategory?: string,
+  page?: number,
+  size?: number
+): Promise<SubmissionsResponse> => {
   const params = new URLSearchParams();
   if (region && region !== 'all') {
     params.append('region', region);
@@ -62,6 +68,12 @@ export const getSubmissions = async (region?: string, category?: string, subcate
   }
   if (subcategory && subcategory !== 'all') {
     params.append('subcategory', subcategory);
+  }
+  if (typeof page !== 'undefined') {
+    params.append('page', page.toString());
+  }
+  if (typeof size !== 'undefined') {
+    params.append('size', size.toString());
   }
 
   const response = await api.get<SubmissionsResponse>(`/submissions?${params.toString()}`);

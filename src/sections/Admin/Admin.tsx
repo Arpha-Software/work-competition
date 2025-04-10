@@ -14,6 +14,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { EUserRole, SortOrder } from '@/utils/enums';
 import type { Work } from '@/utils/types';
 import { UpdateSubmissionModal } from '@/components/UpdateSubmissionModal';
+import { PAGE_SIZE } from '@/utils/constants';
 
 const transformSubmissionToWork = (submission: Submission): Work => ({
   id: submission.id,
@@ -76,6 +77,8 @@ export const Admin = () => {
   const [isVotingModalOpen, setIsVotingModalOpen] = useState(false);
   const [selectedSubmission, setSelectedSubmission] = useState<Submission | null>(null);
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
+  const [page, setPage] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
 
   const categories = [
     { value: 'all', label: 'Всі категорії' },
@@ -118,10 +121,11 @@ export const Admin = () => {
     const fetchData = async () => {
       try {
         const [submissionsResponse, featureResponse] = await Promise.all([
-          getSubmissions(selectedRegion, selectedCategory),
+          getSubmissions(selectedRegion, selectedCategory, undefined, page, PAGE_SIZE),
           getFeature('VOTING')
         ]);
         setSubmissions(submissionsResponse.content);
+        setTotalPages(submissionsResponse.totalPages);
         setIsVotingEnabled(featureResponse.enabled);
       } catch (error) {
         toast.error('Помилка при завантаженні даних');
@@ -131,7 +135,7 @@ export const Admin = () => {
     };
 
     fetchData();
-  }, [router, pathname, selectedRegion, selectedCategory]);
+  }, [router, pathname, selectedRegion, selectedCategory, page]);
 
   const filteredAndSortedWorks = useMemo(() => {
     let filtered = (submissions || []).map(transformSubmissionToWork);
@@ -247,6 +251,11 @@ export const Admin = () => {
     setSubmissions(response.content);
   };
 
+  const handlePageChange = (newPage: number) => {
+    setPage(newPage);
+    setSelectedWorks([]); // Clear selected works when changing page
+  };
+
   if (isAuthLoading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
@@ -360,6 +369,28 @@ export const Admin = () => {
                       onHide={handleHide}
                       onUpdate={handleUpdate}
                     />
+
+                    {totalPages > 1 && (
+                      <div className="flex justify-center items-center gap-2 py-4">
+                        <button
+                          onClick={() => handlePageChange(page - 1)}
+                          disabled={page === 0}
+                          className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                          Попередня
+                        </button>
+                        <span className="text-sm text-gray-700">
+                          Сторінка {page + 1} із {totalPages}
+                        </span>
+                        <button
+                          onClick={() => handlePageChange(page + 1)}
+                          disabled={page + 1 >= totalPages}
+                          className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                          Наступна
+                        </button>
+                      </div>
+                    )}
 
                     {selectedWorks.length > 0 && (
                       <ActionButtons
