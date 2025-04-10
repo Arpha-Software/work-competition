@@ -121,7 +121,7 @@ export const UpdateSubmissionModal = ({ isOpen, onClose, submission, onSuccess }
         default:
           throw new Error('Invalid category');
       }
-      
+
       await updateSubmission(submission.id, requestData);
       toast.success('Роботу успішно оновлено');
       onSuccess();
@@ -163,7 +163,7 @@ export const UpdateSubmissionModal = ({ isOpen, onClose, submission, onSuccess }
             <h3 className="text-lg font-semibold text-gray-900 mb-4">Особиста інформація</h3>
             <div className="grid grid-cols-2 gap-6">
               <div className="space-y-2">
-                <label className="block text-sm font-medium text-gray-700">Повне ім'я</label>
+                <label className="block text-sm font-medium text-gray-700">Повне ім&apos;я</label>
                 <Input
                   name="fullName"
                   value={formData.fullName}
