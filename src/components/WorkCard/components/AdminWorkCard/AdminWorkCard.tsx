@@ -4,7 +4,6 @@ import { Checkbox } from '@/components/Checkbox';
 import cn from '@/tools/cn';
 import type { Work } from '@/utils/types';
 import { Tag } from '../Tag';
-import FileIcon from "../../../../../public/icons/file.svg";
 
 type AdminWorkCardProps = {
   work: Work;

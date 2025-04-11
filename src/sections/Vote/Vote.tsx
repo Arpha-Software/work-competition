@@ -47,7 +47,7 @@ export const Vote = ({ category, subcategory }: VoteProps) => {
     const fetchWorks = async () => {
       try {
         setIsLoading(true);
-        const response = await getSubmissions('all', category, subcategory, page, PAGE_SIZE);
+        const response = await getSubmissions('all', category, subcategory, page, PAGE_SIZE, true);
 
         const transformedWorks = response.content.map(transformSubmissionToWork);
 

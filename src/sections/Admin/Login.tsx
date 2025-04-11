@@ -25,10 +25,12 @@ export const Login = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
+    if (isLoading) return; // Don't redirect while loading
+    
     if (user && (user?.role === EUserRole.ADMIN || user?.role === EUserRole.MODERATOR)) {
       router.push('/admin');
     }
-  }, [router]);
+  }, [router, user, isLoading]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
