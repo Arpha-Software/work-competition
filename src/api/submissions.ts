@@ -57,7 +57,8 @@ export const getSubmissions = async (
   category?: string,
   subcategory?: string,
   page?: number,
-  size?: number
+  size?: number,
+  isPublic?: boolean,
 ): Promise<SubmissionsResponse> => {
   const params = new URLSearchParams();
   if (region && region !== 'all') {
@@ -74,6 +75,9 @@ export const getSubmissions = async (
   }
   if (typeof size !== 'undefined') {
     params.append('size', size.toString());
+  }
+  if (isPublic) {
+    params.append('isPublic', isPublic ? 'true' : 'false');
   }
 
   const response = await api.get<SubmissionsResponse>(`/submissions?${params.toString()}`);

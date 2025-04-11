@@ -113,13 +113,17 @@ export const Admin = () => {
   }, [user?.allowedRegions, isSuperuser]);
 
   useEffect(() => {
-    if ((!user || user.role === EUserRole.USER) && pathname === '/admin') {
+    if (isAuthLoading) return; // Don't proceed while auth is loading
+    
+    const token = getCookie('authToken');
+    if (!token || (!user || user.role === EUserRole.USER)) {
       router.push('/admin/login');
       return;
     }
 
     const fetchData = async () => {
       try {
+        setIsLoading(true);
         const [submissionsResponse, featureResponse] = await Promise.all([
           getSubmissions(selectedRegion, selectedCategory, undefined, page, PAGE_SIZE),
           getFeature('VOTING')
@@ -128,14 +132,16 @@ export const Admin = () => {
         setTotalPages(submissionsResponse.totalPages);
         setIsVotingEnabled(featureResponse.enabled);
       } catch (error) {
+        console.error('Error fetching data:', error);
         toast.error('Помилка при завантаженні даних');
+        // If there's an error, we should still set loading to false
       } finally {
         setIsLoading(false);
       }
     };
 
     fetchData();
-  }, [router, pathname, selectedRegion, selectedCategory, page]);
+  }, [router, pathname, selectedRegion, selectedCategory, page, user, isAuthLoading]);
 
   const filteredAndSortedWorks = useMemo(() => {
     let filtered = (submissions || []).map(transformSubmissionToWork);
@@ -165,12 +171,22 @@ export const Admin = () => {
 
       toast.success('Роботу успішно опубліковано');
 
-      const response = await getSubmissions(selectedRegion, selectedCategory);
-      setSubmissions(response.content);
+      const response = await getSubmissions(selectedRegion, selectedCategory, undefined, page);
+      const sortedSubmissions = [...response.content].sort((a, b) => {
+        const dateA = new Date(a.submittedAt).getTime();
+        const dateB = new Date(b.submittedAt).getTime();
+        return sortBy === SortOrder.NEWEST ? dateB - dateA : dateA - dateB;
+      });
+      setSubmissions(sortedSubmissions);
       setSelectedWorks(prev => prev.filter(id => id !== workId));
     } catch (error: any) {
-      console.error('Publish error:', error);
-      toast.error(error?.response?.data?.message || 'Помилка при публікації роботи');
+      if (error?.response?.data?.errors) {
+        error.response.data.errors.forEach((err: any) => {
+          toast.error(err.errorMessage || 'Помилка при публікації роботи');
+        });
+      } else {
+        toast.error(error?.response?.data?.message || 'Помилка при публікації роботи');
+      }
     }
   };
 
@@ -186,14 +202,24 @@ export const Admin = () => {
         }]
       });
 
-      toast.success(work.hidden ? 'Роботу успішно приховано' : 'Роботу успішно показано');
+      toast.success(work.hidden ? 'Роботу успішно показано' : 'Роботу успішно приховано');
 
-      const response = await getSubmissions(selectedRegion, selectedCategory);
-      setSubmissions(response.content);
+      const response = await getSubmissions(selectedRegion, selectedCategory, undefined, page);
+      const sortedSubmissions = [...response.content].sort((a, b) => {
+        const dateA = new Date(a.submittedAt).getTime();
+        const dateB = new Date(b.submittedAt).getTime();
+        return sortBy === SortOrder.NEWEST ? dateB - dateA : dateA - dateB;
+      });
+      setSubmissions(sortedSubmissions);
       setSelectedWorks(prev => prev.filter(id => id !== workId));
     } catch (error: any) {
-      console.error('Hide/Show error:', error);
-      toast.error(error?.response?.data?.message || 'Помилка при зміні видимості роботи');
+      if (error?.response?.data?.errors) {
+        error.response.data.errors.forEach((err: any) => {
+          toast.error(err.errorMessage || 'Помилка при зміні видимості роботи');
+        });
+      } else {
+        toast.error(error?.response?.data?.message || 'Помилка при зміні видимості роботи');
+      }
     }
   };
 
@@ -203,13 +229,22 @@ export const Admin = () => {
 
       toast.success('Роботу успішно видалено');
 
-      const response = await getSubmissions(selectedRegion, selectedCategory);
-
-      setSubmissions(response.content);
+      const response = await getSubmissions(selectedRegion, selectedCategory, undefined, page);
+      const sortedSubmissions = [...response.content].sort((a, b) => {
+        const dateA = new Date(a.submittedAt).getTime();
+        const dateB = new Date(b.submittedAt).getTime();
+        return sortBy === SortOrder.NEWEST ? dateB - dateA : dateA - dateB;
+      });
+      setSubmissions(sortedSubmissions);
       setSelectedWorks(prev => prev.filter(id => id !== workId));
     } catch (error: any) {
-      console.error('Delete error:', error);
-      toast.error(error?.response?.data?.message || 'Помилка при видаленні роботи');
+      if (error?.response?.data?.errors) {
+        error.response.data.errors.forEach((err: any) => {
+          toast.error(err.errorMessage || 'Помилка при видаленні роботи');
+        });
+      } else {
+        toast.error(error?.response?.data?.message || 'Помилка при видаленні роботи');
+      }
     }
   };
 
@@ -223,8 +258,13 @@ export const Admin = () => {
       setIsVotingEnabled(!isVotingEnabled);
       toast.success(`Голосування ${!isVotingEnabled ? 'увімкнено' : 'вимкнено'}`);
     } catch (error: any) {
-      console.error('Voting toggle error:', error);
-      toast.error(error?.response?.data?.message || 'Помилка при зміні стану голосування');
+      if (error?.response?.data?.errors) {
+        error.response.data.errors.forEach((err: any) => {
+          toast.error(err.errorMessage || 'Помилка при зміні стану голосування');
+        });
+      } else {
+        toast.error(error?.response?.data?.message || 'Помилка при зміні стану голосування');
+      }
     } finally {
       setIsVotingModalOpen(false);
     }
@@ -247,8 +287,24 @@ export const Admin = () => {
   };
 
   const handleUpdateSuccess = async () => {
-    const response = await getSubmissions(selectedRegion, selectedCategory);
-    setSubmissions(response.content);
+    try {
+      const response = await getSubmissions(selectedRegion, selectedCategory, undefined, page);
+      const sortedSubmissions = [...response.content].sort((a, b) => {
+        const dateA = new Date(a.submittedAt).getTime();
+        const dateB = new Date(b.submittedAt).getTime();
+        return sortBy === SortOrder.NEWEST ? dateB - dateA : dateA - dateB;
+      });
+      setSubmissions(sortedSubmissions);
+      setTotalPages(response.totalPages);
+    } catch (error: any) {
+      if (error?.response?.data?.errors) {
+        error.response.data.errors.forEach((err: any) => {
+          toast.error(err.errorMessage || 'Помилка при оновленні роботи');
+        });
+      } else {
+        toast.error(error?.response?.data?.message || 'Помилка при оновленні роботи');
+      }
+    }
   };
 
   const handlePageChange = (newPage: number) => {

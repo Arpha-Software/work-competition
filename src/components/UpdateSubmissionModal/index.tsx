@@ -127,8 +127,9 @@ export const UpdateSubmissionModal = ({ isOpen, onClose, submission, onSuccess }
       onSuccess();
       onClose();
     } catch (error: any) {
-      console.error('Update error:', error);
-      toast.error(error?.response?.data?.message || 'Помилка при оновленні роботи');
+      error?.response?.data?.errors.forEach((error: any) => {
+        toast.error(error.errorMessage || 'Помилка при оновленні списку робіт');
+      });
     }
   };
 

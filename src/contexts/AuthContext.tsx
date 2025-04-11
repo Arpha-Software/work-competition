@@ -42,9 +42,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
     try {
       const decoded = decodeToken(token);
+      if (!decoded || !decoded.role) {
+        console.error('Invalid token structure:', decoded);
+        setUser(null);
+        return;
+      }
 
       setUser({
-        role: decoded.role || '',
+        role: decoded.role,
         allowedRegions: decoded.regions || [],
       });
     } catch (e) {
