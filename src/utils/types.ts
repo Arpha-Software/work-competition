@@ -14,6 +14,7 @@ export type Work = {
   id: number;
   title: string;
   subtitle: string;
+  subcategory: string | null;
   fileAccessLink: {
     accessType: string;
     url: string;

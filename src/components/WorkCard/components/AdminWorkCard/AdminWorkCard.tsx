@@ -100,6 +100,7 @@ export const AdminWorkCard = ({
           <div className="min-w-0 mt-4">
             <WorkCard.Title title={work.title} />
             <WorkCard.Subtitle subtitle={work.subtitle} />
+            {work.subcategory ? <WorkCard.Subtitle subtitle={work.subcategory} className='opacity-50'/> : null }
           </div>
 
           <div className="mt-4 flex flex-wrap gap-2">

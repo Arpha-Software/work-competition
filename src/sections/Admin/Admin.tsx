@@ -20,6 +20,7 @@ const transformSubmissionToWork = (submission: Submission): Work => ({
   id: submission.id,
   title: submission.fullName,
   subtitle: submission.category,
+  subcategory: submission.subcategory || null,
   fileAccessLink: {
     accessType: 'public',
     url: `${submission.file.accessLink}`,
