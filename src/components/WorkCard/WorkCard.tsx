@@ -69,11 +69,10 @@ const FileRenderer = ({ fileAccessLink }: FileRendererProps) => {
 const LikeCount = ({ count, className, iconClassName }: LikeCountProps) => {
   return (
     <div className={cn('flex text-white gap-4 bg-primary w-full px-4 py-2 rounded group', className)}>
-      <IconLike className={cn(iconClassName)} />
-
-      <span>
-        {count} Вподобань
-      </span>
+      <div className="flex items-center gap-2">
+        <IconLike className={cn(iconClassName)} />
+        <span>{count} Вподобань</span>
+      </div>
     </div>
   );
 };

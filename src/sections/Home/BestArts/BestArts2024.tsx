@@ -75,7 +75,8 @@ const BestArts2024: React.FC = () => {
               mimeType: work.file.mimeType
             }} />
             <div className="flex flex-col p-4">
-              <WorkCard.Title title={work.fullName} className="h-24 mt-4 mb-4" />
+              <WorkCard.LikeCount count={work.numberOfVotes} className="mb-4 py-2" />
+              <WorkCard.Title title={work.fullName} className="h-24" />
             </div>
           </WorkCard>
         ))}
