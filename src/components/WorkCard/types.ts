@@ -15,6 +15,7 @@ export type FileRendererProps = {
 
 export type LikeCountProps = {
   count: number;
+  numberOfVotes?: number;
   className?: string;
   iconClassName?: string;
 };
