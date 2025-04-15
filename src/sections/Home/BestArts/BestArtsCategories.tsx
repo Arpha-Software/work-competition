@@ -5,7 +5,7 @@ import { bestArtsContent } from '@/utils/mockedContent';
 export const BestArtsCategories = () => {
   return (
     <Container className="my-5">
-      <section className='flex justify-center gap-8'>
+      <section className='flex flex-col md:flex-row justify-center gap-4 md:gap-8'>
         {bestArtsContent.map(({ image, content, linkHref, buttonText, type, tagLabel }, index) => (
           <CategoryCard
             image={image}
