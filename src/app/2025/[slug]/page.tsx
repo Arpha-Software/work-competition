@@ -131,6 +131,26 @@ export default function Page({ params: { slug } }: PageParams) {
                 );
               }
 
+              if (typeof item === 'string' && item.includes('ratingop.expertus.com.ua')) {
+                const parts = item.split(/(ratingop\.expertus\.com\.ua)/);
+                return (
+                  <li key={index} className='mb-2'>
+                    {parts.map((part, partIndex) => 
+                      part === 'ratingop.expertus.com.ua' ? 
+                        <a 
+                          key={partIndex} 
+                          href="https://ratingop.expertus.com.ua/" 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          className="text-primary hover:underline"
+                        >
+                          {part}
+                        </a> : part
+                    )}
+                  </li>
+                );
+              }
+
               return (
                 <li key={index} className='mb-2'>{item}</li>
               );
