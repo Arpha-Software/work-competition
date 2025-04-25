@@ -71,7 +71,7 @@ const commonInputs = {
 
 const contactInputsCommon = [
   createInput('Електронна пошта', 'Введіть електронну пошту', 'email', 'email'),
-  createInput('Номер мобільного телефону', 'Введіть номер мобільного телефону', 'phoneNumber', 'tel'),
+  createInput('Номер мобільного телефону', '+380ХХХХХХХХХ', 'phoneNumber', 'tel'),
 ];
 
 function additionalInfoInput(label: string, placeholder: string) {

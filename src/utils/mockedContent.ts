@@ -69,16 +69,16 @@ export const subcategories = [
     },
     linkHref: "/2025/art/photos-and-collages",
   },
-  {
-    content: {
-      title: "Малюнки"
-    },
-    image: {
-      src: images.subcategories.drawings,
-      alt: "image3",
-    },
-    linkHref: "/2025/art/drawings",
-  },
+  // {
+  //   content: {
+  //     title: "Малюнки"
+  //   },
+  //   image: {
+  //     src: images.subcategories.drawings,
+  //     alt: "image3",
+  //   },
+  //   linkHref: "/2025/art/drawings",
+  // },
   {
     content: {
       title: "Відеоролики"
@@ -113,9 +113,9 @@ export const regions = [
   { value: 'Житомирська' },
   { value: 'Хмельницька' },
   { value: 'Вінницька' },
-  { value: 'Київ' },
-  { value: 'Черкаси' },
-  { value: 'Чернігів' },
+  { value: 'Київська' },
+  { value: 'Черкаська' },
+  { value: 'Чернігівська' },
 ]
 
 export const homeContent = [
