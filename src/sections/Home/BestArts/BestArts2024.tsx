@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { artSections } from '../../../utils/mockedContent';
 import styles from './BestArts2024.module.scss';
-import { images, PAGE_SIZE, API_URL } from '@/utils/constants';
+import { images, PAGE_SIZE } from '@/utils/constants';
 import { ArrowLink } from '@/components/ArrowLink';
 import { WorkCard } from '@/components/WorkCard';
 import toast from 'react-hot-toast';
@@ -33,7 +33,7 @@ const BestArts2024: React.FC = () => {
         setIsLoading(true);
         const selectedCategory = artSections.find((section) => section.id === selectedSection)?.title || '';
         const category = selectedCategory === 'Усі категорії 2024 року' ? '' : encodeURIComponent(selectedCategory);
-        const response = await fetch(`${API_URL}?page=${page}&size=${pageSize}&category=${category}`);
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_OLD_URL}?page=${page}&size=${pageSize}&category=${category}`);
         const data = await response.json();
         setWorks(data.content);
         setTotalPages(data.totalPages);
