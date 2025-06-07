@@ -40,24 +40,18 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       return;
     }
 
-    try {
-      const decoded = decodeToken(token);
-      if (!decoded || !decoded.role) {
-        console.error('Invalid token structure:', decoded);
-        setUser(null);
-        return;
-      }
+    const decoded = decodeToken(token);
 
+    if (decoded && decoded.role) {
       setUser({
         role: decoded.role,
         allowedRegions: decoded.regions || [],
       });
-    } catch (e) {
-      console.error('Token parsing error:', e);
+    } else {
       setUser(null);
-    } finally {
-      setIsLoading(false);
     }
+
+    setIsLoading(false);
   }, []);
 
   const login = async (provider: EProvider) => {

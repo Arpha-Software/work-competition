@@ -17,6 +17,15 @@ const GoogleCallback = () => {
 
     if (searchParams.get('error') || !token) {
       router.replace('/');
+      return;
+    }
+
+    const decoded = decodeToken(token);
+
+    if (!decoded || !decoded.role) {
+      console.error('Invalid or malformed token received.');
+      router.replace('/');
+      return;
     }
 
     setCookie('authToken', token, {
@@ -24,16 +33,14 @@ const GoogleCallback = () => {
       path: '/'
     });
 
-    const decoded = decodeToken(token || '');
-
     setUser({
       role: decoded.role,
-      allowedRegions: []
+      allowedRegions: decoded.regions || []
     });
 
     const lastRoute = localStorage.getItem('lastRoute');
     router.replace(lastRoute || '/');
-  }, [searchParams, router]);
+  }, [searchParams, router, setUser]);
 
   return (
     <div className='mt-full'>
